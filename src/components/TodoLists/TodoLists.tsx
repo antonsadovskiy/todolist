@@ -10,7 +10,7 @@ type TodoListsPropsType = {
 const TodoLists:FC<TodoListsPropsType> = (props) => {
 
     let lists = props.data.lists.map((list,index) =>
-        <TodoList title={list.title} tasks={list.tasks}/>
+        <TodoList key={list.id} title={list.title} tasks={list.tasks}/>
     )
 
     return (

@@ -7,6 +7,7 @@ export type DataType = {
 }
 
 export type ListType = {
+    id: number
     title: string
     tasks: Array<TaskType>
 }
@@ -22,27 +23,30 @@ const App = () => {
     const data = {
         lists: [
             {
+                id: 1,
                 title: "Homework",
                 tasks: [
                     {id: 1, title: "React", isDone: false},
-                    {id: 2, title: "JS & TS", isDone: true},
-                    {id: 3, title: "Math", isDone: true},
+                    {id: 2, title: "JS & TS", isDone: false},
+                    {id: 3, title: "HTML & CSS", isDone: true},
                 ]
             },
             {
+                id: 2,
                 title: "Exams",
                 tasks: [
-                    {id: 1, title: "React", isDone: false},
-                    {id: 2, title: "JS & TS", isDone: true},
-                    {id: 3, title: "Math", isDone: true},
+                    {id: 1, title: "Math", isDone: true},
+                    {id: 2, title: "English", isDone: true},
+                    {id: 3, title: "Physics", isDone: true},
                 ]
             },
             {
+                id: 3,
                 title: "Work",
                 tasks: [
-                    {id: 1, title: "React", isDone: false},
-                    {id: 2, title: "JS & TS", isDone: true},
-                    {id: 3, title: "Math", isDone: true},
+                    {id: 1, title: "add blue button", isDone: true},
+                    {id: 2, title: "typification props", isDone: true},
+                    {id: 3, title: "create universal button", isDone: true},
                 ]
             },
 

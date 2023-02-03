@@ -1,13 +1,14 @@
 import React, {FC, useState} from "react";
 import TasksList from "./TasksList/TasksList";
 import {TaskType} from "../../../App";
+import StatusButtons from "./StatusButtons/StatusButtons";
 
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType>
 }
 
-type FilterType = 'all' | 'active' | 'completed'
+export type FilterType = 'all' | 'active' | 'completed'
 
 const TodoList: FC<TodoListPropsType> = (props) => {
 
@@ -34,11 +35,7 @@ const TodoList: FC<TodoListPropsType> = (props) => {
                 <button>+</button>
             </div>
             <TasksList tasks={filteredTasks} />
-            <div>
-                <button onClick={() => {changeFilter('all')}}>All</button>
-                <button onClick={() => {changeFilter('active')}}>Active</button>
-                <button onClick={() => {changeFilter('completed')}}>Completed</button>
-            </div>
+            <StatusButtons changeFilter={changeFilter}/>
         </div>
     )
 }

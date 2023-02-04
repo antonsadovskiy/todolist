@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {TaskType} from "../../../../App";
+import s from './TasksList.module.css'
 
 type TaskListPropsType = {
     tasks: Array<TaskType>
@@ -14,7 +15,7 @@ const TasksList:FC<TaskListPropsType> = (props) => {
             </li>)
 
     return (
-        <ul>
+        <ul className={s.tasks}>
             {tasks}
         </ul>
     );

@@ -3,3 +3,9 @@
     flex-wrap: wrap;
     gap: 50px;
 }
+
+.appContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}

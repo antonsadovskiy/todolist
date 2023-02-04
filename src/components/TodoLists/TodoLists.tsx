@@ -9,12 +9,12 @@ type TodoListsPropsType = {
 
 const TodoLists:FC<TodoListsPropsType> = (props) => {
 
-    let lists = props.data.lists.map((list,index) =>
+    let lists = props.data.lists.map(list =>
         <TodoList key={list.id} title={list.title} tasks={list.tasks}/>
     )
 
     return (
-        <div className={s.listsWrapper}>
+        <div className={s.listsContainer}>
             {lists}
         </div>
     );

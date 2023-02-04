@@ -2,6 +2,7 @@ import React, {FC, useState} from "react";
 import TasksList from "./TasksList/TasksList";
 import {TaskType} from "../../../App";
 import StatusButtons from "./StatusButtons/StatusButtons";
+import s from './TodoList.module.css'
 
 type TodoListPropsType = {
     title: string
@@ -28,9 +29,9 @@ const TodoList: FC<TodoListPropsType> = (props) => {
     }
 
     return (
-        <div>
+        <div className={s.listContainer}>
             <h3>{props.title}</h3>
-            <div>
+            <div className={s.input}>
                 <input/>
                 <button>+</button>
             </div>

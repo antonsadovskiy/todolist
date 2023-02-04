@@ -49,7 +49,6 @@ const App = () => {
                     {id: 3, title: "create universal button", isDone: true},
                 ]
             },
-
         ]
     }
 

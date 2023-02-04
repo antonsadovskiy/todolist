@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
 import {DataType} from "../../App";
-import TodoList from "./TodoList/TodoList";
+import {TodoList} from "./TodoList/TodoList";
 import s from './TodoLists.module.css'
 import InputList from "./InputList/InputList";
 
@@ -8,7 +8,7 @@ type TodoListsPropsType = {
     data: DataType
 }
 
-const TodoLists:FC<TodoListsPropsType> = (props) => {
+export const TodoLists:FC<TodoListsPropsType> = (props) => {
     debugger
     let [listsForApp, setListsForApp] = useState(props.data.lists)
 
@@ -37,5 +37,3 @@ const TodoLists:FC<TodoListsPropsType> = (props) => {
         </div>
     );
 };
-
-export default TodoLists;

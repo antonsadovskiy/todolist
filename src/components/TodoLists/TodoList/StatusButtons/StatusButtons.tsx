@@ -5,7 +5,7 @@ type StatusButtonsPropsType = {
     changeFilter: (value: FilterType) => void
 }
 
-const StatusButtons:FC<StatusButtonsPropsType> = (props) => {
+export const StatusButtons:FC<StatusButtonsPropsType> = (props) => {
     return (
         <div>
             <button onClick={() => {props.changeFilter('all')}}>All</button>
@@ -14,5 +14,3 @@ const StatusButtons:FC<StatusButtonsPropsType> = (props) => {
         </div>
     );
 };
-
-export default StatusButtons;

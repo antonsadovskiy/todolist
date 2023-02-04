@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import TodoLists from "./components/TodoLists/TodoLists";
+import {TodoLists} from "./components/TodoLists/TodoLists";
 
 export type DataType = {
     lists: Array<ListType>

@@ -5,7 +5,7 @@ type InputTaskPropsType = {
     addTask: (value: string) => void
 }
 
-const InputTask:FC<InputTaskPropsType> = (props) => {
+export const InputTask:FC<InputTaskPropsType> = (props) => {
 
     let [text, setText] = useState('')
 
@@ -26,5 +26,3 @@ const InputTask:FC<InputTaskPropsType> = (props) => {
         </div>
     );
 };
-
-export default InputTask;

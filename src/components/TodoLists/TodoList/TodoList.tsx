@@ -1,9 +1,9 @@
 import React, {FC, useState} from "react";
-import TasksList from "./TasksList/TasksList";
-import {DataType, TaskType} from "../../../App";
-import StatusButtons from "./StatusButtons/StatusButtons";
+import {TasksList} from "./TasksList/TasksList";
+import {TaskType} from "../../../App";
+import {StatusButtons} from "./StatusButtons/StatusButtons";
 import s from './TodoList.module.css'
-import InputTask from "./InputTask/InputTask";
+import {InputTask} from "./InputTask/InputTask";
 
 type TodoListPropsType = {
     title: string
@@ -12,7 +12,7 @@ type TodoListPropsType = {
 
 export type FilterType = 'all' | 'active' | 'completed'
 
-const TodoList: FC<TodoListPropsType> = (props) => {
+export const TodoList: FC<TodoListPropsType> = (props) => {
 
     const [filter, setFilter] = useState<FilterType>('all')
 
@@ -40,15 +40,19 @@ const TodoList: FC<TodoListPropsType> = (props) => {
         setTasksForList([newTask, ...tasksForList])
     }
 
+    const removeTask = (id: number) => {
+        let tasks = tasksForList.filter( item => item.id !== id )
+        setTasksForList(tasks)
+    }
+
+
 
     return (
         <div className={s.listContainer}>
             <h3>{props.title}</h3>
             <InputTask addTask={addTask}/>
-            <TasksList tasks={filteredTasks} />
+            <TasksList tasks={filteredTasks} removeTask={removeTask}/>
             <StatusButtons changeFilter={changeFilter}/>
         </div>
     )
 }
-
-export default TodoList

@@ -1,6 +1,6 @@
 {
   "homepage": "https://antonsadovskiy.github.io/todolist",
-  "name": "todolist",
+  "name": "todolist-main",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

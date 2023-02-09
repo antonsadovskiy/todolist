@@ -1,28 +1,53 @@
-import React, {FC} from 'react';
-import {FilterType, TasksType} from '../../App';
+import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
+import {FilterType, TaskType} from "../../App";
 import {TasksList} from "./TasksList/TasksList";
 
 type TodoListPropsType = {
     title: string
-    tasks: Array<TasksType>
+    tasks: Array<TaskType>
     changeFilter: (filterValue: FilterType) => void
-    removeTask: (id: number) => void
+    removeTask: (id: string) => void
+    addTask: (text: string) => void
 }
 
 export const TodoList:FC<TodoListPropsType> = (props) => {
+
+    const [text, setText] = useState<string>('')
+
+    const onchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setText(e.currentTarget.value)
+    }
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter"){
+            addTask()
+        }
+    }
+    const addTask = () => {
+        props.addTask(text)
+        setText('')
+    }
+    const setAll = () => {
+        props.changeFilter('all')
+    }
+    const setActive = () => {
+        props.changeFilter('active')
+    }
+    const setCompleted = () => {
+        props.changeFilter('completed')
+    }
 
     return (
         <div>
             <h3>{props.title}</h3>
             <div>
-                <input />
-                <button>+</button>
+                <input onChange={onchangeHandler}  onKeyPress={onKeyPressHandler} value={text}/>
+                <button onClick={addTask}>+</button>
             </div>
-            <TasksList tasks={props.tasks} removeTask={props.removeTask} />
+            <TasksList tasks={props.tasks} removeTask={props.removeTask}/>
             <div>
-                <button onClick={() => props.changeFilter('all')} >All</button>
-                <button onClick={() => props.changeFilter('active')} >Active</button>
-                <button onClick={() => props.changeFilter('completed')} >Completed</button>
+                <button onClick={setAll}>All</button>
+                <button onClick={setActive}>Active</button>
+                <button onClick={setCompleted}>Completed</button>
             </div>
         </div>
     );

@@ -39,13 +39,13 @@ const App = () => {
         setTasks(newTasks)
     }
 
-    const addTask = (text: string) => {
+    const addTask = (title: string) => {
         const newTask = {
             id: v1(),
-            title: text,
+            title: title,
             isDone: false,
         }
-        setTasks([newTask, ...tasks])
+        setTasks([newTask,...tasks])
     }
 
     return (

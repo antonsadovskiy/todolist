@@ -7,10 +7,10 @@ type TodoListPropsType = {
     tasks: Array<TaskType>
     changeFilter: (filterValue: FilterType) => void
     removeTask: (id: string) => void
-    addTask: (text: string) => void
+    addTask: (title: string) => void
 }
 
-export const TodoList:FC<TodoListPropsType> = (props) => {
+export const TodoList:FC<TodoListPropsType> = ({title, tasks, ...props}) => {
 
     const [text, setText] = useState<string>('')
 
@@ -18,7 +18,7 @@ export const TodoList:FC<TodoListPropsType> = (props) => {
         setText(e.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter"){
+        if (e.key === 'Enter'){
             addTask()
         }
     }
@@ -38,12 +38,12 @@ export const TodoList:FC<TodoListPropsType> = (props) => {
 
     return (
         <div>
-            <h3>{props.title}</h3>
+            <h3>{title}</h3>
             <div>
-                <input onChange={onchangeHandler}  onKeyPress={onKeyPressHandler} value={text}/>
+                <input onChange={onchangeHandler} onKeyPress={onKeyPressHandler} value={text}/>
                 <button onClick={addTask}>+</button>
             </div>
-            <TasksList tasks={props.tasks} removeTask={props.removeTask}/>
+            <TasksList tasks={tasks} removeTask={props.removeTask}/>
             <div>
                 <button onClick={setAll}>All</button>
                 <button onClick={setActive}>Active</button>

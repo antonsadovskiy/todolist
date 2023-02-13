@@ -19,3 +19,6 @@
     color: red;
     font-weight: 600;
 }
+.newTaskContainer input{
+    outline: 0;
+}

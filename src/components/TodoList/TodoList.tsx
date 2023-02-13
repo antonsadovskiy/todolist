@@ -43,8 +43,8 @@ export const TodoList:FC<TodoListPropsType> = ({title, tasks, ...props}) => {
     return (
         <div className={style.listContainer}>
             <h3>{title}</h3>
-            <div>
-                <input onChange={onchangeHandler} onKeyPress={onKeyPressHandler} value={text}/>
+            <div className={style.newTaskContainer}>
+                <input placeholder={"Enter task"} onChange={onchangeHandler} onKeyPress={onKeyPressHandler} value={text}/>
                 <button disabled={!text.length || text.length > 15} onClick={addTask}>+</button>
                 {text.length > 15 && <div className={style.warning}>Title is too long</div>}
             </div>

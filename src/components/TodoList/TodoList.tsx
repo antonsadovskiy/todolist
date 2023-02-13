@@ -1,6 +1,7 @@
 import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
 import {FilterType, TaskType} from "../../App";
 import {TasksList} from "./TasksList/TasksList";
+import style from './TodoList.module.css'
 
 type TodoListPropsType = {
     title: string
@@ -18,12 +19,15 @@ export const TodoList:FC<TodoListPropsType> = ({title, tasks, ...props}) => {
         setText(e.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter'){
+        if (text.length <= 15 && e.key === 'Enter'){
             addTask()
         }
     }
     const addTask = () => {
-        props.addTask(text)
+        const trimmedTask = text.trim()
+        if (trimmedTask){
+            props.addTask(trimmedTask)
+        }
         setText('')
     }
     const setAll = () => {
@@ -37,11 +41,12 @@ export const TodoList:FC<TodoListPropsType> = ({title, tasks, ...props}) => {
     }
 
     return (
-        <div>
+        <div className={style.listContainer}>
             <h3>{title}</h3>
             <div>
                 <input onChange={onchangeHandler} onKeyPress={onKeyPressHandler} value={text}/>
-                <button onClick={addTask}>+</button>
+                <button disabled={!text.length || text.length > 15} onClick={addTask}>+</button>
+                {text.length > 15 && <div className={style.warning}>Title is too long</div>}
             </div>
             <TasksList tasks={tasks} removeTask={props.removeTask}/>
             <div>

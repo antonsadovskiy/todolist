@@ -26,13 +26,17 @@ const App = () => {
         setFilter(filterValue)
     }
 
-    let todoListTasks: Array<TaskType> = tasks
-    if (filter === 'active'){
-        todoListTasks = tasks.filter( task => !task.isDone )
+    const getFilteredTasks = (tasks: Array<TaskType>, filter: FilterType):Array<TaskType> => {
+        switch (filter) {
+            case "active":
+                return tasks.filter( task => !task.isDone )
+            case "completed":
+                return tasks.filter( task => task.isDone )
+            default:
+                return tasks
+        }
     }
-    if (filter === 'completed'){
-        todoListTasks = tasks.filter( task => task.isDone )
-    }
+    const todoListTasks = getFilteredTasks(tasks, filter)
 
     const removeTask = (id: string) => {
         let newTasks = tasks.filter( task => task.id !== id )

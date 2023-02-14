@@ -23,6 +23,7 @@
     outline: 0;
 }
 .isActive {
-    background-color: lightcoral;
+    background-color: antiquewhite;
+    border: 2px solid gray;
     outline: 0;
 }

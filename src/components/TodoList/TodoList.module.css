@@ -22,3 +22,7 @@
 .newTaskContainer input{
     outline: 0;
 }
+.isActive {
+    background-color: lightcoral;
+    outline: 0;
+}

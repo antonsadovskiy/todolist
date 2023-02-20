@@ -51,11 +51,9 @@ const App = () => {
         setTasks([newTask,...tasks])
     }
     const changeStatus = (id: string, isDone: boolean) => {
-        let task = tasks.find( task => task.id === id )
-        if (task) {
-            task.isDone = isDone
-        }
-        setTasks([...tasks])
+        setTasks(tasks.map (task =>
+            task.id === id?
+                {...task, isDone: isDone} : task))
     }
 
     return (

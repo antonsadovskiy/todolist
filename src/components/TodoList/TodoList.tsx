@@ -17,6 +17,8 @@ export const TodoList:FC<TodoListPropsType> = ({title, tasks,filter, ...props}) 
 
     const [text, setText] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
+    const inputMaxLength: number = 15
+    const isUserMessageTooLong: boolean = text.length > inputMaxLength
 
     const onchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setText(e.currentTarget.value)
@@ -45,14 +47,18 @@ export const TodoList:FC<TodoListPropsType> = ({title, tasks,filter, ...props}) 
         props.changeFilter('completed')
     }
 
+    const errorLength = isUserMessageTooLong && <div className={style.warning}>Title is too long</div>
+    const errorZeroInput = error && <div className={style.warning}>{error}</div>
+    const isButtonDisabled = text.length > 15 || text.length === 0
+
     return (
         <div className={style.listContainer}>
             <h3>{title}</h3>
             <div className={style.newTaskContainer}>
                 <input placeholder={"Enter task"} onChange={onchangeHandler} onKeyPress={onKeyPressHandler} value={text}/>
-                <button disabled={text.length > 15 || text.length === 0} onClick={addTask}>+</button>
-                {error && <div className={style.warning}>{error}</div>}
-                {text.length > 15 && <div className={style.warning}>Title is too long</div>}
+                <button disabled={isButtonDisabled} onClick={addTask}>+</button>
+                {errorZeroInput}
+                {errorLength}
             </div>
             <TasksList tasks={tasks} removeTask={props.removeTask} changeStatus={props.changeStatus}/>
             <div>

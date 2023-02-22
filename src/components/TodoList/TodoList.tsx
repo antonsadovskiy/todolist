@@ -1,9 +1,9 @@
 import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
-import {FilterType, TaskType} from "../../App";
 import {TasksList} from "./TasksList/TasksList";
 import style from './TodoList.module.css'
+import {FilterType, TaskType} from "../../App";
 
-type TodoListPropsType = {
+type TodoListPropType = {
     title: string
     tasks: Array<TaskType>
     filter: FilterType
@@ -13,30 +13,34 @@ type TodoListPropsType = {
     changeStatus: (id: string, isDone: boolean) => void
 }
 
-export const TodoList:FC<TodoListPropsType> = ({title, tasks,filter, ...props}) => {
+export const TodoList:FC<TodoListPropType> = (props) => {
 
-    const [text, setText] = useState<string>('')
+    const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
-    const inputMaxLength: number = 15
-    const isUserMessageTooLong: boolean = text.length > inputMaxLength
+    const titleMaxLength: number = 15
+    const isUserMessageIsTooLong: boolean = title.length > titleMaxLength
 
-    const onchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setText(e.currentTarget.value)
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)
+    }
+    const onClickHandler = () => {
+        addTask()
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null)
-        if (text.length <= 15 && e.key === 'Enter'){
+        if (title.length <= 15 && e.key === 'Enter'){
             addTask()
         }
     }
     const addTask = () => {
-        if (text.trim()){
-            props.addTask(text.trim())
-            setText('')
+        if (title.trim()){
+            props.addTask(title.trim())
+            setTitle('')
         } else {
             setError('Title is required')
         }
     }
+
     const setAll = () => {
         props.changeFilter('all')
     }
@@ -47,24 +51,30 @@ export const TodoList:FC<TodoListPropsType> = ({title, tasks,filter, ...props}) 
         props.changeFilter('completed')
     }
 
-    const errorLength = isUserMessageTooLong && <div className={style.warning}>Title is too long</div>
-    const errorZeroInput = error && <div className={style.warning}>{error}</div>
-    const isButtonDisabled = text.length > 15 || text.length === 0
+    const errorTitleZero = error && <div className={style.warning}>{error}</div>
+    const errorTitleLength = isUserMessageIsTooLong && <div className={style.warning}>Title is too long</div>
+    const isButtonDisabled = title.length > 15 || title.length === 0
 
     return (
         <div className={style.listContainer}>
-            <h3>{title}</h3>
+            <h3>{props.title}</h3>
             <div className={style.newTaskContainer}>
-                <input placeholder={"Enter task"} onChange={onchangeHandler} onKeyPress={onKeyPressHandler} value={text}/>
-                <button disabled={isButtonDisabled} onClick={addTask}>+</button>
-                {errorZeroInput}
-                {errorLength}
+                <input placeholder={'Enter task'}
+                       type="text"
+                       value={title}
+                       onChange={onChangeHandler}
+                       onKeyDown={onKeyPressHandler}/>
+                <button disabled={isButtonDisabled} onClick={onClickHandler}>+</button>
+                {errorTitleZero}
+                {errorTitleLength}
             </div>
-            <TasksList tasks={tasks} removeTask={props.removeTask} changeStatus={props.changeStatus}/>
+            <TasksList tasks={props.tasks}
+                       removeTask={props.removeTask}
+                       changeStatus={props.changeStatus}/>
             <div>
-                <button className={filter === 'all'? style.isActive : ''} onClick={setAll}>All</button>
-                <button className={filter === 'active'? style.isActive : ''} onClick={setActive}>Active</button>
-                <button className={filter === 'completed'? style.isActive : ''} onClick={setCompleted}>Completed</button>
+                <button className={props.filter === 'all'? style.isActive : ''} onClick={setAll}>all</button>
+                <button className={props.filter === 'active'? style.isActive : ''} onClick={setActive}>active</button>
+                <button className={props.filter === 'completed'? style.isActive : ''} onClick={setCompleted}>complete</button>
             </div>
         </div>
     );

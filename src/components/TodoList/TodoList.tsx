@@ -8,10 +8,10 @@ type TodoListPropType = {
     title: string
     tasks: Array<TaskType>
     filter: FilterType
-    changeFilter: (filterValue: FilterType, todolistId: string) => void
-    removeTask: (taskId: string, todolistId: string) => void
-    addTask: (title: string, todolistId: string) => void
-    changeStatus: (taskId: string, isDone: boolean, todolistId: string) => void
+    changeFilter: (todolistId: string, filterValue: FilterType) => void
+    removeTask: (todolistId: string, taskId: string) => void
+    addTask: (todolistId: string, title: string) => void
+    changeStatus: (todolistId: string, taskId: string, isDone: boolean) => void
     removeList: (todolistId: string) => void
 }
 
@@ -36,7 +36,7 @@ export const TodoList:FC<TodoListPropType> = (props) => {
     }
     const addTask = () => {
         if (title.trim()){
-            props.addTask(title.trim(), props.id)
+            props.addTask(props.id, title.trim())
             setTitle('')
         } else {
             setError('Title is required')
@@ -47,13 +47,13 @@ export const TodoList:FC<TodoListPropType> = (props) => {
     }
 
     const setAll = () => {
-        props.changeFilter('all', props.id)
+        props.changeFilter(props.id,'all')
     }
     const setActive = () => {
-        props.changeFilter('active', props.id)
+        props.changeFilter(props.id, 'active')
     }
     const setCompleted = () => {
-        props.changeFilter('completed', props.id)
+        props.changeFilter(props.id, 'completed')
     }
 
     const errorTitleZero = error && <div className={style.warning}>{error}</div>

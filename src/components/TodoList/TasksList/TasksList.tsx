@@ -6,7 +6,7 @@ type TasksListPropsType = {
     todolistId: string
     tasks: Array<TaskType>
     removeTask: (taskId: string, todolistId: string) => void
-    changeStatus: (taskId: string, isDone: boolean, todolistId: string) => void
+    changeStatus: (todolistId: string, taskId: string, isDone: boolean) => void
 }
 
 export const TasksList:FC<TasksListPropsType> = (props) => {
@@ -14,10 +14,10 @@ export const TasksList:FC<TasksListPropsType> = (props) => {
     const tasks = props.tasks.map( task => {
 
         const onClickHandler = () => {
-            props.removeTask(task.id, props.todolistId)
+            props.removeTask(props.todolistId, task.id)
         }
         const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            props.changeStatus(task.id, e.currentTarget.checked, props.todolistId)
+            props.changeStatus(props.todolistId, task.id, e.currentTarget.checked)
         }
 
         return (

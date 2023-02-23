@@ -4,13 +4,15 @@ import style from './TodoList.module.css'
 import {FilterType, TaskType} from "../../App";
 
 type TodoListPropType = {
+    id: string
     title: string
     tasks: Array<TaskType>
     filter: FilterType
-    changeFilter: (filterValue: FilterType) => void
-    removeTask: (id: string) => void
-    addTask: (title: string) => void
-    changeStatus: (id: string, isDone: boolean) => void
+    changeFilter: (filterValue: FilterType, todolistId: string) => void
+    removeTask: (taskId: string, todolistId: string) => void
+    addTask: (title: string, todolistId: string) => void
+    changeStatus: (taskId: string, isDone: boolean, todolistId: string) => void
+    removeList: (todolistId: string) => void
 }
 
 export const TodoList:FC<TodoListPropType> = (props) => {
@@ -34,21 +36,24 @@ export const TodoList:FC<TodoListPropType> = (props) => {
     }
     const addTask = () => {
         if (title.trim()){
-            props.addTask(title.trim())
+            props.addTask(title.trim(), props.id)
             setTitle('')
         } else {
             setError('Title is required')
         }
     }
+    const onClickRemoveListHandler = () => {
+        props.removeList(props.id)
+    }
 
     const setAll = () => {
-        props.changeFilter('all')
+        props.changeFilter('all', props.id)
     }
     const setActive = () => {
-        props.changeFilter('active')
+        props.changeFilter('active', props.id)
     }
     const setCompleted = () => {
-        props.changeFilter('completed')
+        props.changeFilter('completed', props.id)
     }
 
     const errorTitleZero = error && <div className={style.warning}>{error}</div>
@@ -57,7 +62,7 @@ export const TodoList:FC<TodoListPropType> = (props) => {
 
     return (
         <div className={style.listContainer}>
-            <h3>{props.title}</h3>
+            <h3>{props.title} <button onClick={onClickRemoveListHandler}>x</button></h3>
             <div className={style.newTaskContainer}>
                 <input placeholder={'Enter task'}
                        type="text"
@@ -68,7 +73,8 @@ export const TodoList:FC<TodoListPropType> = (props) => {
                 {errorTitleZero}
                 {errorTitleLength}
             </div>
-            <TasksList tasks={props.tasks}
+            <TasksList todolistId={props.id}
+                       tasks={props.tasks}
                        removeTask={props.removeTask}
                        changeStatus={props.changeStatus}/>
             <div>

@@ -3,9 +3,10 @@ import style from './TasksList.module.css'
 import {TaskType} from "../../../App";
 
 type TasksListPropsType = {
+    todolistId: string
     tasks: Array<TaskType>
-    removeTask: (id: string) => void
-    changeStatus: (id: string, isDone: boolean) => void
+    removeTask: (taskId: string, todolistId: string) => void
+    changeStatus: (taskId: string, isDone: boolean, todolistId: string) => void
 }
 
 export const TasksList:FC<TasksListPropsType> = (props) => {
@@ -13,10 +14,10 @@ export const TasksList:FC<TasksListPropsType> = (props) => {
     const tasks = props.tasks.map( task => {
 
         const onClickHandler = () => {
-            props.removeTask(task.id)
+            props.removeTask(task.id, props.todolistId)
         }
         const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            props.changeStatus(task.id, e.currentTarget.checked)
+            props.changeStatus(task.id, e.currentTarget.checked, props.todolistId)
         }
 
         return (

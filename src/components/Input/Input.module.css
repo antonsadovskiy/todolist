@@ -1,0 +1,11 @@
+.newTaskContainer {
+    display: flex;
+}
+.newTaskContainer input{
+    outline: 0;
+}
+
+.warning {
+    color: red;
+    font-weight: 600;
+}

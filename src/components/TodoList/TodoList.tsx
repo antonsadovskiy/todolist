@@ -1,7 +1,11 @@
-import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
+import React, {FC} from 'react';
 import {TasksList} from "./TasksList/TasksList";
 import style from './TodoList.module.css'
 import {FilterType, TaskType} from "../../App";
+import {Input} from "../Input/Input";
+import EditableSpan from "../EditableSpan/EditableSpan";
+import {Button, IconButton} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type TodoListPropType = {
     id: string
@@ -13,37 +17,17 @@ type TodoListPropType = {
     addTask: (todolistId: string, title: string) => void
     changeStatus: (todolistId: string, taskId: string, isDone: boolean) => void
     removeList: (todolistId: string) => void
+    changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
+    changeListTitle: (todolistId: string, title: string) => void
 }
 
 export const TodoList:FC<TodoListPropType> = (props) => {
 
-    const [title, setTitle] = useState<string>('')
-    const [error, setError] = useState<string | null>(null)
-    const titleMaxLength: number = 15
-    const isUserMessageIsTooLong: boolean = title.length > titleMaxLength
-
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
-    }
-    const onClickHandler = () => {
-        addTask()
-    }
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
-        if (title.length <= 15 && e.key === 'Enter'){
-            addTask()
-        }
-    }
-    const addTask = () => {
-        if (title.trim()){
-            props.addTask(props.id, title.trim())
-            setTitle('')
-        } else {
-            setError('Title is required')
-        }
-    }
     const onClickRemoveListHandler = () => {
         props.removeList(props.id)
+    }
+    const onChangeTitleHandler = (newTitle: string) => {
+        props.changeListTitle(props.id, newTitle)
     }
 
     const setAll = () => {
@@ -56,31 +40,42 @@ export const TodoList:FC<TodoListPropType> = (props) => {
         props.changeFilter(props.id, 'completed')
     }
 
-    const errorTitleZero = error && <div className={style.warning}>{error}</div>
-    const errorTitleLength = isUserMessageIsTooLong && <div className={style.warning}>Title is too long</div>
-    const isButtonDisabled = title.length > 15 || title.length === 0
+    const addTask = (title: string) => {
+        props.addTask(props.id, title)
+    }
 
     return (
         <div className={style.listContainer}>
-            <h3>{props.title} <button onClick={onClickRemoveListHandler}>x</button></h3>
-            <div className={style.newTaskContainer}>
-                <input placeholder={'Enter task'}
-                       type="text"
-                       value={title}
-                       onChange={onChangeHandler}
-                       onKeyDown={onKeyPressHandler}/>
-                <button disabled={isButtonDisabled} onClick={onClickHandler}>+</button>
-                {errorTitleZero}
-                {errorTitleLength}
+            <div className={style.titleContainer}>
+                <div>
+                    <h3><EditableSpan title={props.title} onChangeTitle={onChangeTitleHandler}/></h3>
+                </div>
+                <IconButton onClick={onClickRemoveListHandler}>
+                    <DeleteIcon/>
+                </IconButton>
             </div>
+            <Input addItem={addTask}/>
             <TasksList todolistId={props.id}
                        tasks={props.tasks}
                        removeTask={props.removeTask}
-                       changeStatus={props.changeStatus}/>
-            <div>
-                <button className={props.filter === 'all'? style.isActive : ''} onClick={setAll}>all</button>
-                <button className={props.filter === 'active'? style.isActive : ''} onClick={setActive}>active</button>
-                <button className={props.filter === 'completed'? style.isActive : ''} onClick={setCompleted}>complete</button>
+                       changeStatus={props.changeStatus}
+                       changeTaskTitle={props.changeTaskTitle}/>
+            <div className={style.buttonContainer}>
+                <Button variant={props.filter === 'all'? "contained" : "outlined"}
+                        onClick={setAll}
+                        size={'small'}>
+                    all
+                </Button>
+                <Button variant={props.filter === 'active'? "contained" : "outlined"}
+                        onClick={setActive}
+                        size={'small'}>
+                    active
+                </Button>
+                <Button variant={props.filter === 'completed'? "contained" : "outlined"}
+                        onClick={setCompleted}
+                        size={'small'}>
+                    completed
+                </Button>
             </div>
         </div>
     );

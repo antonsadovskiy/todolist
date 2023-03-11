@@ -1,29 +1,19 @@
-.listsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 50px;
-}
-
-.appContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-}
-
 .listContainer {
-    border: 1px solid black;
     padding: 25px;
+    flex-wrap: wrap;
 }
 
-.warning {
-    color: red;
-    font-weight: 600;
-}
-.newTaskContainer input{
-    outline: 0;
-}
 .isActive {
     background-color: antiquewhite;
     border: 2px solid gray;
     outline: 0;
+}
+.titleContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.buttonContainer {
+    display: flex;
+    gap: 5px;
 }

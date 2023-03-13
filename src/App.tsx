@@ -6,7 +6,6 @@ import {Input} from "./components/Input/Input";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 
-
 export type TaskType = {
     id: string
     title: string
@@ -32,7 +31,6 @@ const App = () => {
         {id: TodolistId1, title: "What to learn", filter: 'active'},
         {id: TodolistId2, title: "Travel to Poland", filter: 'completed'},
     ])
-
     const [tasks, setTasks] = useState<TasksType>({
         [TodolistId1]: [
             {id: v1(), title: "Redux", isDone: false},
@@ -46,9 +44,6 @@ const App = () => {
         ]
     })
 
-    const changeFilter = (todolistId: string, filterValue: FilterType) => {
-        setTodolists(todolists.map(list => list.id === todolistId ? {...list, filter: filterValue} : list))
-    }
     const addTask = (todolistId: string, title: string) => {
         const newTask: TaskType = {
             id: v1(),
@@ -56,15 +51,11 @@ const App = () => {
             isDone: false
         }
         setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]})
+
     }
     const removeTask = (todolistId: string, taskId: string) => {
         setTasks({...tasks, [todolistId]: tasks[todolistId].filter(task => task.id !== taskId)})
-    }
-    const changeStatus = (todolistId: string, taskId: string, isDone: boolean) => {
-        setTasks({
-            ...tasks,
-            [todolistId]: tasks[todolistId].map(task => task.id === taskId ? {...task, isDone: isDone} : task)
-        })
+
     }
     const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
         setTasks({
@@ -72,19 +63,11 @@ const App = () => {
             [todolistId]: tasks[todolistId].map(task => task.id === taskId ? {...task, title: title} : task)
         })
     }
-    const changeListTitle = (todolistId: string, title: string) => {
-        setTodolists(todolists.map(list => list.id === todolistId ? {...list, title: title} : list))
-    }
-
-    const getTasksBuFilter = (filterValue: FilterType, tasks: Array<TaskType>) => {
-        switch (filterValue) {
-            case "active":
-                return tasks.filter(task => !task.isDone)
-            case "completed":
-                return tasks.filter(task => task.isDone)
-            default:
-                return tasks
-        }
+    const changeStatus = (todolistId: string, taskId: string, isDone: boolean) => {
+        setTasks({
+            ...tasks,
+            [todolistId]: tasks[todolistId].map(task => task.id === taskId ? {...task, isDone: isDone} : task)
+        })
     }
 
     const addList = (title: string) => {
@@ -100,11 +83,29 @@ const App = () => {
         setTodolists(todolists.filter(list => list.id !== todolistId))
         delete tasks[todolistId]
     }
+    const changeListTitle = (todolistId: string, title: string) => {
+        setTodolists(todolists.map(list => list.id === todolistId ? {...list, title: title} : list))
+    }
+    const changeFilter = (todolistId: string, filterValue: FilterType) => {
+        setTodolists(todolists.map(list => list.id === todolistId ? {...list, filter: filterValue} : list))
+    }
+
+
+    const getTasksByFilter = (filterValue: FilterType, tasks: Array<TaskType>) => {
+        switch (filterValue) {
+            case "active":
+                return tasks.filter(task => !task.isDone)
+            case "completed":
+                return tasks.filter(task => task.isDone)
+            default:
+                return tasks
+        }
+    }
 
 
     const TodoLists = todolists.map(list => {
 
-            const tasksForList = getTasksBuFilter(list.filter, tasks[list.id])
+            const tasksForList = getTasksByFilter(list.filter, tasks[list.id])
 
             return (
                 <Grid item>
@@ -134,7 +135,7 @@ const App = () => {
                     <IconButton edge="start" color="inherit" aria-label="menu">
                         <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6" sx={{flexGrow: 1}}>
                         Menu
                     </Typography>
                     <Button color="inherit">Login</Button>

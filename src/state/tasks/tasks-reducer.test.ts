@@ -1,9 +1,9 @@
 import {v1} from "uuid";
 import {TasksType} from "../../App";
 import {
-    AddTaskActionCreator, ChangeTaskStatusActionCreator,
-    ChangeTaskTitleActionCreator,
-    RemoveTaskActionCreator,
+    addTaskActionCreator, changeTaskStatusActionCreator,
+    changeTaskTitleActionCreator,
+    removeTaskActionCreator,
     tasksReducer
 } from "./tasks-reducer";
 
@@ -33,7 +33,7 @@ test('should add new task to correct todolist', () => {
 
     const newTaskTitle = 'New Task Title'
 
-    const action = AddTaskActionCreator(TodolistId1, newTaskTitle)
+    const action = addTaskActionCreator(TodolistId1, newTaskTitle)
 
     const endState = tasksReducer(startState, action)
 
@@ -46,7 +46,7 @@ test('should remove task from correct todolist', () => {
 
     const taskId = startState[TodolistId1][0].id
 
-    const action = RemoveTaskActionCreator(TodolistId1, taskId)
+    const action = removeTaskActionCreator(TodolistId1, taskId)
 
     const endState = tasksReducer(startState, action)
 
@@ -59,7 +59,7 @@ test('should change task title in correct todolist', () => {
     const taskId = startState[TodolistId2][2].id
     const newTaskTitle = 'Happy life'
 
-    const action = ChangeTaskTitleActionCreator(TodolistId2, taskId, newTaskTitle)
+    const action = changeTaskTitleActionCreator(TodolistId2, taskId, newTaskTitle)
 
     const endState = tasksReducer(startState, action)
 
@@ -72,7 +72,7 @@ test('should change task status in correct todolist', () => {
     const taskId = startState[TodolistId1][2].id
     const newTaskStatus = true
 
-    const action = ChangeTaskStatusActionCreator(TodolistId1, taskId, newTaskStatus)
+    const action = changeTaskStatusActionCreator(TodolistId1, taskId, newTaskStatus)
 
     const endState = tasksReducer(startState, action)
 

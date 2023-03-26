@@ -1,10 +1,10 @@
 import {v1} from "uuid";
 import {TasksType} from "../../App";
 import {
-    addEmptyTodolistAC,
-    addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, removeTasksFromTodolistAC,
+    addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC,
     tasksReducer
 } from "./tasks-reducer";
+import {addTodolistAC, removeTodolistAC} from "../todolists/todolists-reducer";
 
 let TodolistId1: string
 let TodolistId2: string
@@ -80,7 +80,7 @@ test('new property with new array should be added when new todolist is added', (
 
     const newTodolistId = v1()
 
-    const action = addEmptyTodolistAC(newTodolistId)
+    const action = addTodolistAC(newTodolistId)
     const endState = tasksReducer(startState, action)
 
     const keys = Object.keys(endState)
@@ -95,7 +95,7 @@ test('new property with new array should be added when new todolist is added', (
 
 test('array of tasks should be deleted from correct todolist', () => {
 
-    const action = removeTasksFromTodolistAC(TodolistId1)
+    const action = removeTodolistAC(TodolistId1)
     const endState = tasksReducer(startState, action)
 
     const keys = Object.keys(endState)

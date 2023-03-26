@@ -21,9 +21,8 @@ beforeEach(() => {
 test('new todolist should be added', () => {
 
     const newTodolistTitle = 'New Todolist'
-    const newTodolistId = v1()
 
-    const action = addTodolistAC(newTodolistId, newTodolistTitle)
+    const action = addTodolistAC(newTodolistTitle)
     const endState = todolistsReducer(startState, action)
 
     expect(endState.length).toBe(3)

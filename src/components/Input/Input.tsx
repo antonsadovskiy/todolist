@@ -48,7 +48,7 @@ export const Input: FC<InputPropsType> = (props) => {
                        onKeyDown={onKeyPressHandler}
                        error={isUserMessageIsTooLong || !!error}
                        helperText={isUserMessageIsTooLong? 'title is too long' : '' || error}/>
-            <IconButton disabled={isButtonDisabled}
+            <IconButton className={style.addItem} disabled={isButtonDisabled}
                         onClick={onClickHandler}
                         color={'primary'}>
                 <ControlPoint/>

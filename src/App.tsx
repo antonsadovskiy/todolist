@@ -120,7 +120,7 @@ const App = () => {
                 <Grid container style={{padding: '20px'}}>
                     <Input addItem={addList}/>
                 </Grid>
-                <Grid container spacing={3}>
+                <Grid container spacing={6}>
                     {TodoLists}
                 </Grid>
             </Container>

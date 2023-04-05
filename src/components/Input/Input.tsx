@@ -40,7 +40,7 @@ export const Input: FC<InputPropsType> = (props) => {
 
 
     return (
-        <div className={style.newTaskContainer}>
+        <div>
             <TextField label="Enter title"
                        variant="outlined"
                        value={title}

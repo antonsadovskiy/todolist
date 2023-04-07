@@ -1,9 +1,7 @@
 import {v1} from "uuid";
 import {
-    AddTodolistActionType,
-    RemoveTodolistActionType,
+    AddTodolistAT, RemoveTodolistAT,
     TodolistId1,
-    TodolistId2
 } from "../todolists/todolists-reducer";
 export type TaskType = {
     id: string
@@ -14,14 +12,14 @@ export type TaskType = {
 export type TasksType = {
     [key: string]: Array<TaskType>
 }
-export type AddTaskActionType = ReturnType<typeof addTaskAC>
-export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
-export type ChangeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
-export type ChangeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
+export type AddTaskAT = ReturnType<typeof addTaskAC>
+export type RemoveTaskAT = ReturnType<typeof removeTaskAC>
+export type ChangeTaskTitleAT = ReturnType<typeof changeTaskTitleAC>
+export type ChangeTaskStatusAT = ReturnType<typeof changeTaskStatusAC>
 
-export type ActionsType = AddTodolistActionType | RemoveTodolistActionType |
-    AddTaskActionType | RemoveTaskActionType |
-    ChangeTaskTitleActionType | ChangeTaskStatusActionType
+export type ActionsType = AddTodolistAT | RemoveTodolistAT |
+    AddTaskAT | RemoveTaskAT |
+    ChangeTaskTitleAT | ChangeTaskStatusAT
 
 const initialState: TasksType = {
     [TodolistId1]: [
@@ -29,14 +27,9 @@ const initialState: TasksType = {
         {id: v1(), title: "TypeScript", isDone: true},
         {id: v1(), title: "React", isDone: false},
     ],
-    [TodolistId2]: [
-        {id: v1(), title: "Get a job", isDone: false},
-        {id: v1(), title: "become React Developer", isDone: false},
-        {id: v1(), title: "Happy parents", isDone: false},
-    ]
 }
 
-export const tasksReducer = (state: TasksType = initialState, action: ActionsType) => {
+export const tasksReducer = (state: TasksType = initialState, action: ActionsType): TasksType => {
     switch (action.type) {
         case "ADD-TODOLIST":
             return {...state, [action.payload.todolistId]: []}

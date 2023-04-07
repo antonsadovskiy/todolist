@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {TodoList} from "./components/TodoList/TodoList";
 import {Input} from "./components/Input/Input";
@@ -15,19 +15,16 @@ const App = () => {
     const dispatch = useDispatch()
     const todolists = useSelector<AppStateType, Array<TodoListType>>(state => state.todolists)
 
-    const addList = (title: string) => {
+    const addList = useCallback((title: string) => {
         dispatch(addTodolistAC(title))
-    }
+    }, [dispatch])
 
-    const TodoLists = todolists.map(list => {
-            return (
-                <Grid item key={list.id}>
-                    <Paper elevation={6}>
-                        <TodoList todolist={list}/>
-                    </Paper>
-                </Grid>
-            )
-        }
+    const TodoLists = todolists.map(list =>
+        <Grid item key={list.id}>
+            <Paper elevation={6}>
+                <TodoList todolist={list}/>
+            </Paper>
+        </Grid>
     )
 
     return (

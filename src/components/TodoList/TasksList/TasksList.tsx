@@ -1,9 +1,7 @@
-import React, {ChangeEvent, FC} from 'react';
+import React, {FC} from 'react';
 import style from './TasksList.module.css'
-import EditableSpan from "../../EditableSpan/EditableSpan";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {Checkbox, IconButton} from "@mui/material";
 import {TaskType} from "../../../redux/tasks/tasks-reducer";
+import Task from "./Task/Task";
 
 type TasksListPropsType = {
     tasks: Array<TaskType>
@@ -12,28 +10,16 @@ type TasksListPropsType = {
     changeTaskTitle: (taskId: string, title: string) => void
 }
 
-export const TasksList:FC<TasksListPropsType> = (props) => {
+export const TasksList: FC<TasksListPropsType> = React.memo((props) => {
 
-    const tasks = props.tasks.map( task => {
-
-        const onClickHandler = () => {
-            props.removeTask(task.id)
-        }
-        const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            props.changeTaskStatus(task.id, e.currentTarget.checked)
-        }
-        const onChangeTitleHandler = (newTitle: string) => {
-            props.changeTaskTitle(task.id, newTitle)
-        }
-
-        return (
-            <li key={task.id} className={style.task}>
-                <Checkbox checked={task.isDone} onChange={onChangeHandler}/>
-                <EditableSpan title={task.title} onChangeTitle={onChangeTitleHandler}/>
-                <IconButton onClick={onClickHandler}>
-                    <DeleteIcon/>
-                </IconButton>
-            </li>)}
+    const tasks = props.tasks.map(task =>
+        <Task key={task.id}
+              id={task.id}
+              title={task.title}
+              isDone={task.isDone}
+              removeTask={props.removeTask}
+              changeTaskStatus={props.changeTaskStatus}
+              changeTaskTitle={props.changeTaskTitle}/>
     )
 
     return (
@@ -41,4 +27,4 @@ export const TasksList:FC<TasksListPropsType> = (props) => {
             {tasks}
         </ul>
     );
-};
+});

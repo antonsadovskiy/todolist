@@ -7,7 +7,7 @@ export type InputPropsType = {
     addItem: (title: string) => void
 }
 
-export const Input: FC<InputPropsType> = (props) => {
+export const Input: FC<InputPropsType> = React.memo((props) => {
 
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
@@ -55,4 +55,4 @@ export const Input: FC<InputPropsType> = (props) => {
             </IconButton>
         </div>
     );
-};
+});

@@ -1,7 +1,6 @@
 import React, {ChangeEvent, FC} from 'react';
 import {Checkbox} from "@mui/material";
 import {EditableSpan} from "../../../EditableSpan/EditableSpan";
-import style from "./Task.module.css"
 import DeleteItem from "../../../DeleteItem/DeleteItem";
 
 type TaskPropsType = {
@@ -25,8 +24,14 @@ const Task: FC<TaskPropsType> = React.memo((props) => {
         props.changeTaskStatus(props.id, e.currentTarget.checked)
     }
 
+    const task = {
+        listStyle: 'none',
+        opacity: props.isDone ? '0.6' : '1',
+        textDecorationLine: props.isDone ? 'line-through' : 'none'
+    }
+
     return (
-        <li className={style.task}>
+        <li style={task}>
             <Checkbox checked={props.isDone} onChange={onChangeStatusHandler}/>
             <EditableSpan title={props.title} onChangeTitle={onChangeTitleHandler}/>
             <DeleteItem deleteItem={removeTaskHandler}/>

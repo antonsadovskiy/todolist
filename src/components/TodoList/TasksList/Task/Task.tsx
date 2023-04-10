@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC} from 'react';
+import React, {ChangeEvent, FC, useCallback} from 'react';
 import {Checkbox} from "@mui/material";
 import {EditableSpan} from "../../../EditableSpan/EditableSpan";
 import DeleteItem from "../../../DeleteItem/DeleteItem";
@@ -14,12 +14,12 @@ type TaskPropsType = {
 
 const Task: FC<TaskPropsType> = React.memo((props) => {
 
-    const removeTaskHandler = () => {
+    const removeTaskHandler = useCallback(() => {
         props.removeTask(props.id)
-    }
-    const onChangeTitleHandler = (newTitle: string) => {
+    }, [props.removeTask, props.id])
+    const onChangeTitleHandler = useCallback((newTitle: string) => {
         props.changeTaskTitle(props.id, newTitle)
-    }
+    }, [props.changeTaskTitle, props.id])
     const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         props.changeTaskStatus(props.id, e.currentTarget.checked)
     }

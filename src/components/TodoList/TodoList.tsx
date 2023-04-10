@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useMemo} from 'react';
 import {TasksList} from "./TasksList/TasksList";
 import style from './TodoList.module.css'
 import {Input} from "../Input/Input";
@@ -58,7 +58,7 @@ export const TodoList: FC<TodoListPropType> = React.memo(({todolist}) => {
     const setActive = useCallback(() => changeTodolistFilter('active'), [changeTodolistFilter])
     const setCompleted = useCallback(() => changeTodolistFilter('completed'), [changeTodolistFilter])
 
-    const getTasksByFilter = (filter: FilterType) => {
+    const getTasksByFilter = useCallback((filter: FilterType) => {
         switch (filter) {
             case "active":
                 return tasks.filter(task => !task.isDone)
@@ -67,8 +67,8 @@ export const TodoList: FC<TodoListPropType> = React.memo(({todolist}) => {
             default:
                 return tasks
         }
-    }
-    const tasksToTodolist = getTasksByFilter(filter)
+    }, [tasks])
+    const tasksToTodolist = useMemo(() => getTasksByFilter(filter), [getTasksByFilter, filter])
 
     return (
         <div className={style.listContainer}>

@@ -1,9 +1,0 @@
-.tasksContainer {
-    padding-left: 20px;
-    display: flex;
-    flex-direction: column;
-}
-.isDone {
-    opacity: 0.5;
-    text-decoration: line-through;
-}

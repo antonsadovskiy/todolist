@@ -1,5 +1,4 @@
-import React, {FC, useCallback, useMemo} from 'react';
-import {TasksList} from "./TasksList/TasksList";
+import React, {FC, useCallback} from 'react';
 import style from './TodoList.module.css'
 import {Input} from "../Input/Input";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
@@ -21,6 +20,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store/store";
 import Buttons from "./Buttons/Buttons";
 import DeleteItem from "../DeleteItem/DeleteItem";
+import Task from "./Task/Task";
 
 type TodoListPropType = {
     todolist: TodoListType
@@ -58,7 +58,7 @@ export const TodoList: FC<TodoListPropType> = React.memo(({todolist}) => {
     const setActive = useCallback(() => changeTodolistFilter('active'), [changeTodolistFilter])
     const setCompleted = useCallback(() => changeTodolistFilter('completed'), [changeTodolistFilter])
 
-    const getTasksByFilter = useCallback((filter: FilterType) => {
+    const getTasksByFilter = (filter: FilterType) => {
         switch (filter) {
             case "active":
                 return tasks.filter(task => !task.isDone)
@@ -67,8 +67,9 @@ export const TodoList: FC<TodoListPropType> = React.memo(({todolist}) => {
             default:
                 return tasks
         }
-    }, [tasks])
-    const tasksToTodolist = useMemo(() => getTasksByFilter(filter), [getTasksByFilter, filter])
+    }
+    const tasksForTodolist = getTasksByFilter(filter)
+
 
     return (
         <div className={style.listContainer}>
@@ -77,10 +78,19 @@ export const TodoList: FC<TodoListPropType> = React.memo(({todolist}) => {
                 <DeleteItem deleteItem={removeTodolist}/>
             </div>
             <Input addItem={addTask}/>
-            <TasksList tasks={tasksToTodolist}
-                       removeTask={removeTask}
-                       changeTaskStatus={changeTaskStatus}
-                       changeTaskTitle={changeTaskTitle}/>
+            <ul className={style.tasksContainer}>
+                {
+                    tasksForTodolist.map(task =>
+                        <Task key={task.id}
+                              id={task.id}
+                              title={task.title}
+                              isDone={task.isDone}
+                              removeTask={removeTask}
+                              changeTaskStatus={changeTaskStatus}
+                              changeTaskTitle={changeTaskTitle}/>
+                    )
+                }
+            </ul>
             <Buttons filter={filter}
                      setAll={setAll}
                      setActive={setActive}

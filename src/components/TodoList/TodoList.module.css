@@ -13,3 +13,8 @@
     align-items: center;
     gap: 10px;
 }
+.tasksContainer {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+}

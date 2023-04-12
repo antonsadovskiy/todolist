@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FC, useCallback} from 'react';
 import {Checkbox} from "@mui/material";
-import {EditableSpan} from "../../../EditableSpan/EditableSpan";
-import DeleteItem from "../../../DeleteItem/DeleteItem";
+import {EditableSpan} from "../../EditableSpan/EditableSpan";
+import DeleteItem from "../../DeleteItem/DeleteItem";
 
 type TaskPropsType = {
     id: string

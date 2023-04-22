@@ -2,11 +2,10 @@ import React, {ChangeEvent, FC, useCallback} from 'react';
 import {Checkbox} from "@mui/material";
 import {EditableSpan} from "../../EditableSpan/EditableSpan";
 import DeleteItem from "../../DeleteItem/DeleteItem";
+import {TaskType} from "../../../redux/tasks/tasks-reducer";
 
 type TaskPropsType = {
-    id: string
-    title: string
-    isDone: boolean
+    task: TaskType
     removeTask: (taskId: string) => void
     changeTaskStatus: (taskId: string, newStatus: boolean) => void
     changeTaskTitle: (taskId: string, newTitle: string) => void
@@ -14,26 +13,28 @@ type TaskPropsType = {
 
 const Task: FC<TaskPropsType> = React.memo((props) => {
 
+    const {id, title, isDone} = props.task
+
     const removeTaskHandler = useCallback(() => {
-        props.removeTask(props.id)
-    }, [props.removeTask, props.id])
+        props.removeTask(id)
+    }, [props.removeTask, id])
     const onChangeTitleHandler = useCallback((newTitle: string) => {
-        props.changeTaskTitle(props.id, newTitle)
-    }, [props.changeTaskTitle, props.id])
+        props.changeTaskTitle(id, newTitle)
+    }, [props.changeTaskTitle, id])
     const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        props.changeTaskStatus(props.id, e.currentTarget.checked)
+        props.changeTaskStatus(id, e.currentTarget.checked)
     }
 
     const task = {
         listStyle: 'none',
-        opacity: props.isDone ? '0.6' : '1',
-        textDecorationLine: props.isDone ? 'line-through' : 'none'
+        opacity: isDone ? '0.6' : '1',
+        textDecorationLine: isDone ? 'line-through' : 'none'
     }
 
     return (
         <li style={task}>
-            <Checkbox checked={props.isDone} onChange={onChangeStatusHandler}/>
-            <EditableSpan title={props.title} onChangeTitle={onChangeTitleHandler}/>
+            <Checkbox checked={isDone} onChange={onChangeStatusHandler}/>
+            <EditableSpan title={title} onChangeTitle={onChangeTitleHandler}/>
             <DeleteItem deleteItem={removeTaskHandler}/>
         </li>
     );

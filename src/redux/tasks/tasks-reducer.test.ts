@@ -4,6 +4,7 @@ import {
     tasksReducer, TasksType
 } from "./tasks-reducer";
 import {addTodolistAC, removeTodolistAC} from "../todolists/todolists-reducer";
+import {TaskPriority, TaskStatus} from "../../api/todolistAPI";
 
 let TodolistId1: string
 let TodolistId2: string
@@ -15,14 +16,38 @@ beforeEach(() => {
 
     startState = {
         [TodolistId1]: [
-            {id: v1(), title: "Redux", isDone: false},
-            {id: v1(), title: "TypeScript", isDone: true},
-            {id: v1(), title: "React", isDone: false},
+            {
+                id: v1(), title: 'Angular', status: TaskStatus.New, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: TodolistId1
+            },
+            {
+                id: v1(), title: 'TypeScript', status: TaskStatus.Completed, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: TodolistId1
+            },
+            {
+                id: v1(), title: 'React', status: TaskStatus.New, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: TodolistId1
+            },
         ],
         [TodolistId2]: [
-            {id: v1(), title: "Get a job", isDone: false},
-            {id: v1(), title: "Iphone", isDone: false},
-            {id: v1(), title: "Happy parents", isDone: false},
+            {
+                id: v1(), title: "Get a job", status: TaskStatus.New, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: TodolistId2
+            },
+            {
+                id: v1(), title: "Iphone", status: TaskStatus.New, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: TodolistId2
+            },
+            {
+                id: v1(), title: "Happy parents", status: TaskStatus.New, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: TodolistId2
+            },
         ]
     }
 })
@@ -36,7 +61,7 @@ test('should add new task to correct todolist', () => {
 
     expect(endState[TodolistId1].length).toBe(4)
     expect(endState[TodolistId1][0].title).toBe(newTaskTitle)
-    expect(endState[TodolistId1][0].isDone).toBe(false)
+    expect(endState[TodolistId1][0].status).toBe(TaskStatus.New)
 })
 
 test('should remove task from correct todolist', () => {
@@ -48,7 +73,7 @@ test('should remove task from correct todolist', () => {
 
     expect(endState[TodolistId1].length).toBe(2)
     expect(endState[TodolistId1][0].title).toBe('TypeScript')
-    expect(endState[TodolistId1][0].isDone).toBe(true)
+    expect(endState[TodolistId1][0].status).toBe(TaskStatus.Completed)
 })
 test('should change task title in correct todolist', () => {
 
@@ -60,19 +85,19 @@ test('should change task title in correct todolist', () => {
 
     expect(endState[TodolistId2].length).toBe(3)
     expect(endState[TodolistId2][2].title).toBe('Happy life')
-    expect(endState[TodolistId2][2].isDone).toBe(false)
+    expect(endState[TodolistId2][2].status).toBe(TaskStatus.New)
 })
 test('should change task status in correct todolist', () => {
 
     const taskId = startState[TodolistId1][2].id
-    const newTaskStatus = true
+    const newTaskStatus = TaskStatus.Completed
 
     const action = changeTaskStatusAC(TodolistId1, taskId, newTaskStatus)
     const endState = tasksReducer(startState, action)
 
     expect(endState[TodolistId1].length).toBe(3)
     expect(endState[TodolistId1][2].title).toBe('React')
-    expect(endState[TodolistId1][2].isDone).toBe(newTaskStatus)
+    expect(endState[TodolistId1][2].status).toBe(newTaskStatus)
 })
 
 test('new property with new array should be added when new todolist is added', () => {

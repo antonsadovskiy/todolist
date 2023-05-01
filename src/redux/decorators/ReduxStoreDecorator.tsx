@@ -4,32 +4,58 @@ import {todolistsReducer} from "../todolists/todolists-reducer";
 import {tasksReducer} from "../tasks/tasks-reducer";
 import {AppStateType} from "../store/store";
 import {Provider} from "react-redux";
+import {v1} from "uuid";
+import {TaskPriority, TaskStatus} from "../../api/todolistAPI";
 
 const rootReducer = combineReducers({
     todolists: todolistsReducer,
     tasks: tasksReducer
 })
 
-const initialState = {
+const initialState: AppStateType = {
     todolists: [
-        {id: 'todolistId1', title: 'what to learn', filter: 'all'},
-        {id: 'todolistId2', title: 'what to buy', filter: 'active'},
+        {id: 'todolistId1', title: 'what to learn', filter: 'all', order: 0, addedDate: ''},
+        {id: 'todolistId2', title: 'what to buy', filter: 'active', order: 0, addedDate: ''},
     ],
     tasks: {
         ["todolistId1"]: [
-            {id: '1', title: 'React', isDone: false},
-            {id: '2', title: 'Redux', isDone: false},
-            {id: '3', title: 'Storybook', isDone: true},
+            {
+                id: v1(), title: 'Angular', status: TaskStatus.New, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: 'TodolistId1'
+            },
+            {
+                id: v1(), title: 'TypeScript', status: TaskStatus.Completed, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: 'TodolistId1'
+            },
+            {
+                id: v1(), title: 'React', status: TaskStatus.New, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: 'TodolistId1'
+            },
         ],
         ["todolistId2"]: [
-            {id: '1', title: 'Java', isDone: false},
-            {id: '2', title: 'Django', isDone: false},
-            {id: '3', title: 'Angular', isDone: false},
+            {
+                id: v1(), title: "Get a job", status: TaskStatus.New, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: 'TodolistId2'
+            },
+            {
+                id: v1(), title: "Iphone", status: TaskStatus.New, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: 'TodolistId2'
+            },
+            {
+                id: v1(), title: "Happy parents", status: TaskStatus.New, description: '',
+                addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
+                todoListId: 'TodolistId2'
+            },
         ]
     }
 }
 
-const storybookStore = legacy_createStore(rootReducer, initialState as AppStateType)
+const storybookStore = legacy_createStore(rootReducer, initialState)
 
 export const reduxStoreDecorator = (storyFunc: () => React.ReactNode) => {
     return <Provider store={storybookStore}>{storyFunc()}</Provider>

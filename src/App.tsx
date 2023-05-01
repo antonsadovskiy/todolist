@@ -13,14 +13,14 @@ import {
     Typography
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import {addTodolistAC, TodoListType} from "./redux/todolists/todolists-reducer";
+import {addTodolistAC, TodoListDomainType} from "./redux/todolists/todolists-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "./redux/store/store";
 
 const App = () => {
 
     const dispatch = useDispatch()
-    const todolists = useSelector<AppStateType, Array<TodoListType>>(state => state.todolists)
+    const todolists = useSelector<AppStateType, Array<TodoListDomainType>>(state => state.todolists)
 
     const addList = useCallback((title: string) => {
         dispatch(addTodolistAC(title))

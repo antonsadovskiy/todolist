@@ -1,5 +1,6 @@
 import {v1} from "uuid";
-import {TodolistType} from "../../api/todolistAPI";
+import {todolistAPI, TodolistType} from "../../api/todolistAPI";
+import {Dispatch} from "redux";
 
 export type FilterType = 'all' | 'active' | 'completed'
 
@@ -11,40 +12,53 @@ export type AddTodolistAT = ReturnType<typeof addTodolistAC>
 export type RemoveTodolistAT = ReturnType<typeof removeTodolistAC>
 export type ChangeTodolistTitleAT = ReturnType<typeof changeTodolistTitleAC>
 export type ChangeTodolistFilterAT = ReturnType<typeof changeTodolistFilterAC>
+export type SetTodolistsAT = ReturnType<typeof setTodolistsAC>
 
 export type ActionsType = AddTodolistAT | RemoveTodolistAT |
-    ChangeTodolistTitleAT | ChangeTodolistFilterAT
+    ChangeTodolistTitleAT | ChangeTodolistFilterAT | SetTodolistsAT
 
 const initialState: Array<TodoListDomainType> = []
 
 export const todolistsReducer = (state: Array<TodoListDomainType> = initialState, action: ActionsType): Array<TodoListDomainType> => {
     switch (action.type) {
+        case "SET-TODOLISTS":
+            return action.payload.todolists.map(list => ({...list, filter: 'all'}))
         case 'ADD-TODOLIST':
             const newTodolist: TodoListDomainType = {
-                id: action.payload.todolistId,
-                title: action.payload.newTodolistTitle,
-                addedDate: '',
-                order: 0,
+                ...action.payload.newTodolist,
                 filter: 'all'
             }
             return [newTodolist, ...state]
         case 'REMOVE-TODOLIST':
             return state.filter(list => list.id !== action.payload.todolistId)
         case 'CHANGE-TODOLIST-TITLE':
-            return state.map(list => list.id === action.payload.todolistId ? {...list, title: action.payload.newTitle} : list)
+            return state.map(list => list.id === action.payload.todolistId ? {
+                ...list,
+                title: action.payload.newTitle
+            } : list)
         case 'CHANGE-TODOLIST-FILTER':
-            return state.map(list => list.id === action.payload.todolistId ? {...list, filter: action.payload.newFilter} : list)
+            return state.map(list => list.id === action.payload.todolistId ? {
+                ...list,
+                filter: action.payload.newFilter
+            } : list)
         default:
             return state
     }
 }
 
-export const addTodolistAC = (newTodolistTitle: string) => {
+export const setTodolistsAC = (todolists: Array<TodolistType>) => {
+    return {
+        type: 'SET-TODOLISTS',
+        payload: {
+            todolists
+        }
+    } as const
+}
+export const addTodolistAC = (newTodolist: TodolistType) => {
     return ({
         type: 'ADD-TODOLIST',
         payload: {
-            todolistId: v1(),
-            newTodolistTitle
+            newTodolist
         }
     }) as const
 }
@@ -73,4 +87,36 @@ export const changeTodolistFilterAC = (todolistId: string, newFilter: FilterType
             newFilter
         }
     }) as const
+}
+
+
+export const getTodolistsTC = () => (dispatch: Dispatch) => {
+    todolistAPI.getTodolists()
+        .then(res => {
+            dispatch(setTodolistsAC(res.data))
+        })
+}
+export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
+    todolistAPI.addTodolist(title)
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(addTodolistAC(res.data.data.item))
+            }
+        })
+}
+export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch) => {
+    todolistAPI.deleteTodolist(todolistId)
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(removeTodolistAC(todolistId))
+            }
+        })
+}
+export const changeTodolistTitleTC = (todolistId: string, newTitle: string) => (dispatch: Dispatch) => {
+    todolistAPI.updateTodolist(todolistId, newTitle)
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(changeTodolistTitleAC(todolistId, newTitle))
+            }
+        })
 }

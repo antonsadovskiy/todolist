@@ -1,29 +1,24 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {TodoList} from "./components/TodoList/TodoList";
 import {Input} from "./components/Input/Input";
-import {
-    AppBar,
-    Button,
-    Container,
-    Grid,
-    IconButton,
-    Paper,
-    Toolbar,
-    Typography
-} from "@mui/material";
+import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import {addTodolistAC, TodoListDomainType} from "./redux/todolists/todolists-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "./redux/store/store";
+import {addTodolistTC, getTodolistsTC, TodoListDomainType} from "./redux/todolists/todolists-reducer";
+import {useSelector} from "react-redux";
+import {AppStateType, useAppDispatch} from "./redux/store/store";
 
 const App = () => {
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const todolists = useSelector<AppStateType, Array<TodoListDomainType>>(state => state.todolists)
 
+    useEffect(() => {
+        dispatch(getTodolistsTC())
+    }, [])
+
     const addList = useCallback((title: string) => {
-        dispatch(addTodolistAC(title))
+        dispatch(addTodolistTC(title))
     }, [dispatch])
 
     const TodoLists = todolists.map(list =>

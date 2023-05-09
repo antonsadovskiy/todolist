@@ -1,9 +1,9 @@
 import {Meta, StoryObj} from "@storybook/react";
 import {TodoList} from "./TodoList";
-import {reduxStoreDecorator} from "../../redux/decorators/ReduxStoreDecorator";
+import {reduxStoreDecorator} from "../../../app/store/ReduxStoreDecorator";
 
 const meta: Meta<typeof TodoList> = {
-    title: 'Todolist/TodoList',
+    title: 'TodoList/TodoList',
     component: TodoList,
     tags: ['autodocs'],
     decorators: [reduxStoreDecorator]

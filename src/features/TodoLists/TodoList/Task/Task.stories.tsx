@@ -1,9 +1,9 @@
 import {Meta, StoryObj} from "@storybook/react";
 import Task from "./Task";
-import {TaskPriority, TaskStatus} from "../../../api/todolistAPI";
+import {TaskPriority, TaskStatus} from "../../../../api/todolistAPI";
 
 const meta: Meta<typeof Task> = {
-    title: 'Todolist/Task',
+    title: 'TodoList/Task',
     component: Task,
     tags: ['autodocs'],
     argTypes: {

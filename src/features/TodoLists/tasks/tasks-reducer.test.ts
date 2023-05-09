@@ -1,10 +1,7 @@
 import {v1} from "uuid";
-import {
-    addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC,
-    tasksReducer, TasksType
-} from "./tasks-reducer";
-import {addTodolistAC, removeTodolistAC, TodoListDomainType} from "../todolists/todolists-reducer";
-import {TaskPriority, TaskStatus, TaskType} from "../../api/todolistAPI";
+import {addTaskAC, removeTaskAC, tasksReducer, TasksType, updateTaskAC} from "./tasks-reducer";
+import {addTodolistAC, removeTodolistAC, setTodolistsAC, TodoListDomainType} from "../todolists/todolists-reducer";
+import {TaskPriority, TaskStatus, TaskType} from "../../../api/todolistAPI";
 
 let TodolistId1: string
 let TodolistId2: string
@@ -74,7 +71,6 @@ test('should add new task to correct todolist', () => {
     expect(endState[TodolistId1][0].title).toBe('new task title')
     expect(endState[TodolistId1][0].status).toBe(TaskStatus.New)
 })
-
 test('should remove task from correct todolist', () => {
 
     const taskId = startState[TodolistId1][0].id
@@ -91,7 +87,7 @@ test('should change task title in correct todolist', () => {
     const taskId = startState[TodolistId2][2].id
     const newTaskTitle = 'Happy life'
 
-    const action = changeTaskTitleAC(TodolistId2, taskId, newTaskTitle)
+    const action = updateTaskAC(TodolistId2, taskId, {title: newTaskTitle})
     const endState = tasksReducer(startState, action)
 
     expect(endState[TodolistId2].length).toBe(3)
@@ -103,14 +99,13 @@ test('should change task status in correct todolist', () => {
     const taskId = startState[TodolistId1][2].id
     const newTaskStatus = TaskStatus.Completed
 
-    const action = changeTaskStatusAC(TodolistId1, taskId, newTaskStatus)
+    const action = updateTaskAC(TodolistId1, taskId, {status: newTaskStatus})
     const endState = tasksReducer(startState, action)
 
     expect(endState[TodolistId1].length).toBe(3)
     expect(endState[TodolistId1][2].title).toBe('React')
     expect(endState[TodolistId1][2].status).toBe(newTaskStatus)
 })
-
 test('new property with new array should be added when new todolist is added', () => {
 
     const newTodolist: TodoListDomainType = {
@@ -133,7 +128,6 @@ test('new property with new array should be added when new todolist is added', (
     expect(keys.length).toBe(3)
     expect(endState[newKey]).toEqual([])
 })
-
 test('array of tasks should be deleted from correct todolist', () => {
 
     const action = removeTodolistAC(TodolistId1)
@@ -143,4 +137,18 @@ test('array of tasks should be deleted from correct todolist', () => {
 
     expect(keys.length).toBe(1)
     expect(endState[TodolistId1]).not.toBeDefined()
+})
+test('empty array should be added to tasks state', () => {
+
+    const action = setTodolistsAC([
+        {id: '1', title: 'title1', order: 0, addedDate: '0'},
+        {id: '2', title: 'title1', order: 0, addedDate: '0'}
+    ])
+    const endState = tasksReducer({}, action)
+
+    const keys = Object.keys(endState)
+
+    expect(keys.length).toBe(2)
+    expect(endState['1']).toStrictEqual([])
+    expect(endState['2']).toStrictEqual([])
 })

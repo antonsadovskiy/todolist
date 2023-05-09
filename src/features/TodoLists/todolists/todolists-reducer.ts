@@ -1,21 +1,22 @@
-import {v1} from "uuid";
-import {todolistAPI, TodolistType} from "../../api/todolistAPI";
+import {todolistAPI, TodoListType} from "../../../api/todolistAPI";
 import {Dispatch} from "redux";
 
 export type FilterType = 'all' | 'active' | 'completed'
-
-export type TodoListDomainType = TodolistType & {
+export type TodoListDomainType = TodoListType & {
     filter: FilterType
 }
 
 export type AddTodolistAT = ReturnType<typeof addTodolistAC>
 export type RemoveTodolistAT = ReturnType<typeof removeTodolistAC>
-export type ChangeTodolistTitleAT = ReturnType<typeof changeTodolistTitleAC>
-export type ChangeTodolistFilterAT = ReturnType<typeof changeTodolistFilterAC>
+type ChangeTodolistTitleAT = ReturnType<typeof changeTodolistTitleAC>
+type ChangeTodolistFilterAT = ReturnType<typeof changeTodolistFilterAC>
 export type SetTodolistsAT = ReturnType<typeof setTodolistsAC>
 
-export type ActionsType = AddTodolistAT | RemoveTodolistAT |
-    ChangeTodolistTitleAT | ChangeTodolistFilterAT | SetTodolistsAT
+export type ActionsType = AddTodolistAT
+    | RemoveTodolistAT
+    | ChangeTodolistTitleAT
+    | ChangeTodolistFilterAT
+    | SetTodolistsAT
 
 const initialState: Array<TodoListDomainType> = []
 
@@ -46,7 +47,8 @@ export const todolistsReducer = (state: Array<TodoListDomainType> = initialState
     }
 }
 
-export const setTodolistsAC = (todolists: Array<TodolistType>) => {
+// actions
+export const setTodolistsAC = (todolists: Array<TodoListType>) => {
     return {
         type: 'SET-TODOLISTS',
         payload: {
@@ -54,42 +56,51 @@ export const setTodolistsAC = (todolists: Array<TodolistType>) => {
         }
     } as const
 }
-export const addTodolistAC = (newTodolist: TodolistType) => {
-    return ({
+export const addTodolistAC = (newTodolist: TodoListType) => {
+    return {
         type: 'ADD-TODOLIST',
         payload: {
             newTodolist
         }
-    }) as const
+    } as const
 }
 export const removeTodolistAC = (todolistId: string) => {
-    return ({
+    return {
         type: "REMOVE-TODOLIST",
         payload: {
             todolistId
         }
-    }) as const
+    } as const
 }
 export const changeTodolistTitleAC = (todolistId: string, newTitle: string) => {
-    return ({
+    return {
         type: "CHANGE-TODOLIST-TITLE",
         payload: {
             todolistId,
             newTitle
         }
-    }) as const
+    } as const
 }
 export const changeTodolistFilterAC = (todolistId: string, newFilter: FilterType) => {
-    return ({
+    return {
         type: "CHANGE-TODOLIST-FILTER",
         payload: {
             todolistId,
             newFilter
         }
-    }) as const
+    } as const
 }
+// export const setIsLoadingAC = (isLoading: boolean) => {
+//     return {
+//         type: 'SET-IS-LOADING',
+//         payload: {
+//             isLoading
+//         }
+//     } as const
+// }
 
 
+// thunks
 export const getTodolistsTC = () => (dispatch: Dispatch) => {
     todolistAPI.getTodolists()
         .then(res => {

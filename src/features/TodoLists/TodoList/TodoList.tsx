@@ -1,27 +1,21 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import style from './TodoList.module.css'
-import {Input} from "../Input/Input";
-import {EditableSpan} from "../EditableSpan/EditableSpan";
-import {
-    addTaskTC,
-    deleteTaskTC,
-    getTasksTC,
-    updateTaskStatusTC,
-    updateTaskTitleTC,
-} from "../../redux/tasks/tasks-reducer";
+import {Input} from "../../../components/Input/Input";
+import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
+import {addTaskTC, deleteTaskTC, getTasksTC, updateTaskTC,} from "../tasks/tasks-reducer";
 import {
     changeTodolistFilterAC,
     changeTodolistTitleTC,
     deleteTodolistTC,
     FilterType,
     TodoListDomainType,
-} from "../../redux/todolists/todolists-reducer";
+} from "../todolists/todolists-reducer";
 import {useSelector} from "react-redux";
-import {AppStateType, useAppDispatch} from "../../redux/store/store";
+import {AppStateType, useAppDispatch} from "../../../app/store/store";
 import Buttons from "./Buttons/Buttons";
-import DeleteItem from "../DeleteItem/DeleteItem";
+import DeleteItem from "../../../components/DeleteItem/DeleteItem";
 import Task from "./Task/Task";
-import {TaskStatus, TaskType} from "../../api/todolistAPI";
+import {TaskStatus, TaskType} from "../../../api/todolistAPI";
 
 type TodoListPropType = {
     todolist: TodoListDomainType
@@ -58,11 +52,11 @@ export const TodoList: FC<TodoListPropType> = React.memo(({todolist}) => {
     }, [dispatch, id])
 
     const changeTaskTitle = useCallback((taskId: string, newTaskTitle: string) => {
-        dispatch(updateTaskTitleTC(id, taskId, newTaskTitle))
+        dispatch(updateTaskTC(id, taskId, {title: newTaskTitle}))
     }, [dispatch, id])
 
     const changeTaskStatus = useCallback((taskId: string, newTaskStatus: TaskStatus) => {
-        dispatch(updateTaskStatusTC(id, taskId, newTaskStatus))
+        dispatch(updateTaskTC(id, taskId, {status: newTaskStatus}))
     }, [dispatch, id])
 
     const setAll = useCallback(() => changeTodolistFilter('all'), [changeTodolistFilter])

@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import style from './Buttons.module.css'
 import {Button} from "@mui/material";
-import {FilterType} from "../../../redux/todolists/todolists-reducer";
+import {FilterType} from "../../todolists/todolists-reducer";
 
 type ButtonsPropsType = {
     filter: FilterType

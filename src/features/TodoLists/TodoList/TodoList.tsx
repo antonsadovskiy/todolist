@@ -2,32 +2,36 @@ import React, {FC, useCallback, useEffect} from 'react';
 import style from './TodoList.module.css'
 import {Input} from "../../../components/Input/Input";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
-import {addTaskTC, deleteTaskTC, getTasksTC, updateTaskTC,} from "../tasks/tasks-reducer";
+import {addTaskTC, deleteTaskTC, getTasksTC, updateTaskTC,} from "../reducers/tasks-reducer/tasks-reducer";
 import {
     changeTodolistFilterAC,
     changeTodolistTitleTC,
     deleteTodolistTC,
     FilterType,
     TodoListDomainType,
-} from "../todolists/todolists-reducer";
+} from "../reducers/todolist-reducer/todolists-reducer";
 import {useSelector} from "react-redux";
 import {AppStateType, useAppDispatch} from "../../../app/store/store";
 import Buttons from "./Buttons/Buttons";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
 import Task from "./Task/Task";
-import {TaskStatus, TaskType} from "../../../api/todolistAPI";
+import {TaskDomainType, TaskStatus} from "../../../api/todolistAPI";
 
 type TodoListPropType = {
     todolist: TodoListDomainType
+    demo?: boolean
 }
 
-export const TodoList: FC<TodoListPropType> = React.memo(({todolist}) => {
+export const TodoList: FC<TodoListPropType> = React.memo(({todolist, demo = false}) => {
 
     const dispatch = useAppDispatch()
     const {id, title, filter} = todolist
-    const tasks = useSelector<AppStateType, Array<TaskType>>(state => state.tasks[id])
+    const tasks = useSelector<AppStateType, Array<TaskDomainType>>(state => state.tasks[id])
 
     useEffect(() => {
+        if (demo) {
+            return
+        }
         dispatch(getTasksTC(id))
     }, [])
 
@@ -79,10 +83,13 @@ export const TodoList: FC<TodoListPropType> = React.memo(({todolist}) => {
     return (
         <div className={style.listContainer}>
             <div className={style.titleContainer}>
-                <h3><EditableSpan title={title} onChangeTitle={changeTodolistTitle}/></h3>
-                <DeleteItem deleteItem={removeTodolist} status={todolist.status}/>
+                <h3>
+                    <EditableSpan title={title} onChangeTitle={changeTodolistTitle}
+                                  disabled={todolist.entityStatus === 'loading'}/>
+                </h3>
+                <DeleteItem deleteItem={removeTodolist} disabled={todolist.entityStatus === 'loading'}/>
             </div>
-            <Input addItem={addTask}/>
+            <Input addItem={addTask} disabled={todolist.entityStatus === 'loading'}/>
             <ul className={style.tasksContainer}>
                 {
                     tasksForTodolist.map(task =>

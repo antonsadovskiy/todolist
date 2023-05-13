@@ -1,0 +1,4 @@
+.disabledSpan {
+    pointer-events: none;
+    color: grey;
+}

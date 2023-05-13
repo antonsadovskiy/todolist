@@ -5,21 +5,18 @@ import {ControlPoint} from "@mui/icons-material";
 
 export type InputPropsType = {
     addItem: (title: string) => void
+    disabled?: boolean
 }
 
 export const Input: FC<InputPropsType> = React.memo((props) => {
 
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
-    const titleMaxLength: number = 15
-    const isUserMessageIsTooLong: boolean = title.length > titleMaxLength
-    const isButtonDisabled = title.length > 15 || title.length === 0
-
+    const isButtonDisabled = title.length === 0
 
     const addItem = () => {
         if (title.trim()) {
             props.addItem(title.trim())
-            setTitle('')
         } else {
             setError('Title is required')
         }
@@ -33,7 +30,7 @@ export const Input: FC<InputPropsType> = React.memo((props) => {
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null)
-        if (title.length <= 15 && e.key === 'Enter') {
+        if (e.key === 'Enter') {
             addItem()
         }
     }
@@ -44,10 +41,11 @@ export const Input: FC<InputPropsType> = React.memo((props) => {
             <TextField label="Enter title"
                        variant="outlined"
                        value={title}
+                       disabled={props.disabled}
                        onChange={onChangeHandler}
                        onKeyDown={onKeyPressHandler}
-                       error={isUserMessageIsTooLong || !!error}
-                       helperText={isUserMessageIsTooLong? 'title is too long' : '' || error}/>
+                       error={!!error}
+                       helperText={error}/>
             <IconButton className={style.addItem} disabled={isButtonDisabled}
                         onClick={onClickHandler}
                         color={'primary'}>

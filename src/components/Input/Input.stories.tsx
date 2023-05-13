@@ -17,3 +17,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const InputExample: Story = {}
+export const DisabledInputExample: Story = {
+    args: {
+        disabled: true
+    }
+}

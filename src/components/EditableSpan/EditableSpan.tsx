@@ -1,9 +1,11 @@
 import React, {ChangeEvent, KeyboardEvent, FC, useState} from 'react';
-import {TextField} from "@mui/material";
+import TextField from "@mui/material/TextField";
+import style from './EditableSpan.module.css'
 
 export type EditableSpanPropsType = {
     title: string
     onChangeTitle: (newTitle: string) => void
+    disabled: boolean
 }
 
 export const EditableSpan:FC<EditableSpanPropsType> = React.memo((props) => {
@@ -33,6 +35,8 @@ export const EditableSpan:FC<EditableSpanPropsType> = React.memo((props) => {
         }
     }
 
+    const spanStyle = props.disabled ? style.disabledSpan : ''
+
     return isEditModeOn
         ? <TextField variant={'standard'}
                      type="text"
@@ -41,5 +45,5 @@ export const EditableSpan:FC<EditableSpanPropsType> = React.memo((props) => {
                      onBlur={onBlurHandler}
                      onKeyDown={onKeyDownHandler}
                      autoFocus/>
-        : <span onDoubleClick={onDoubleClickHandler}>{props.title}</span>
+        : <span className={spanStyle} onDoubleClick={onDoubleClickHandler}>{props.title}</span>
 });

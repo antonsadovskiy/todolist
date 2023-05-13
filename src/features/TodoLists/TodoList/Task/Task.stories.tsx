@@ -29,7 +29,7 @@ export const ActiveTaskExample: Story = {
         task: {
             id: '1', title: 'React', status: TaskStatus.New, description: '',
             addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
-            todoListId: ''
+            todoListId: '', entityStatus: 'idle'
         }
     }
 }
@@ -38,7 +38,7 @@ export const CompletedTaskExample: Story = {
         task: {
             id: '2', title: 'Angular', status: TaskStatus.Completed, description: '',
             addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
-            todoListId: ''
+            todoListId: '', entityStatus: 'idle'
         }
     }
 }

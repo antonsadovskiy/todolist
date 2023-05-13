@@ -15,7 +15,8 @@ type Story = StoryObj<typeof meta>;
 export const TodolistExample: Story = {
     args: {
         todolist: {
-            id: 'todolistId2', title: 'what to learn', filter: 'active', order: 0, addedDate: '', status: 'idle'
-        }
+            id: 'todolistId2', title: 'what to learn', filter: 'active', order: 0, addedDate: '', entityStatus: 'idle'
+        },
+        demo: true
     }
 }

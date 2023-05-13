@@ -1,9 +1,9 @@
 import {AnyAction, applyMiddleware, combineReducers, legacy_createStore as createStore} from "redux";
-import {tasksReducer} from "../../features/TodoLists/tasks/tasks-reducer";
-import {todolistsReducer} from "../../features/TodoLists/todolists/todolists-reducer";
+import {tasksReducer} from "../../features/TodoLists/reducers/tasks-reducer/tasks-reducer";
+import {todolistsReducer} from "../../features/TodoLists/reducers/todolist-reducer/todolists-reducer";
 import thunk, {ThunkDispatch} from "redux-thunk";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
-import {appReducer} from "./app-reducer";
+import {appReducer} from "../app-reducer";
 
 const rootReducer = combineReducers({
     todolists: todolistsReducer,

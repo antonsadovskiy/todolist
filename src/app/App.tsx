@@ -1,27 +1,21 @@
-import React, {useEffect} from 'react';
+import React, {FC} from 'react';
 import './App.css';
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import LinearProgress from "@mui/material/LinearProgress";
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from "@mui/material/Container";
-import {getTodolistsTC} from "../features/TodoLists/todolists/todolists-reducer";
-import {useAppDispatch, useAppSelector} from "./store/store";
 import TodoLists from "../features/TodoLists/TodoLists";
-import {RequestType} from "./store/app-reducer";
 import {Message} from "../components/Message/Message";
+import Preloader from "../components/Preloader/Preloader";
 
-const App = () => {
+type AppPropsType = {
+    demo?: boolean
+}
 
-    const dispatch = useAppDispatch()
-    const status = useAppSelector<RequestType | null>(state => state.app.status)
-
-    useEffect(() => {
-        dispatch(getTodolistsTC())
-    }, [dispatch])
+const App:FC<AppPropsType> = ({demo = false}) => {
 
     return (
         <div className="App">
@@ -35,10 +29,10 @@ const App = () => {
                     </Typography>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
+                <Preloader/>
             </AppBar>
-            {status === 'loading' && <LinearProgress />}
             <Container fixed>
-                <TodoLists/>
+                <TodoLists demo={demo}/>
             </Container>
             <Message/>
         </div>

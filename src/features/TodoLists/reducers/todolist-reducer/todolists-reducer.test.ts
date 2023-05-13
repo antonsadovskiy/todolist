@@ -1,8 +1,14 @@
 import {
-    addTodolistAC, changeTodolistFilterAC, changeTodolistTitleAC, FilterType, removeTodolistAC,
-    todolistsReducer, TodoListDomainType
+    addTodolistAC,
+    changeTodolistFilterAC,
+    changeTodolistTitleAC,
+    FilterType,
+    removeTodolistAC, setTodolistStatusAC,
+    TodoListDomainType,
+    todolistsReducer
 } from "./todolists-reducer";
 import {v1} from "uuid";
+import {RequestType} from "../../../../app/app-reducer";
 
 let startState: Array<TodoListDomainType>
 let TodolistId1: string
@@ -12,8 +18,8 @@ beforeEach(() => {
     TodolistId1 = v1()
     TodolistId2 = v1()
     startState = [
-        {id: TodolistId1, title: "What to learn", filter: 'active', addedDate: '', order: 0, status: 'idle'},
-        {id: TodolistId2, title: "Travel to Poland", filter: 'completed', addedDate: '', order: 0, status: 'idle'},
+        {id: TodolistId1, title: "What to learn", filter: 'active', addedDate: '', order: 0, entityStatus: 'idle'},
+        {id: TodolistId2, title: "Travel to Poland", filter: 'completed', addedDate: '', order: 0, entityStatus: 'idle'},
     ]
 })
 
@@ -25,7 +31,7 @@ test('new todolist should be added', () => {
         order: 0,
         addedDate: '',
         filter: 'all',
-        status: 'idle'
+        entityStatus: 'idle'
     }
     const action = addTodolistAC(newTodolist)
     const endState = todolistsReducer(startState, action)
@@ -69,4 +75,16 @@ test('should change todolist filter value', () => {
     expect(endState[0].id).toBe(TodolistId1)
     expect(endState[0].title).toBe('What to learn')
     expect(endState[0].filter).toBe(newFilter)
+})
+test('should change todolist status', () => {
+
+    const newEntityStatus: RequestType = 'success'
+
+    const action = setTodolistStatusAC(TodolistId1, newEntityStatus)
+    const endState = todolistsReducer(startState, action)
+
+    expect(endState.length).toBe(2)
+    expect(endState[0].id).toBe(TodolistId1)
+    expect(endState[0].title).toBe('What to learn')
+    expect(endState[0].entityStatus).toBe(newEntityStatus)
 })

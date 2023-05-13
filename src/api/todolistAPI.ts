@@ -1,4 +1,5 @@
 import axios from "axios";
+import {RequestType} from "../app/app-reducer";
 
 export type TodoListType = {
     id: string
@@ -39,6 +40,9 @@ export type TaskType = {
     todoListId: string
     order: number
     addedDate: string
+}
+export type TaskDomainType = TaskType & {
+    entityStatus: RequestType
 }
 
 type ResponseType<T = {}> = {

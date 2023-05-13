@@ -1,7 +1,7 @@
 import {v1} from "uuid";
 import {addTaskAC, removeTaskAC, tasksReducer, TasksType, updateTaskAC} from "./tasks-reducer";
-import {addTodolistAC, removeTodolistAC, setTodolistsAC, TodoListDomainType} from "../todolists/todolists-reducer";
-import {TaskPriority, TaskStatus, TaskType} from "../../../api/todolistAPI";
+import {addTodolistAC, removeTodolistAC, setTodolistsAC, TodoListDomainType} from "../todolist-reducer/todolists-reducer";
+import {TaskPriority, TaskStatus, TaskType} from "../../../../api/todolistAPI";
 
 let TodolistId1: string
 let TodolistId2: string
@@ -16,34 +16,34 @@ beforeEach(() => {
             {
                 id: v1(), title: 'Angular', status: TaskStatus.New, description: '',
                 addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
-                todoListId: TodolistId1
+                todoListId: TodolistId1,  entityStatus: 'idle'
             },
             {
                 id: v1(), title: 'TypeScript', status: TaskStatus.Completed, description: '',
                 addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
-                todoListId: TodolistId1
+                todoListId: TodolistId1,  entityStatus: 'idle'
             },
             {
                 id: v1(), title: 'React', status: TaskStatus.New, description: '',
                 addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
-                todoListId: TodolistId1
+                todoListId: TodolistId1,  entityStatus: 'idle'
             },
         ],
         [TodolistId2]: [
             {
                 id: v1(), title: "Get a job", status: TaskStatus.New, description: '',
                 addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
-                todoListId: TodolistId2
+                todoListId: TodolistId2,  entityStatus: 'idle'
             },
             {
                 id: v1(), title: "Iphone", status: TaskStatus.New, description: '',
                 addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
-                todoListId: TodolistId2
+                todoListId: TodolistId2,  entityStatus: 'idle'
             },
             {
                 id: v1(), title: "Happy parents", status: TaskStatus.New, description: '',
                 addedDate: '', deadline: '', order: 0, priority: TaskPriority.Low, startDate: '',
-                todoListId: TodolistId2
+                todoListId: TodolistId2,  entityStatus: 'idle'
             },
         ]
     }
@@ -114,7 +114,7 @@ test('new property with new array should be added when new todolist is added', (
         order: 0,
         addedDate: '',
         filter: 'all',
-        status: 'idle'
+        entityStatus: 'idle'
     }
 
     const action = addTodolistAC(newTodolist)
@@ -129,7 +129,7 @@ test('new property with new array should be added when new todolist is added', (
     expect(keys.length).toBe(3)
     expect(endState[newKey]).toEqual([])
 })
-test('array of tasks should be deleted from correct todolist', () => {
+test('array of tasks-reducer should be deleted from correct todolist', () => {
 
     const action = removeTodolistAC(TodolistId1)
     const endState = tasksReducer(startState, action)
@@ -139,7 +139,7 @@ test('array of tasks should be deleted from correct todolist', () => {
     expect(keys.length).toBe(1)
     expect(endState[TodolistId1]).not.toBeDefined()
 })
-test('empty array should be added to tasks state', () => {
+test('empty array should be added to tasks-reducer state', () => {
 
     const action = setTodolistsAC([
         {id: '1', title: 'title1', order: 0, addedDate: '0'},

@@ -12,8 +12,8 @@ beforeEach(() => {
     TodolistId1 = v1()
     TodolistId2 = v1()
     startState = [
-        {id: TodolistId1, title: "What to learn", filter: 'active', addedDate: '', order: 0},
-        {id: TodolistId2, title: "Travel to Poland", filter: 'completed', addedDate: '', order: 0},
+        {id: TodolistId1, title: "What to learn", filter: 'active', addedDate: '', order: 0, status: 'idle'},
+        {id: TodolistId2, title: "Travel to Poland", filter: 'completed', addedDate: '', order: 0, status: 'idle'},
     ]
 })
 
@@ -24,7 +24,8 @@ test('new todolist should be added', () => {
         title: 'new todolist',
         order: 0,
         addedDate: '',
-        filter: 'all'
+        filter: 'all',
+        status: 'idle'
     }
     const action = addTodolistAC(newTodolist)
     const endState = todolistsReducer(startState, action)

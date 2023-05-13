@@ -80,7 +80,7 @@ export const TodoList: FC<TodoListPropType> = React.memo(({todolist}) => {
         <div className={style.listContainer}>
             <div className={style.titleContainer}>
                 <h3><EditableSpan title={title} onChangeTitle={changeTodolistTitle}/></h3>
-                <DeleteItem deleteItem={removeTodolist}/>
+                <DeleteItem deleteItem={removeTodolist} status={todolist.status}/>
             </div>
             <Input addItem={addTask}/>
             <ul className={style.tasksContainer}>

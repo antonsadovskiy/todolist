@@ -2,6 +2,7 @@ import {AddTodolistAT, RemoveTodolistAT, SetTodolistsAT,} from "../todolists/tod
 import {TaskPriority, tasksAPI, TaskStatus, TaskType, UpdateTaskModelType} from "../../../api/todolistAPI";
 import {Dispatch} from "redux";
 import {AppStateType} from "../../../app/store/store";
+import {setErrorAC, setStatusAC} from "../../../app/store/app-reducer";
 
 export type TasksType = {
     [key: string]: Array<TaskType>
@@ -98,25 +99,39 @@ export const updateTaskAC = (todolistId: string, taskId: string, model: UpdateDo
 
 // thunks
 export const getTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
+    dispatch(setStatusAC('loading'))
     tasksAPI.getTasks(todolistId)
         .then(res => {
+            dispatch(setStatusAC('idle'))
             dispatch(setTasksAC(todolistId, res.data.items))
         })
 }
 export const addTaskTC = (todolistId: string, taskTitle: string) => (dispatch: Dispatch) => {
+    dispatch(setStatusAC('loading'))
     tasksAPI.addTask(todolistId, taskTitle)
         .then(res => {
             if (res.data.resultCode === 0) {
+                dispatch(setStatusAC('idle'))
                 dispatch(addTaskAC(todolistId, res.data.data.item))
             }
         })
+        .catch(e => {
+            dispatch(setStatusAC('idle'))
+            dispatch(setErrorAC(e.message))
+        })
 }
 export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
+    dispatch(setStatusAC('loading'))
     tasksAPI.deleteTask(todolistId, taskId)
         .then(res => {
             if (res.data.resultCode === 0) {
+                dispatch(setStatusAC('idle'))
                 dispatch(removeTaskAC(todolistId, taskId))
             }
+        })
+        .catch(e => {
+            dispatch(setStatusAC('idle'))
+            dispatch(setErrorAC(e.message))
         })
 }
 export type UpdateDomainTaskModelType = {
@@ -129,6 +144,7 @@ export type UpdateDomainTaskModelType = {
 }
 export const updateTaskTC = (todolistId: string, taskId: string, model: UpdateDomainTaskModelType) =>
     (dispatch: Dispatch, getState: () => AppStateType) => {
+        dispatch(setStatusAC('loading'))
         const task = getState().tasks[todolistId].find(task => task.id === taskId)
         if (task) {
             const taskModel: UpdateTaskModelType = {
@@ -143,8 +159,13 @@ export const updateTaskTC = (todolistId: string, taskId: string, model: UpdateDo
             tasksAPI.updateTask(todolistId, taskId, taskModel)
                 .then(res => {
                     if (res.data.resultCode === 0) {
+                        dispatch(setStatusAC('idle'))
                         dispatch(updateTaskAC(todolistId, taskId, taskModel))
                     }
+                })
+                .catch(e => {
+                    dispatch(setStatusAC('idle'))
+                    dispatch(setErrorAC(e.message))
                 })
         }
     }

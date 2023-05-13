@@ -6,16 +6,18 @@ import {AppStateType} from "./store";
 import {Provider} from "react-redux";
 import {v1} from "uuid";
 import {TaskPriority, TaskStatus} from "../../api/todolistAPI";
+import {appReducer} from "./app-reducer";
 
 const rootReducer = combineReducers({
     todolists: todolistsReducer,
-    tasks: tasksReducer
+    tasks: tasksReducer,
+    app: appReducer
 })
 
 const initialState: AppStateType = {
     todolists: [
-        {id: 'todolistId1', title: 'what to learn', filter: 'all', order: 0, addedDate: ''},
-        {id: 'todolistId2', title: 'what to buy', filter: 'active', order: 0, addedDate: ''},
+        {id: 'todolistId1', title: 'what to learn', filter: 'all', order: 0, addedDate: '', status: 'idle'},
+        {id: 'todolistId2', title: 'what to buy', filter: 'active', order: 0, addedDate: '', status: 'idle'},
     ],
     tasks: {
         ["todolistId1"]: [
@@ -52,6 +54,10 @@ const initialState: AppStateType = {
                 todoListId: 'TodolistId2'
             },
         ]
+    },
+    app: {
+        status: 'idle',
+        error: ''
     }
 }
 

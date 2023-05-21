@@ -28,7 +28,11 @@ export enum TaskPriority {
     Urgently = 3,
     Later = 4
 }
-
+export enum ResultCode {
+    OK = 0,
+    ERROR = 1,
+    CAPTCHA = 2
+}
 export type TaskType = {
     description: string
     title: string
@@ -45,7 +49,7 @@ export type TaskDomainType = TaskType & {
     entityStatus: RequestType
 }
 
-type ResponseType<T = {}> = {
+export type ResponseType<T = {}> = {
     resultCode: number
     messages: string[]
     data: T
@@ -54,6 +58,16 @@ type GetTasksResponseType = {
     items: TaskType[]
     totalCount: number
     error: string
+}
+type GetMeResponseType = {
+    id: number
+    email: string
+    login: string
+}
+export type FormDataType = {
+    email: string
+    password: string
+    rememberMe: boolean
 }
 
 const instance = axios.create({
@@ -87,5 +101,16 @@ export const tasksAPI = {
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
         return instance.put<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, model);
+    }
+}
+export const authAPI = {
+    me() {
+        return instance.get<ResponseType<GetMeResponseType>>('auth/me')
+    },
+    login(data: FormDataType) {
+        return instance.post<ResponseType<{userId: number}>>('auth/login', data)
+    },
+    logout() {
+        return instance.delete<ResponseType>('auth/login')
     }
 }

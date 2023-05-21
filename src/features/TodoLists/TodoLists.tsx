@@ -4,8 +4,9 @@ import Paper from "@mui/material/Paper";
 import {TodoList} from "./TodoList/TodoList";
 import {addTodolistTC, getTodolistsTC, TodoListDomainType} from "./reducers/todolist-reducer/todolists-reducer";
 import {Input} from "../../components/Input/Input";
-import {AppStateType, useAppDispatch} from "../../app/store/store";
+import {AppStateType, useAppDispatch, useAppSelector} from "../../app/store/store";
 import {useSelector} from "react-redux";
+import { Navigate } from 'react-router-dom';
 
 type TodoListsPropsType = {
     demo?: boolean
@@ -15,6 +16,7 @@ const TodoLists: FC<TodoListsPropsType> = ({demo = false}) => {
 
     const dispatch = useAppDispatch()
     const todolists = useSelector<AppStateType, Array<TodoListDomainType>>(state => state.todolists)
+    const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
 
     useEffect(() => {
         if (demo) {
@@ -26,6 +28,10 @@ const TodoLists: FC<TodoListsPropsType> = ({demo = false}) => {
     const addList = useCallback((title: string) => {
         dispatch(addTodolistTC(title))
     }, [dispatch])
+
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
 
     return (
         <>

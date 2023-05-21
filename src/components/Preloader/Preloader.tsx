@@ -11,7 +11,6 @@ const Preloader = () => {
     return (
         <div className={style.progress}>
             {status === 'loading' && <LinearProgress/>}
-            {/*<LinearProgress/>*/}
         </div>
     );
 };

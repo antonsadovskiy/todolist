@@ -129,7 +129,7 @@ test('new property with new array should be added when new todolist is added', (
     expect(keys.length).toBe(3)
     expect(endState[newKey]).toEqual([])
 })
-test('array of tasks-reducer should be deleted from correct todolist', () => {
+test('array of tasks-reducers should be deleted from correct todolist', () => {
 
     const action = removeTodolistAC(TodolistId1)
     const endState = tasksReducer(startState, action)
@@ -139,7 +139,7 @@ test('array of tasks-reducer should be deleted from correct todolist', () => {
     expect(keys.length).toBe(1)
     expect(endState[TodolistId1]).not.toBeDefined()
 })
-test('empty array should be added to tasks-reducer state', () => {
+test('empty array should be added to tasks-reducers state', () => {
 
     const action = setTodolistsAC([
         {id: '1', title: 'title1', order: 0, addedDate: '0'},

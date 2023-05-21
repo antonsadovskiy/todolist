@@ -31,16 +31,20 @@ const Task: FC<TaskPropsType> = React.memo((props) => {
         listStyle: 'none',
         opacity: status === TaskStatus.Completed ? '0.6' : '1',
         textDecorationLine: status === TaskStatus.Completed ? 'line-through' : 'none',
+        display: 'flex',
+        justifyContent: 'space-between'
     }
 
     return (
         <li style={taskStyle}>
-            <Checkbox checked={status === TaskStatus.Completed}
-                      onChange={onChangeStatusHandler}
-                      disabled={entityStatus === 'loading'}/>
-            <EditableSpan title={title}
-                          onChangeTitle={onChangeTitleHandler}
+            <div>
+                <Checkbox checked={status === TaskStatus.Completed}
+                          onChange={onChangeStatusHandler}
                           disabled={entityStatus === 'loading'}/>
+                <EditableSpan title={title}
+                              onChangeTitle={onChangeTitleHandler}
+                              disabled={entityStatus === 'loading'}/>
+            </div>
             <DeleteItem deleteItem={removeTaskHandler}
                         disabled={entityStatus === 'loading'}/>
         </li>

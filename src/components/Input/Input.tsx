@@ -17,6 +17,7 @@ export const Input: FC<InputPropsType> = React.memo((props) => {
     const addItem = () => {
         if (title.trim()) {
             props.addItem(title.trim())
+            setTitle('')
         } else {
             setError('Title is required')
         }

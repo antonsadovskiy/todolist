@@ -14,12 +14,10 @@ import {Navigate, Route, Routes} from 'react-router-dom';
 import {Login} from "../features/Login/Login";
 import {Page404} from "./page404/page404";
 import {useAppDispatch, useAppSelector} from "./store/store";
-import {logoutTC, meTC} from "../features/Login/reducers/auth-reducer";
-import CircularProgress from "@mui/material/CircularProgress";
+import {logoutTC, initializeAppTC} from "../features/Login/reducers/auth-reducer";
+import InitializedPreloader from "../components/InitializedPreloader/InitializedPreloader";
 
-type AppPropsType = {
-    demo?: boolean
-}
+type AppPropsType = { demo?: boolean }
 
 const App: FC<AppPropsType> = ({demo = false}) => {
 
@@ -28,24 +26,15 @@ const App: FC<AppPropsType> = ({demo = false}) => {
     const isInitialized = useAppSelector<boolean>(state => state.app.isInitialized)
 
     useEffect(() => {
-        dispatch(meTC())
+        dispatch(initializeAppTC())
     }, [])
 
-    if (!isInitialized) {
-        return (
-            <div
-                style={{position: 'fixed', top: '40%', textAlign: 'center', width: '100%'}}>
-                <CircularProgress/>
-            </div>
-        )
-    }
+    if (!isInitialized) return <InitializedPreloader/>
 
-    const logout = () => {
-        dispatch(logoutTC())
-    }
+    const logout = () => dispatch(logoutTC())
 
     return (
-        <div className="App">
+        <div>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
@@ -62,6 +51,7 @@ const App: FC<AppPropsType> = ({demo = false}) => {
                 <Routes>
                     <Route path={'*'} element={<Navigate to={'/404_NOT_FOUND'}/>}/>
                     <Route path={'/404_NOT_FOUND'} element={<Page404/>}/>
+                    <Route path={'/todolist'} element={<Navigate to={'/'}/>}/>
                     <Route path={'/login'} element={<Login/>}/>
                     <Route path={'/'} element={<TodoLists demo={demo}/>}/>
                 </Routes>

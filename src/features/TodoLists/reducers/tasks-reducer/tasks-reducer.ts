@@ -34,26 +34,27 @@ export type ActionsType =
     | SetTasksAT
 
 const initialState: TasksType = {}
+
 export const tasksReducer = (state: TasksType = initialState, action: ActionsType): TasksType => {
     switch (action.type) {
-        case "SET-TODOLISTS":
+        case "TODOLIST/SET-TODOLISTS":
             const copyState = {...state}
             action.payload.todolists.forEach((list) => {
                 copyState[list.id] = []
             })
             return copyState
-        case "ADD-TODOLIST":
+        case "TODOLIST/ADD-TODOLIST":
             return {...state, [action.payload.newTodolist.id]: []}
-        case "REMOVE-TODOLIST":
+        case "TODOLIST/REMOVE-TODOLIST":
             const stateCopy = {...state}
             delete stateCopy[action.payload.todolistId]
             return stateCopy
-        case "SET-TASKS":
+        case "TASKS/SET-TASKS":
             return {
                 ...state,
                 [action.payload.todolistId]: action.payload.tasks.map(t => ({...t, entityStatus: 'idle'}))
             }
-        case "ADD-TASK":
+        case "TASKS/ADD-TASK":
             return {
                 ...state,
                 [action.payload.todolistId]: [{
@@ -61,12 +62,12 @@ export const tasksReducer = (state: TasksType = initialState, action: ActionsTyp
                     entityStatus: 'idle'
                 }, ...state[action.payload.todolistId]]
             }
-        case "REMOVE-TASK":
+        case "TASKS/REMOVE-TASK":
             return {
                 ...state, [action.payload.todolistId]:
                     state[action.payload.todolistId].filter(task => task.id !== action.payload.taskId)
             }
-        case "UPDATE-TASK":
+        case "TASKS/UPDATE-TASK":
             return {
                 ...state,
                 [action.payload.todolistId]:
@@ -75,7 +76,7 @@ export const tasksReducer = (state: TasksType = initialState, action: ActionsTyp
                         : task
                     )
             }
-        case "SET-TASK-STATUS":
+        case "TASKS/SET-TASK-STATUS":
             return {
                 ...state,
                 [action.payload.todolistId]: state[action.payload.todolistId].map(task => task.id === action.payload.taskId ? {
@@ -92,7 +93,7 @@ export const tasksReducer = (state: TasksType = initialState, action: ActionsTyp
 // actions
 export const setTasksAC = (todolistId: string, tasks: Array<TaskType>) => {
     return {
-        type: 'SET-TASKS',
+        type: 'TASKS/SET-TASKS',
         payload: {
             todolistId,
             tasks
@@ -101,7 +102,7 @@ export const setTasksAC = (todolistId: string, tasks: Array<TaskType>) => {
 }
 export const addTaskAC = (todolistId: string, task: TaskType) => {
     return {
-        type: "ADD-TASK",
+        type: "TASKS/ADD-TASK",
         payload: {
             todolistId,
             task
@@ -110,7 +111,7 @@ export const addTaskAC = (todolistId: string, task: TaskType) => {
 }
 export const removeTaskAC = (todolistId: string, taskId: string) => {
     return {
-        type: "REMOVE-TASK",
+        type: "TASKS/REMOVE-TASK",
         payload: {
             todolistId,
             taskId
@@ -119,7 +120,7 @@ export const removeTaskAC = (todolistId: string, taskId: string) => {
 }
 export const updateTaskAC = (todolistId: string, taskId: string, model: UpdateDomainTaskModelType) => {
     return {
-        type: "UPDATE-TASK",
+        type: "TASKS/UPDATE-TASK",
         payload: {
             todolistId,
             taskId,
@@ -129,7 +130,7 @@ export const updateTaskAC = (todolistId: string, taskId: string, model: UpdateDo
 }
 export const setTaskStatusAC = (todolistId: string, taskId: string, newStatus: RequestType) => {
     return {
-        type: 'SET-TASK-STATUS',
+        type: 'TASKS/SET-TASK-STATUS',
         payload: {
             todolistId,
             taskId,

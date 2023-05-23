@@ -6,11 +6,9 @@ import {addTodolistTC, getTodolistsTC, TodoListDomainType} from "./reducers/todo
 import {Input} from "../../components/Input/Input";
 import {AppStateType, useAppDispatch, useAppSelector} from "../../app/store/store";
 import {useSelector} from "react-redux";
-import { Navigate } from 'react-router-dom';
+import {Navigate} from 'react-router-dom';
 
-type TodoListsPropsType = {
-    demo?: boolean
-}
+type TodoListsPropsType = { demo?: boolean }
 
 const TodoLists: FC<TodoListsPropsType> = ({demo = false}) => {
 
@@ -19,24 +17,20 @@ const TodoLists: FC<TodoListsPropsType> = ({demo = false}) => {
     const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
 
     useEffect(() => {
-        if (demo) {
-            return
-        }
+        if (demo || !isLoggedIn) return
         dispatch(getTodolistsTC())
     }, [dispatch])
 
-    const addList = useCallback((title: string) => {
+    const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistTC(title))
     }, [dispatch])
 
-    if (!isLoggedIn) {
-        return <Navigate to={'/login'}/>
-    }
+    if (!isLoggedIn) return <Navigate to={'/login'}/>
 
     return (
         <>
             <Grid container style={{padding: '20px'}}>
-                <Input addItem={addList}/>
+                <Input addItem={addTodolist}/>
             </Grid>
             <Grid container spacing={6}>
                 {

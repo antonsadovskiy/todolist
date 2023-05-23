@@ -50,9 +50,7 @@ export const Login = () => {
         },
     })
 
-    if (isLoggedIn) {
-        return <Navigate to={'/'}/>
-    }
+    if (isLoggedIn) return <Navigate to={'/'}/>
 
     return (
         <Grid container justifyContent={'center'}>
@@ -84,7 +82,8 @@ export const Login = () => {
                             {formik.touched.password && formik.errors.password &&
                                 <div style={{color: 'red'}}>{formik.errors.password}</div>}
                             <FormControlLabel label={'Remember me'} control={
-                                <Checkbox {...formik.getFieldProps("rememberMe")}
+                                <Checkbox checked={formik.values.rememberMe}
+                                          {...formik.getFieldProps("rememberMe")}
                                 />
                             }/>
                             <Button type={'submit'} variant={'contained'} color={'primary'}>

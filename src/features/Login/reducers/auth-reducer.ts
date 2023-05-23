@@ -5,20 +5,19 @@ import {handlerAppNetworkError, handlerAppServerError} from "../../../utils/erro
 import {setAppStatusAC, setIsInitializedAC} from "../../../app/app-reducer";
 
 export type SetIsLoggedInAT = ReturnType<typeof setIsLoggedInAC>
-
 type ActionsType = SetIsLoggedInAT
 
-type AuthStateType = {
+export type AuthInitialStateType = {
     isLoggedIn: boolean
 }
 
-const initialState: AuthStateType = {
+const initialState: AuthInitialStateType = {
     isLoggedIn: false
 }
 
-export const authReducer = (state: AuthStateType = initialState, action: ActionsType): AuthStateType => {
+export const authReducer = (state: AuthInitialStateType = initialState, action: ActionsType): AuthInitialStateType => {
     switch (action.type) {
-        case "SET-IS-LOGGED-IN":
+        case "AUTH/SET-IS-LOGGED-IN":
             return {...state, isLoggedIn: action.payload.isLoggedIn}
         default:
             return state
@@ -28,7 +27,7 @@ export const authReducer = (state: AuthStateType = initialState, action: Actions
 // actions
 export const setIsLoggedInAC = (isLoggedIn: boolean) => {
     return {
-        type: 'SET-IS-LOGGED-IN',
+        type: 'AUTH/SET-IS-LOGGED-IN',
         payload: {
             isLoggedIn
         }
@@ -36,7 +35,7 @@ export const setIsLoggedInAC = (isLoggedIn: boolean) => {
 }
 
 // thunks
-export const meTC = () => (dispatch: Dispatch) => {
+export const initializeAppTC = () => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC('loading'))
     authAPI.me()
         .then(res => {

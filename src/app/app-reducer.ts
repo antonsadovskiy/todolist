@@ -1,57 +1,34 @@
-export type RequestType = 'idle' | 'loading' | 'error' | 'success'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type SetIsInitializedAT = ReturnType<typeof setIsInitializedAC>
-type SetAppStatusAT = ReturnType<typeof setAppStatusAC>
-type SetAppErrorAT = ReturnType<typeof setAppErrorAC>
-type ActionsType = SetIsInitializedAT | SetAppStatusAT | SetAppErrorAT
+export type RequestType = "idle" | "loading" | "error" | "success";
 
-export type AppInitialStateType = {
-    isInitialized: boolean
-    status: RequestType
-    error: string | null
-}
+type AppInitialStateType = {
+  isInitialized: boolean;
+  status: RequestType;
+  error: null | string;
+};
 
 const initialState: AppInitialStateType = {
-    isInitialized: false,
-    status: 'idle',
-    error: null,
-}
+  isInitialized: false,
+  status: "idle",
+  error: null,
+};
 
+export const appSlice = createSlice({
+  name: "app",
+  initialState: initialState,
+  reducers: {
+    setIsInitialized(state, action: PayloadAction<{ isInitialized: boolean }>) {
+      state.isInitialized = action.payload.isInitialized;
+    },
+    setAppStatus(state, action: PayloadAction<{ status: RequestType }>) {
+      state.status = action.payload.status;
+    },
+    setAppError(state, action: PayloadAction<{ error: string | null }>) {
+      state.error = action.payload.error;
+    },
+  },
+});
 
-export const appReducer = (state: AppInitialStateType = initialState, action: ActionsType): AppInitialStateType => {
-    switch (action.type) {
-        case "APP/SET-INITIALIZED":
-            return {...state, isInitialized: action.payload.isInitialized}
-        case "APP/SET-STATUS" :
-            return {...state, status: action.payload.newStatus}
-        case "APP/SET-ERROR":
-            return {...state, error: action.payload.error}
-        default:
-            return state
-    }
-}
-
-export const setIsInitializedAC = (isInitialized: boolean) => {
-    return {
-        type: 'APP/SET-INITIALIZED',
-        payload: {
-            isInitialized
-        }
-    } as const
-}
-export const setAppStatusAC = (newStatus: RequestType) => {
-    return {
-        type: 'APP/SET-STATUS',
-        payload: {
-            newStatus
-        }
-    } as const
-}
-export const setAppErrorAC = (error: string | null) => {
-    return {
-        type: 'APP/SET-ERROR',
-        payload: {
-            error
-        }
-    } as const
-}
+export const appReducer = appSlice.reducer;
+export const { setIsInitialized, setAppStatus, setAppError } = appSlice.actions;

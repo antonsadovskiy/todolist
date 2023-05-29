@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.12",
+    "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -87,10 +88,13 @@
     "babel-plugin-named-exports-order": "0.0.2",
     "jest-image-snapshot": "^6.1.0",
     "jest-puppeteer": "^8.0.6",
+    "prettier": "2.8.8",
     "prop-types": "15.8.1",
     "puppeteer": "^19.10.1",
     "start-server-and-test": "^2.0.0",
     "storybook": "7.0.6",
+    "storybook-addon-react-router-v6": "^1.0.1",
+    "storybook-react-router": "^1.0.8",
     "webpack": "5.80.0"
   },
   "jest": {

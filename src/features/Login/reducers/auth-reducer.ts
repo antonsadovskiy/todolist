@@ -1,87 +1,79 @@
-import {Dispatch} from "redux";
-import {authAPI, FormDataType, ResultCode} from "../../../api/todolistAPI";
-import {AxiosError} from "axios";
-import {handlerAppNetworkError, handlerAppServerError} from "../../../utils/error-utils";
-import {setAppStatusAC, setIsInitializedAC} from "../../../app/app-reducer";
+import { Dispatch } from "redux";
+import { authAPI, FormDataType, ResultCode } from "../../../api/todolistAPI";
+import { AxiosError } from "axios";
+import { handlerAppNetworkError, handlerAppServerError } from "../../../utils/error-utils";
+import { setAppStatus, setIsInitialized } from "../../../app/app-reducer";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ClearTasksAndTodolists } from "../../../common/actions/common-actions";
 
-export type SetIsLoggedInAT = ReturnType<typeof setIsLoggedInAC>
-type ActionsType = SetIsLoggedInAT
+const initialState = {
+  isLoggedIn: false,
+};
 
-export type AuthInitialStateType = {
-    isLoggedIn: boolean
-}
+export const authSlice = createSlice({
+  name: "auth",
+  initialState: initialState,
+  reducers: {
+    setIsLoggedIn(state, action: PayloadAction<{ isLoggedIn: boolean }>) {
+      state.isLoggedIn = action.payload.isLoggedIn;
+    },
+  },
+});
 
-const initialState: AuthInitialStateType = {
-    isLoggedIn: false
-}
-
-export const authReducer = (state: AuthInitialStateType = initialState, action: ActionsType): AuthInitialStateType => {
-    switch (action.type) {
-        case "AUTH/SET-IS-LOGGED-IN":
-            return {...state, isLoggedIn: action.payload.isLoggedIn}
-        default:
-            return state
-    }
-}
-
-// actions
-export const setIsLoggedInAC = (isLoggedIn: boolean) => {
-    return {
-        type: 'AUTH/SET-IS-LOGGED-IN',
-        payload: {
-            isLoggedIn
-        }
-    } as const
-}
+export const authReducer = authSlice.reducer;
+export const { setIsLoggedIn } = authSlice.actions;
 
 // thunks
 export const initializeAppTC = () => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC('loading'))
-    authAPI.me()
-        .then(res => {
-            if (res.data.resultCode === ResultCode.OK) {
-                dispatch(setIsLoggedInAC(true))
-                dispatch(setAppStatusAC('success'))
-            } else {
-                handlerAppServerError(dispatch, res.data)
-            }
-        })
-        .catch((e: AxiosError) => {
-            handlerAppNetworkError(dispatch, e)
-        })
-        .finally(() => {
-            dispatch(setIsInitializedAC(true))
-        })
-}
-
+  dispatch(setAppStatus({ status: "loading" }));
+  authAPI
+    .me()
+    .then((res) => {
+      if (res.data.resultCode === ResultCode.OK) {
+        dispatch(setIsLoggedIn({ isLoggedIn: true }));
+        dispatch(setAppStatus({ status: "success" }));
+      } else {
+        handlerAppServerError(dispatch, res.data);
+      }
+    })
+    .catch((e: AxiosError) => {
+      handlerAppNetworkError(dispatch, e);
+    })
+    .finally(() => {
+      dispatch(setIsInitialized({ isInitialized: true }));
+    });
+};
 export const loginTC = (data: FormDataType) => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC('loading'))
-    authAPI.login(data)
-        .then(res => {
-            if (res.data.resultCode === ResultCode.OK) {
-                dispatch(setIsLoggedInAC(true))
-                dispatch(setAppStatusAC('success'))
-            } else {
-                handlerAppServerError(dispatch, res.data);
-            }
-        })
-        .catch((e: AxiosError) => {
-            handlerAppNetworkError(dispatch, e)
-        })
-}
+  dispatch(setAppStatus({ status: "loading" }));
 
+  authAPI
+    .login(data)
+    .then((res) => {
+      if (res.data.resultCode === ResultCode.OK) {
+        dispatch(setIsLoggedIn({ isLoggedIn: true }));
+        dispatch(setAppStatus({ status: "success" }));
+      } else {
+        handlerAppServerError(dispatch, res.data);
+      }
+    })
+    .catch((e: AxiosError) => {
+      handlerAppNetworkError(dispatch, e);
+    });
+};
 export const logoutTC = () => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC('loading'))
-    authAPI.logout()
-        .then(res => {
-            if (res.data.resultCode === ResultCode.OK) {
-                dispatch(setIsLoggedInAC(false))
-                dispatch(setAppStatusAC('success'))
-            } else {
-                handlerAppServerError(dispatch, res.data);
-            }
-        })
-        .catch((e: AxiosError) => {
-            handlerAppNetworkError(dispatch, e)
-        })
-}
+  dispatch(setAppStatus({ status: "loading" }));
+  authAPI
+    .logout()
+    .then((res) => {
+      if (res.data.resultCode === ResultCode.OK) {
+        dispatch(setIsLoggedIn({ isLoggedIn: false }));
+        dispatch(setAppStatus({ status: "success" }));
+        dispatch(ClearTasksAndTodolists());
+      } else {
+        handlerAppServerError(dispatch, res.data);
+      }
+    })
+    .catch((e: AxiosError) => {
+      handlerAppNetworkError(dispatch, e);
+    });
+};

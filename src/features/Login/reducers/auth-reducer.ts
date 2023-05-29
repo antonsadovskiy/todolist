@@ -5,14 +5,13 @@ import { handlerAppNetworkError, handlerAppServerError } from "../../../utils/er
 import { setAppStatus, setIsInitialized } from "../../../app/app-reducer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ClearTasksAndTodolists } from "../../../common/actions/common-actions";
+import { createAppAsyncThunk } from "../../../common/utils/createAppAsyncThunk";
 
-const initialState = {
-  isLoggedIn: false,
-};
-
-export const authSlice = createSlice({
+const authSlice = createSlice({
   name: "auth",
-  initialState: initialState,
+  initialState: {
+    isLoggedIn: false,
+  },
   reducers: {
     setIsLoggedIn(state, action: PayloadAction<{ isLoggedIn: boolean }>) {
       state.isLoggedIn = action.payload.isLoggedIn;
@@ -24,7 +23,56 @@ export const authReducer = authSlice.reducer;
 export const { setIsLoggedIn } = authSlice.actions;
 
 // thunks
-export const initializeAppTC = () => (dispatch: Dispatch) => {
+export const initializeAppTC = createAppAsyncThunk("auth/me", async (arg, thunkAPI) => {
+  const { dispatch } = thunkAPI;
+  try {
+    const res = await authAPI.me();
+    if (res.data.resultCode === ResultCode.OK) {
+      dispatch(setIsLoggedIn({ isLoggedIn: true }));
+      dispatch(setAppStatus({ status: "success" }));
+    } else {
+      handlerAppServerError(dispatch, res.data);
+    }
+  } catch (e) {
+    handlerAppNetworkError(dispatch, e as AxiosError);
+  } finally {
+    dispatch(setIsInitialized({ isInitialized: true }));
+  }
+});
+export const loginTC = createAppAsyncThunk<void, FormDataType>("auth/login", async (arg, thunkAPI) => {
+  const { dispatch } = thunkAPI;
+  dispatch(setAppStatus({ status: "loading" }));
+  try {
+    const res = await authAPI.login(arg);
+    if (res.data.resultCode === ResultCode.OK) {
+      dispatch(setIsLoggedIn({ isLoggedIn: true }));
+      dispatch(setAppStatus({ status: "success" }));
+    } else {
+      handlerAppServerError(dispatch, res.data);
+    }
+  } catch (e) {
+    handlerAppNetworkError(dispatch, e as AxiosError);
+  }
+});
+export const logoutTC = createAppAsyncThunk("auth/logout", async (arg, thunkAPI) => {
+  const { dispatch } = thunkAPI;
+  dispatch(setAppStatus({ status: "loading" }));
+  try {
+    const res = await authAPI.logout();
+    if (res.data.resultCode === ResultCode.OK) {
+      dispatch(setIsLoggedIn({ isLoggedIn: false }));
+      dispatch(setAppStatus({ status: "success" }));
+      dispatch(ClearTasksAndTodolists());
+    } else {
+      handlerAppServerError(dispatch, res.data);
+    }
+  } catch (e) {
+    handlerAppNetworkError(dispatch, e as AxiosError);
+  }
+});
+
+// deprecated
+export const _initializeAppTC = () => (dispatch: Dispatch) => {
   dispatch(setAppStatus({ status: "loading" }));
   authAPI
     .me()
@@ -43,7 +91,7 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
       dispatch(setIsInitialized({ isInitialized: true }));
     });
 };
-export const loginTC = (data: FormDataType) => (dispatch: Dispatch) => {
+export const _loginTC = (data: FormDataType) => (dispatch: Dispatch) => {
   dispatch(setAppStatus({ status: "loading" }));
 
   authAPI
@@ -60,7 +108,7 @@ export const loginTC = (data: FormDataType) => (dispatch: Dispatch) => {
       handlerAppNetworkError(dispatch, e);
     });
 };
-export const logoutTC = () => (dispatch: Dispatch) => {
+export const _logoutTC = () => (dispatch: Dispatch) => {
   dispatch(setAppStatus({ status: "loading" }));
   authAPI
     .logout()

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, memo} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton } from "@mui/material";
 
@@ -7,7 +7,7 @@ type DeleteItemPropsType = {
   disabled: boolean;
 };
 
-const DeleteItem: FC<DeleteItemPropsType> = React.memo((props) => {
+const DeleteItem: FC<DeleteItemPropsType> = memo((props) => {
   const onClickHandler = () => props.deleteItem();
 
   return (

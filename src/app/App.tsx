@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import "./App.css";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,26 +13,17 @@ import Preloader from "../components/Preloader/Preloader";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Login } from "../features/Login/Login";
 import { Page404 } from "./page404/page404";
-import { useAppDispatch, useAppSelector } from "./store/store";
-import { initializeAppTC, logoutTC } from "../features/Login/reducers/auth-reducer";
-import InitializedPreloader from "../components/InitializedPreloader/InitializedPreloader";
+import InitializedPreloader
+  from "../components/InitializedPreloader/InitializedPreloader";
+import { useApp } from "./hooks/useApp";
 
 type AppPropsType = { demo?: boolean };
 
 const App: FC<AppPropsType> = ({ demo = false }) => {
-  const dispatch = useAppDispatch();
-  const isLoggedIn = useAppSelector<boolean>((state) => state.auth.isLoggedIn);
-  const isInitialized = useAppSelector<boolean>((state) => state.app.isInitialized);
 
-  useEffect(() => {
-    if (!demo) {
-      dispatch(initializeAppTC());
-    }
-  }, []);
+  const { isLoggedIn, isInitialized, logout } = useApp(demo);
 
   if (!isInitialized) return <InitializedPreloader />;
-
-  const logout = () => dispatch(logoutTC());
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import style from './Buttons.module.css'
 import Button from "@mui/material/Button";
 import {FilterType} from "../../reducers/todolist-reducer/todolists-reducer";
@@ -10,7 +10,7 @@ type ButtonsPropsType = {
   setCompleted: () => void
 }
 
-const Buttons: FC<ButtonsPropsType> = React.memo((props) => {
+const Buttons: FC<ButtonsPropsType> = memo((props) => {
 
   const setAll = () => props.setAll()
   const setActive = () => props.setActive()

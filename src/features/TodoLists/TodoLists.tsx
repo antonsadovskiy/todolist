@@ -1,31 +1,16 @@
-import React, { FC, useCallback, useEffect } from "react";
+import React, { FC } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { TodoList } from "./TodoList/TodoList";
-import { addTodolistTC, getTodolistsTC, TodoListDomainType } from "./reducers/todolist-reducer/todolists-reducer";
 import { Input } from "../../components/Input/Input";
-import { AppStateType, useAppDispatch, useAppSelector } from "../../app/store/store";
-import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import { useTodolists } from "./hooks/useTodolists";
 
 type TodoListsPropsType = { demo?: boolean };
 
 const TodoLists: FC<TodoListsPropsType> = ({ demo = false }) => {
-  const dispatch = useAppDispatch();
-  const todolists = useSelector<AppStateType, Array<TodoListDomainType>>((state) => state.todolists);
-  const isLoggedIn = useAppSelector<boolean>((state) => state.auth.isLoggedIn);
 
-  useEffect(() => {
-    if (demo || !isLoggedIn) return;
-    dispatch(getTodolistsTC());
-  }, [dispatch]);
-
-  const addTodolistHandler = useCallback(
-    (title: string) => {
-      dispatch(addTodolistTC(title));
-    },
-    [dispatch]
-  );
+  const { todolists, isLoggedIn, addTodolistHandler } = useTodolists(demo);
 
   if (!isLoggedIn) return <Navigate to={"/login"} />;
 

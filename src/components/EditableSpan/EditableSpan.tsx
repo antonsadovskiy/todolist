@@ -1,6 +1,7 @@
-import React, { ChangeEvent, KeyboardEvent, FC, useState } from "react";
+import React, { FC, memo } from "react";
 import TextField from "@mui/material/TextField";
 import style from "./EditableSpan.module.css";
+import { useEditableSpan } from "./hooks/useEditableSpan";
 
 export type EditableSpanPropsType = {
   title: string;
@@ -8,30 +9,16 @@ export type EditableSpanPropsType = {
   disabled: boolean;
 };
 
-export const EditableSpan: FC<EditableSpanPropsType> = React.memo((props) => {
-  const [title, setTitle] = useState<string>("");
-  const [isEditModeOn, setIsEditModeOn] = useState<boolean>(false);
+export const EditableSpan: FC<EditableSpanPropsType> = memo((props) => {
 
-  const completeChanges = () => {
-    props.onChangeTitle(title);
-  };
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.currentTarget.value);
-  };
-  const onDoubleClickHandler = () => {
-    setIsEditModeOn(true);
-    setTitle(props.title);
-  };
-  const onBlurHandler = () => {
-    setIsEditModeOn(false);
-    completeChanges();
-  };
-  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      completeChanges();
-      setIsEditModeOn(false);
-    }
-  };
+  const {
+    title,
+    isEditModeOn,
+    onChangeHandler,
+    onDoubleClickHandler,
+    onBlurHandler,
+    onKeyDownHandler
+  } = useEditableSpan(props.title, props.onChangeTitle);
 
   const spanStyle = props.disabled ? style.disabledSpan : "";
 

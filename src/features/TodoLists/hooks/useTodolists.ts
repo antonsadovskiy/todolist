@@ -5,10 +5,9 @@ import {
 } from "../../../app/store/store";
 import { useSelector } from "react-redux";
 import {
-  addTodolistTC,
-  getTodolistsTC,
-  TodoListDomainType
-} from "../reducers/todolist-reducer/todolists-reducer";
+  TodoListDomainType,
+  todolistsThunks
+} from "../reducers/todolist-reducer/todolists-slice";
 import { useCallback, useEffect } from "react";
 
 export const useTodolists = (demo: boolean) => {
@@ -19,15 +18,15 @@ export const useTodolists = (demo: boolean) => {
 
   useEffect(() => {
     if (demo || !isLoggedIn) return;
-    dispatch(getTodolistsTC());
+    dispatch(todolistsThunks.getTodolists());
   }, []);
 
   const addTodolistHandler = useCallback(
     (title: string) => {
-      dispatch(addTodolistTC(title));
+      dispatch(todolistsThunks.addTodolist({title}));
     },
     [dispatch]
   );
 
-  return {todolists, isLoggedIn, addTodolistHandler}
-}
+  return { todolists, isLoggedIn, addTodolistHandler };
+};

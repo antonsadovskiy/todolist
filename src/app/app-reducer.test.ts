@@ -1,42 +1,32 @@
-import {appReducer, RequestType, setAppError, setAppStatus, setIsInitialized} from "./app-reducer";
+import { appActions, appReducer, RequestType } from "./app-slice";
+import { authActions, authThunks } from "../features/Login/reducers/auth-slice";
 
-let startState: ReturnType<typeof appReducer>
+let startState: ReturnType<typeof appReducer>;
 
 beforeEach(() => {
   startState = {
-    status: 'idle',
+    status: "idle",
     error: null,
-    isInitialized: false
-  }
-})
+    isInitialized: false,
+  };
+});
 
-test('should change error value', () => {
-  const newError = 'something went wrong'
+test("should change error value", () => {
+  const newError = "something went wrong";
 
-  const action = setAppError({error: newError})
-  const endState = appReducer(startState, action)
+  const action = appActions.setAppError({ error: newError });
+  const endState = appReducer(startState, action);
 
-  expect(endState.status).toBe('idle')
-  expect(endState.error).toBe(newError)
-})
+  expect(endState.status).toBe("idle");
+  expect(endState.error).toBe(newError);
+});
 
-test('should change status value', () => {
-  const newStatus: RequestType = 'loading'
+test("should change status value", () => {
+  const newStatus: RequestType = "loading";
 
-  const action = setAppStatus({status: newStatus})
-  const endState = appReducer(startState, action)
+  const action = appActions.setAppStatus({ status: newStatus });
+  const endState = appReducer(startState, action);
 
-  expect(endState.status).toBe('loading')
-  expect(endState.error).toBe(null)
-})
-
-test('should change isInitialized value', () => {
-  const newIsInitialized = true
-
-  const action = setIsInitialized({isInitialized: newIsInitialized})
-  const endState = appReducer(startState, action)
-
-  expect(endState.status).toBe('idle')
-  expect(endState.error).toBe(null)
-  expect(endState.isInitialized).toBeTruthy()
-})
+  expect(endState.status).toBe("loading");
+  expect(endState.error).toBe(null);
+});

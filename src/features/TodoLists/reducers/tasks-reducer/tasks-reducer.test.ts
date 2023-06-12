@@ -1,14 +1,14 @@
 import { v1 } from "uuid";
 import {
-  tasksActions,
   tasksReducer,
+  tasksThunks,
   TasksType,
   UpdateDomainTaskModelType,
-} from "./tasks-reducer";
+} from "./tasks-slice";
 import {
-  todolistActions,
   TodoListDomainType,
-} from "../todolist-reducer/todolists-reducer";
+  todolistsThunks,
+} from "../todolist-reducer/todolists-slice";
 import {
   TaskPriority,
   TaskStatus,
@@ -114,7 +114,7 @@ test("should add new task to correct todolist", () => {
     id: v1(),
     title: "new task title",
     status: TaskStatus.New,
-    todoListId: "1",
+    todoListId: TodolistId1,
     order: 0,
     startDate: "",
     deadline: "",
@@ -123,10 +123,13 @@ test("should add new task to correct todolist", () => {
     description: "",
   };
 
-  const action = tasksActions.addTask({
-    todolistId: TodolistId1,
-    task: newTask,
-  });
+  const action = tasksThunks.addTask.fulfilled(
+    {
+      task: newTask,
+    },
+    "",
+    { todolistId: TodolistId1, taskTitle: "new task title" }
+  );
   const endState = tasksReducer(startState, action);
 
   expect(endState[TodolistId1].length).toBe(4);
@@ -136,7 +139,14 @@ test("should add new task to correct todolist", () => {
 test("should remove task from correct todolist", () => {
   const taskId = startState[TodolistId1][0].id;
 
-  const action = tasksActions.removeTask({ todolistId: TodolistId1, taskId });
+  const action = tasksThunks.deleteTask.fulfilled(
+    {
+      todolistId: TodolistId1,
+      taskId,
+    },
+    "",
+    { todolistId: TodolistId1, taskId }
+  );
   const endState = tasksReducer(startState, action);
 
   expect(endState[TodolistId1].length).toBe(2);
@@ -151,11 +161,15 @@ test("should change task title in correct todolist", () => {
     title: newTaskTitle,
   };
 
-  const action = tasksActions.updateTask({
-    todolistId: TodolistId2,
-    taskId,
-    model,
-  });
+  const action = tasksThunks.updateTask.fulfilled(
+    {
+      todolistId: TodolistId2,
+      taskId,
+      model,
+    },
+    "requiredId",
+    { todolistId: TodolistId2, taskId, model }
+  );
   const endState = tasksReducer(startState, action);
 
   expect(endState[TodolistId2].length).toBe(3);
@@ -170,11 +184,19 @@ test("should change task status in correct todolist", () => {
     status: newTaskStatus,
   };
 
-  const action = tasksActions.updateTask({
-    todolistId: TodolistId1,
-    taskId,
-    model,
-  });
+  const action = tasksThunks.updateTask.fulfilled(
+    {
+      todolistId: TodolistId1,
+      taskId,
+      model,
+    },
+    "requiredId",
+    {
+      todolistId: TodolistId1,
+      taskId,
+      model,
+    }
+  );
   const endState = tasksReducer(startState, action);
 
   expect(endState[TodolistId1].length).toBe(3);
@@ -191,7 +213,11 @@ test("new property with new array should be added when new todolist is added", (
     entityStatus: "idle",
   };
 
-  const action = todolistActions.addTodolist({ todolist: newTodolist });
+  const action = todolistsThunks.addTodolist.fulfilled(
+    { todolist: newTodolist },
+    "requiredId",
+    { title: "new todolist" }
+  );
   const endState = tasksReducer(startState, action);
 
   const keys = Object.keys(endState);
@@ -204,7 +230,11 @@ test("new property with new array should be added when new todolist is added", (
   expect(endState[newKey]).toEqual([]);
 });
 test("array of tasks-reducers should be deleted from correct todolist", () => {
-  const action = todolistActions.removeTodolist({ todolistId: TodolistId1 });
+  const action = todolistsThunks.deleteTodolist.fulfilled(
+    { id: TodolistId1 },
+    "requiredId",
+    { id: TodolistId1 }
+  );
   const endState = tasksReducer(startState, action);
 
   const keys = Object.keys(endState);
@@ -213,12 +243,15 @@ test("array of tasks-reducers should be deleted from correct todolist", () => {
   expect(endState[TodolistId1]).not.toBeDefined();
 });
 test("empty array should be added to tasks-reducers state", () => {
-  const action = todolistActions.setTodolists({
-    todolists: [
-      { id: "1", title: "title1", order: 0, addedDate: "0" },
-      { id: "2", title: "title1", order: 0, addedDate: "0" },
-    ],
-  });
+  const action = todolistsThunks.getTodolists.fulfilled(
+    {
+      todolists: [
+        { id: "1", title: "title1", order: 0, addedDate: "0" },
+        { id: "2", title: "title1", order: 0, addedDate: "0" },
+      ],
+    },
+    ""
+  );
   const endState = tasksReducer({}, action);
 
   const keys = Object.keys(endState);

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { RequestType } from "../app/app-reducer";
+import { RequestType } from "../app/app-slice";
 
 export type TodoListType = {
   id: string;
@@ -70,7 +70,7 @@ export type FormDataType = {
 
 const instance = axios.create({
   baseURL: "https://social-network.samuraijs.com/api/1.1/",
-  withCredentials: true,
+  withCredentials: true
 });
 
 export const todolistAPI = {
@@ -79,7 +79,7 @@ export const todolistAPI = {
   },
   addTodolist(title: string) {
     return instance.post<ResponseType<{ item: TodoListType }>>(`todo-lists`, {
-      title,
+      title
     });
   },
   deleteTodolist(todolistId: string) {
@@ -87,7 +87,7 @@ export const todolistAPI = {
   },
   updateTodolist(todolistId: string, title: string) {
     return instance.put<ResponseType>(`todo-lists/${todolistId}`, { title });
-  },
+  }
 };
 export const tasksAPI = {
   getTasks(todolistId: string) {
@@ -109,18 +109,16 @@ export const tasksAPI = {
       `todo-lists/${todolistId}/tasks/${taskId}`,
       model
     );
-  },
+  }
 };
 export const authAPI = {
   me() {
-    return instance.get<
-      ResponseType<{ id: number; email: string; login: string }>
-    >("auth/me");
+    return instance.get<ResponseType<{ id: number; email: string; login: string }>>("auth/me");
   },
   login(data: FormDataType) {
     return instance.post<ResponseType<{ userId: number }>>("auth/login", data);
   },
   logout() {
     return instance.delete<ResponseType>("auth/login");
-  },
+  }
 };

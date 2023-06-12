@@ -3,36 +3,30 @@ import { useSelector } from "react-redux";
 import { TaskDomainType, TaskStatus } from "../../../../api/todolistAPI";
 import { useCallback, useEffect } from "react";
 import {
-  changeTodolistTitleTC,
-  deleteTodolistTC,
   FilterType,
-  todolistActions
-} from "../../reducers/todolist-reducer/todolists-reducer";
-import {
-  addTaskTC,
-  deleteTaskTC,
-  getTasksTC,
-  updateTaskTC
-} from "../../reducers/tasks-reducer/tasks-reducer";
+  todolistsActions,
+  todolistsThunks,
+} from "../../reducers/todolist-reducer/todolists-slice";
+import { tasksThunks } from "../../reducers/tasks-reducer/tasks-slice";
 
 export const useTodolist = (demo: boolean, id: string, filter: FilterType) => {
-
   const dispatch = useAppDispatch();
   const tasks = useSelector<AppStateType, Array<TaskDomainType>>(
-    (state) => state.tasks[id]);
+    (state) => state.tasks[id]
+  );
 
   useEffect(() => {
     if (demo) return;
-    dispatch(getTasksTC(id));
+    dispatch(tasksThunks.getTasks({ todolistId: id }));
   }, []);
 
   const removeTodolistHandler = useCallback(() => {
-    dispatch(deleteTodolistTC(id));
+    dispatch(todolistsThunks.deleteTodolist({ id }));
   }, [dispatch, id]);
 
   const changeTodolistTitleHandler = useCallback(
     (newTitle: string) => {
-      dispatch(changeTodolistTitleTC(id, newTitle));
+      dispatch(todolistsThunks.updateTodolist({ id, newTitle }));
     },
     [dispatch, id]
   );
@@ -40,9 +34,9 @@ export const useTodolist = (demo: boolean, id: string, filter: FilterType) => {
   const changeTodolistFilterHandler = useCallback(
     (newFilterValue: FilterType) => {
       dispatch(
-        todolistActions.changeTodolistFilter({
+        todolistsActions.changeTodolistFilter({
           todolistId: id,
-          filter: newFilterValue
+          filter: newFilterValue,
         })
       );
     },
@@ -51,28 +45,40 @@ export const useTodolist = (demo: boolean, id: string, filter: FilterType) => {
 
   const addTaskHandler = useCallback(
     (taskTitle: string) => {
-      dispatch(addTaskTC(id, taskTitle));
+      dispatch(tasksThunks.addTask({ todolistId: id, taskTitle }));
     },
     [dispatch, id]
   );
 
   const removeTaskHandler = useCallback(
     (taskId: string) => {
-      dispatch(deleteTaskTC(id, taskId));
+      dispatch(tasksThunks.deleteTask({ todolistId: id, taskId }));
     },
     [dispatch, id]
   );
 
   const changeTaskTitleHandler = useCallback(
     (taskId: string, newTaskTitle: string) => {
-      dispatch(updateTaskTC(id, taskId, { title: newTaskTitle }));
+      dispatch(
+        tasksThunks.updateTask({
+          todolistId: id,
+          taskId,
+          model: { title: newTaskTitle },
+        })
+      );
     },
     [dispatch, id]
   );
 
   const changeTaskStatusHandler = useCallback(
     (taskId: string, newTaskStatus: TaskStatus) => {
-      dispatch(updateTaskTC(id, taskId, { status: newTaskStatus }));
+      dispatch(
+        tasksThunks.updateTask({
+          todolistId: id,
+          taskId,
+          model: { status: newTaskStatus },
+        })
+      );
     },
     [dispatch, id]
   );
@@ -112,6 +118,6 @@ export const useTodolist = (demo: boolean, id: string, filter: FilterType) => {
     addTaskHandler,
     removeTaskHandler,
     changeTaskTitleHandler,
-    changeTaskStatusHandler
+    changeTaskStatusHandler,
   };
 };

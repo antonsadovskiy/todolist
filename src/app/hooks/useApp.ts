@@ -1,9 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { useEffect } from "react";
-import {
-  initializeAppTC,
-  logoutTC
-} from "../../features/Login/reducers/auth-reducer";
+import { authThunks } from "../../features/Login/reducers/auth-slice";
 
 export const useApp = (demo: boolean) => {
 
@@ -13,11 +10,11 @@ export const useApp = (demo: boolean) => {
 
   useEffect(() => {
     if (!demo) {
-      dispatch(initializeAppTC());
+      dispatch(authThunks.me());
     }
   }, []);
 
-  const logout = () => dispatch(logoutTC());
+  const logout = () => dispatch(authThunks.logout());
 
   return {
     isLoggedIn, isInitialized, logout

@@ -1,7 +1,7 @@
 import React, {FC, memo} from 'react';
 import style from './Buttons.module.css'
 import Button from "@mui/material/Button";
-import {FilterType} from "../../reducers/todolist-reducer/todolists-reducer";
+import {FilterType} from "../../reducers/todolist-reducer/todolists-slice";
 
 type ButtonsPropsType = {
   filter: FilterType

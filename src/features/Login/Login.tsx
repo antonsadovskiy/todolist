@@ -7,10 +7,11 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-import { useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import { useAppDispatch, useAppSelector } from "../../app/store/store";
-import { loginTC } from "./reducers/auth-reducer";
+import { authThunks } from "./reducers/auth-slice";
 import { Navigate } from "react-router-dom";
+import { FormDataType } from "../../api/todolistAPI";
 
 type FormData = {
   email?: string;
@@ -43,9 +44,8 @@ export const Login = () => {
       rememberMe: false
     },
     validate,
-    onSubmit: (values) => {
-      dispatch(loginTC(values));
-      formik.resetForm();
+    onSubmit: async (values, formikHelpers: FormikHelpers<FormDataType>) => {
+      const res = await dispatch(authThunks.login(values));
     }
   });
 

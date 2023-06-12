@@ -4,7 +4,7 @@ import { Input } from "../../../components/Input/Input";
 import { EditableSpan } from "../../../components/EditableSpan/EditableSpan";
 import {
   TodoListDomainType
-} from "../reducers/todolist-reducer/todolists-reducer";
+} from "../reducers/todolist-reducer/todolists-slice";
 import Buttons from "./Buttons/Buttons";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
 import Task from "./Task/Task";

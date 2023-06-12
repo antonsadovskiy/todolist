@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/runtime": "^7.22.5",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
@@ -101,5 +102,8 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(axios)/)"
     ]
-  }
+  },
+  "nohoist": [
+    "**/babel-preset-react-app/@babel/runtime"
+  ]
 }

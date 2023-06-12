@@ -1,21 +1,25 @@
 import React from "react";
 import { combineReducers } from "redux";
-import { todolistsReducer } from "../../features/TodoLists/reducers/todolist-reducer/todolists-reducer";
-import { tasksReducer } from "../../features/TodoLists/reducers/tasks-reducer/tasks-reducer";
+import {
+  todolistsReducer
+} from "../../features/TodoLists/reducers/todolist-reducer/todolists-slice";
+import {
+  tasksReducer
+} from "../../features/TodoLists/reducers/tasks-reducer/tasks-slice";
 import { AppStateType } from "./store";
 import { Provider } from "react-redux";
 import { v1 } from "uuid";
 import { TaskPriority, TaskStatus } from "../../api/todolistAPI";
-import { appReducer } from "../app-reducer";
+import { appReducer } from "../app-slice";
 import thunk from "redux-thunk";
-import { authReducer } from "../../features/Login/reducers/auth-reducer";
+import { authReducer } from "../../features/Login/reducers/auth-slice";
 import { configureStore } from "@reduxjs/toolkit";
 
 const rootReducer = combineReducers({
   todolists: todolistsReducer,
   tasks: tasksReducer,
   app: appReducer,
-  auth: authReducer,
+  auth: authReducer
 });
 
 const initialState: AppStateType = {
@@ -26,7 +30,7 @@ const initialState: AppStateType = {
       filter: "all",
       order: 0,
       addedDate: "",
-      entityStatus: "idle",
+      entityStatus: "idle"
     },
     {
       id: "todolistId2",
@@ -34,8 +38,8 @@ const initialState: AppStateType = {
       filter: "active",
       order: 0,
       addedDate: "",
-      entityStatus: "loading",
-    },
+      entityStatus: "loading"
+    }
   ],
   tasks: {
     ["todolistId1"]: [
@@ -50,7 +54,7 @@ const initialState: AppStateType = {
         priority: TaskPriority.Low,
         startDate: "",
         todoListId: "TodolistId1",
-        entityStatus: "idle",
+        entityStatus: "idle"
       },
       {
         id: v1(),
@@ -63,7 +67,7 @@ const initialState: AppStateType = {
         priority: TaskPriority.Low,
         startDate: "",
         todoListId: "TodolistId1",
-        entityStatus: "idle",
+        entityStatus: "idle"
       },
       {
         id: v1(),
@@ -76,8 +80,8 @@ const initialState: AppStateType = {
         priority: TaskPriority.Low,
         startDate: "",
         todoListId: "TodolistId1",
-        entityStatus: "idle",
-      },
+        entityStatus: "idle"
+      }
     ],
     ["todolistId2"]: [
       {
@@ -91,7 +95,7 @@ const initialState: AppStateType = {
         priority: TaskPriority.Low,
         startDate: "",
         todoListId: "TodolistId2",
-        entityStatus: "idle",
+        entityStatus: "idle"
       },
       {
         id: v1(),
@@ -104,7 +108,7 @@ const initialState: AppStateType = {
         priority: TaskPriority.Low,
         startDate: "",
         todoListId: "TodolistId2",
-        entityStatus: "idle",
+        entityStatus: "idle"
       },
       {
         id: v1(),
@@ -117,24 +121,24 @@ const initialState: AppStateType = {
         priority: TaskPriority.Low,
         startDate: "",
         todoListId: "TodolistId2",
-        entityStatus: "idle",
-      },
-    ],
+        entityStatus: "idle"
+      }
+    ]
   },
   app: {
     status: "idle",
     error: null,
-    isInitialized: true,
+    isInitialized: true
   },
   auth: {
-    isLoggedIn: true,
-  },
+    isLoggedIn: true
+  }
 };
 
 const storybookStore = configureStore({
   reducer: rootReducer,
   preloadedState: initialState,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk)
 });
 
 export const reduxStoreDecorator = (storyFunc: () => React.ReactNode) => {

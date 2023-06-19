@@ -13,14 +13,12 @@ import Preloader from "../components/Preloader/Preloader";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Login } from "../features/Login/Login";
 import { Page404 } from "./page404/page404";
-import InitializedPreloader
-  from "../components/InitializedPreloader/InitializedPreloader";
+import InitializedPreloader from "../components/InitializedPreloader/InitializedPreloader";
 import { useApp } from "./hooks/useApp";
 
 type AppPropsType = { demo?: boolean };
 
 const App: FC<AppPropsType> = ({ demo = false }) => {
-
   const { isLoggedIn, isInitialized, logout } = useApp(demo);
 
   if (!isInitialized) return <InitializedPreloader />;
@@ -47,9 +45,9 @@ const App: FC<AppPropsType> = ({ demo = false }) => {
         <Routes>
           <Route path={"*"} element={<Navigate to={"/404_NOT_FOUND"} />} />
           <Route path={"/404_NOT_FOUND"} element={<Page404 />} />
-          <Route path={"/todolist"} element={<Navigate to={"/"} />} />
+          <Route path={"/"} element={<Navigate to={"/lists"} />} />
           <Route path={"/login"} element={<Login />} />
-          <Route path={"/"} element={<TodoLists demo={demo} />} />
+          <Route path={"/lists"} element={<TodoLists demo={demo} />} />
         </Routes>
       </Container>
       <Message />

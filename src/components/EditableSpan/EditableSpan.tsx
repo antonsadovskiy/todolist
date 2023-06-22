@@ -5,22 +5,22 @@ import { useEditableSpan } from "./hooks/useEditableSpan";
 
 export type EditableSpanPropsType = {
   title: string;
+  taskStatus?: string;
   onChangeTitle: (newTitle: string) => void;
   disabled: boolean;
 };
 
 export const EditableSpan: FC<EditableSpanPropsType> = memo((props) => {
-
   const {
     title,
     isEditModeOn,
     onChangeHandler,
     onDoubleClickHandler,
     onBlurHandler,
-    onKeyDownHandler
+    onKeyDownHandler,
   } = useEditableSpan(props.title, props.onChangeTitle);
 
-  const spanStyle = props.disabled ? style.disabledSpan : "";
+  const titleStyle = props.disabled ? style.disabledSpan : "";
 
   return isEditModeOn ? (
     <TextField
@@ -33,7 +33,11 @@ export const EditableSpan: FC<EditableSpanPropsType> = memo((props) => {
       autoFocus
     />
   ) : (
-    <span className={spanStyle} onDoubleClick={onDoubleClickHandler}>
+    <span
+      className={titleStyle}
+      style={{ opacity: props.taskStatus }}
+      onDoubleClick={onDoubleClickHandler}
+    >
       {props.title}
     </span>
   );

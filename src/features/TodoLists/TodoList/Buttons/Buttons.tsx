@@ -1,38 +1,33 @@
-import React, {FC, memo} from 'react';
-import style from './Buttons.module.css'
+import React, { FC, memo } from "react";
+import style from "./Buttons.module.css";
 import Button from "@mui/material/Button";
-import {FilterType} from "../../reducers/todolist-reducer/todolists-slice";
+import { FilterType } from "../../reducers/todolist-reducer/todolists-slice";
 
 type ButtonsPropsType = {
-  filter: FilterType
-  setAll: () => void
-  setActive: () => void
-  setCompleted: () => void
-}
+  filter: FilterType;
+  setFilter: (filterValue: FilterType) => void;
+};
 
 const Buttons: FC<ButtonsPropsType> = memo((props) => {
+  const setFilter = (filterValue: FilterType) => props.setFilter(filterValue);
 
-  const setAll = () => props.setAll()
-  const setActive = () => props.setActive()
-  const setCompleted = () => props.setCompleted()
+  const renderButton = (filterValue: FilterType) => {
+    return (
+      <Button
+        variant={props.filter === filterValue ? "contained" : "outlined"}
+        onClick={() => setFilter(filterValue)}
+        size={"small"}
+      >
+        {filterValue}
+      </Button>
+    );
+  };
 
   return (
     <div className={style.buttonsContainer}>
-      <Button variant={props.filter === 'all' ? "contained" : "outlined"}
-              onClick={setAll}
-              size={'small'}>
-        all
-      </Button>
-      <Button variant={props.filter === 'active' ? "contained" : "outlined"}
-              onClick={setActive}
-              size={'small'}>
-        active
-      </Button>
-      <Button variant={props.filter === 'completed' ? "contained" : "outlined"}
-              onClick={setCompleted}
-              size={'small'}>
-        completed
-      </Button>
+      {renderButton("all")}
+      {renderButton("active")}
+      {renderButton("completed")}
     </div>
   );
 });

@@ -11,30 +11,18 @@ import { useFormik } from "formik";
 import { useAppDispatch, useAppSelector } from "../../app/store/store";
 import { authThunks } from "./reducers/auth-slice";
 import { Navigate } from "react-router-dom";
+import { selectorIsLoggedIn } from "./selectors";
+import { validate } from "../../common/utils";
 
-type FormData = {
+export type FormData = {
   email?: string;
   password?: string;
   rememberMe?: boolean;
 };
 
-const validate = (values: any) => {
-  const errors: FormData = {};
-
-  if (!values.email) {
-    errors.email = "Required";
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = "Invalid email address";
-  }
-  if (!values.password) {
-    errors.password = "Required";
-  }
-  return errors;
-};
-
 export const Login = () => {
   const dispatch = useAppDispatch();
-  const isLoggedIn = useAppSelector<boolean>((state) => state.auth.isLoggedIn);
+  const isLoggedIn = useAppSelector(selectorIsLoggedIn);
 
   const formik = useFormik({
     initialValues: {

@@ -1,26 +1,47 @@
 import { ChangeEvent, useCallback } from "react";
-import { TaskStatus } from "../../../../../api/todolistAPI";
+import { useAppDispatch } from "../../../../../app/store/store";
+import { tasksThunks } from "../../../reducers/tasks-reducer/tasks-slice";
+import { TaskStatus } from "../../../../../api/tasksAPI";
 
-export const useTask = (
-  id: string,
-  removeTask: (taskId: string) => void,
-  changeTaskTitle: (taskId: string, newTitle: string) => void,
-  changeTaskStatus: (taskId: string, newStatus: TaskStatus) => void
-) => {
+export const useTask = (todoListId: string, id: string) => {
+  const dispatch = useAppDispatch();
 
   const removeTaskHandler = useCallback(() => {
-    removeTask(id);
-  }, [removeTask, id]);
+    dispatch(tasksThunks.deleteTask({ todolistId: todoListId, taskId: id }));
+  }, [dispatch, id]);
 
-  const onChangeTitleHandler = useCallback((newTitle: string) => {
-    changeTaskTitle(id, newTitle);
-  }, [changeTaskTitle, id]);
-
-  const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    changeTaskStatus(id, e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New);
-  };
+  const changeTaskTitleHandler = useCallback(
+    (newTitle: string) => {
+      dispatch(
+        tasksThunks.updateTask({
+          todolistId: todoListId,
+          taskId: id,
+          model: { title: newTitle },
+        })
+      );
+    },
+    [dispatch, id]
+  );
+  const changeTaskStatusHandler = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch(
+        tasksThunks.updateTask({
+          todolistId: todoListId,
+          taskId: id,
+          model: {
+            status: e.currentTarget.checked
+              ? TaskStatus.Completed
+              : TaskStatus.New,
+          },
+        })
+      );
+    },
+    [dispatch, id]
+  );
 
   return {
-    removeTaskHandler, onChangeTitleHandler, onChangeStatusHandler
+    removeTaskHandler,
+    changeTaskStatusHandler,
+    changeTaskTitleHandler,
   };
 };

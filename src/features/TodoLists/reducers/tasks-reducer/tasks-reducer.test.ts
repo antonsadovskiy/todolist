@@ -9,11 +9,7 @@ import {
   TodoListDomainType,
   todolistsThunks,
 } from "../todolist-reducer/todolists-slice";
-import {
-  TaskPriority,
-  TaskStatus,
-  TaskType,
-} from "../../../../api/todolistAPI";
+import { TaskPriority, TaskStatus, TaskType } from "../../../../api/tasksAPI";
 
 let TodolistId1: string;
 let TodolistId2: string;
@@ -123,13 +119,10 @@ test("should add new task to correct todolist", () => {
     description: "",
   };
 
-  const action = tasksThunks.addTask.fulfilled(
-    {
-      task: newTask,
-    },
-    "",
-    { todolistId: TodolistId1, taskTitle: "new task title" }
-  );
+  const action = tasksThunks.addTask.fulfilled({ task: newTask }, "", {
+    todolistId: TodolistId1,
+    taskTitle: "new task title",
+  });
   const endState = tasksReducer(startState, action);
 
   expect(endState[TodolistId1].length).toBe(4);
@@ -211,6 +204,9 @@ test("new property with new array should be added when new todolist is added", (
     addedDate: "",
     filter: "all",
     entityStatus: "idle",
+    pageCount: 4,
+    page: 1,
+    totalCount: 0,
   };
 
   const action = todolistsThunks.addTodolist.fulfilled(

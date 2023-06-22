@@ -1,4 +1,3 @@
-import { authAPI, FormDataType, ResultCode } from "../../../api/todolistAPI";
 import { AxiosError } from "axios";
 import {
   handlerAppNetworkError,
@@ -7,7 +6,9 @@ import {
 import { appActions } from "../../../app/app-slice";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ClearTasksAndTodolists } from "../../../common/actions/common-actions";
-import { createAppAsyncThunk } from "../../../common/utils/createAppAsyncThunk";
+import { createAppAsyncThunk } from "../../../common/utils";
+import { authAPI, FormDataType } from "../../../api/authAPI";
+import { ResultCode } from "../../../api/todolistsAPI";
 
 const slice = createSlice({
   name: "auth",

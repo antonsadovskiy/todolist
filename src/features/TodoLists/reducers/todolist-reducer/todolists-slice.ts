@@ -1,8 +1,3 @@
-import {
-  ResultCode,
-  todolistAPI,
-  TodoListType,
-} from "../../../../api/todolistAPI";
 import { appActions, RequestType } from "../../../../app/app-slice";
 import { AxiosError } from "axios";
 import {
@@ -11,12 +6,21 @@ import {
 } from "../../../../utils/error-utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ClearTasksAndTodolists } from "../../../../common/actions/common-actions";
-import { createAppAsyncThunk } from "../../../../common/utils/createAppAsyncThunk";
+import { createAppAsyncThunk } from "../../../../common/utils";
+import { tasksThunks } from "../tasks-reducer/tasks-slice";
+import {
+  ResultCode,
+  todolistAPI,
+  TodoListType,
+} from "../../../../api/todolistsAPI";
 
 export type FilterType = "all" | "active" | "completed";
 export type TodoListDomainType = TodoListType & {
   filter: FilterType;
   entityStatus: RequestType;
+  totalCount: number;
+  pageCount: number;
+  page: number;
 };
 
 const initialState: Array<TodoListDomainType> = [];
@@ -25,6 +29,20 @@ const slice = createSlice({
   name: "todolists",
   initialState: initialState,
   reducers: {
+    changePage(
+      state,
+      action: PayloadAction<{ todolistId: string; page: number }>
+    ) {
+      const index = state.findIndex((t) => t.id === action.payload.todolistId);
+      if (index !== -1) state[index].page = action.payload.page;
+    },
+    changePageCount(
+      state,
+      action: PayloadAction<{ todolistId: string; pageCount: number }>
+    ) {
+      const index = state.findIndex((t) => t.id === action.payload.todolistId);
+      if (index !== -1) state[index].pageCount = action.payload.pageCount;
+    },
     changeTodolistFilter(
       state,
       action: PayloadAction<{ todolistId: string; filter: FilterType }>
@@ -47,6 +65,9 @@ const slice = createSlice({
           ...l,
           filter: "all",
           entityStatus: "idle",
+          totalCount: 0,
+          pageCount: 4,
+          page: 1,
         }));
       })
       .addCase(addTodolist.fulfilled, (state, action) => {
@@ -54,6 +75,9 @@ const slice = createSlice({
           ...action.payload.todolist,
           filter: "all",
           entityStatus: "idle",
+          totalCount: 0,
+          pageCount: 4,
+          page: 1,
         });
       })
       .addCase(deleteTodolist.fulfilled, (state, action) => {
@@ -66,6 +90,12 @@ const slice = createSlice({
       })
       .addCase(ClearTasksAndTodolists.type, () => {
         return [];
+      })
+      .addCase(tasksThunks.getTasks.fulfilled, (state, action) => {
+        const index = state.findIndex(
+          (t) => t.id === action.payload.todolistId
+        );
+        if (index !== -1) state[index].totalCount = action.payload.totalCount;
       });
   },
 });
@@ -87,12 +117,8 @@ const getTodolists = createAppAsyncThunk<
   }
 });
 const addTodolist = createAppAsyncThunk<
-  {
-    todolist: TodoListType;
-  },
-  {
-    title: string;
-  }
+  { todolist: TodoListType },
+  { title: string }
 >("todolists/add", async (arg, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   dispatch(appActions.setAppStatus({ status: "loading" }));
@@ -110,12 +136,48 @@ const addTodolist = createAppAsyncThunk<
     return rejectWithValue(null);
   }
 });
-const deleteTodolist = createAppAsyncThunk<
-  {
-    id: string;
-  },
-  { id: string }
->("todolists/delete", async (arg, thunkAPI) => {
+const deleteTodolist = createAppAsyncThunk<{ id: string }, { id: string }>(
+  "todolists/delete",
+  async (arg, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI;
+    dispatch(appActions.setAppStatus({ status: "loading" }));
+    dispatch(
+      todolistsActions.setTodolistStatus({
+        todolistId: arg.id,
+        status: "loading",
+      })
+    );
+    try {
+      const res = await todolistAPI.deleteTodolist(arg.id);
+      if (res.data.resultCode === ResultCode.OK) {
+        dispatch(appActions.setAppStatus({ status: "success" }));
+        dispatch(
+          todolistsActions.setTodolistStatus({
+            todolistId: arg.id,
+            status: "success",
+          })
+        );
+        return { id: arg.id };
+      } else {
+        return rejectWithValue(null);
+      }
+    } catch (e) {
+      handlerAppNetworkError(dispatch, e as AxiosError);
+      dispatch(
+        todolistsActions.setTodolistStatus({
+          todolistId: arg.id,
+          status: "error",
+        })
+      );
+      return rejectWithValue(null);
+    }
+  }
+);
+
+const updateTodolist = createAppAsyncThunk<
+  { id: string; newTitle: string },
+  { id: string; newTitle: string }
+>("todolists/update", async (arg, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   dispatch(appActions.setAppStatus({ status: "loading" }));
   dispatch(
@@ -125,7 +187,7 @@ const deleteTodolist = createAppAsyncThunk<
     })
   );
   try {
-    const res = await todolistAPI.deleteTodolist(arg.id);
+    const res = await todolistAPI.updateTodolist(arg.id, arg.newTitle);
     if (res.data.resultCode === ResultCode.OK) {
       dispatch(appActions.setAppStatus({ status: "success" }));
       dispatch(
@@ -134,32 +196,6 @@ const deleteTodolist = createAppAsyncThunk<
           status: "success",
         })
       );
-      return { id: arg.id };
-    } else {
-      return rejectWithValue(null);
-    }
-  } catch (e) {
-    handlerAppNetworkError(dispatch, e as AxiosError);
-    dispatch(
-      todolistsActions.setTodolistStatus({
-        todolistId: arg.id,
-        status: "error",
-      })
-    );
-    return rejectWithValue(null);
-  }
-});
-
-const updateTodolist = createAppAsyncThunk<
-  { id: string; newTitle: string },
-  { id: string; newTitle: string }
->("todolists/update", async (arg, thunkAPI) => {
-  const { dispatch, rejectWithValue } = thunkAPI;
-  dispatch(appActions.setAppStatus({ status: "loading" }));
-  try {
-    const res = await todolistAPI.updateTodolist(arg.id, arg.newTitle);
-    if (res.data.resultCode === ResultCode.OK) {
-      dispatch(appActions.setAppStatus({ status: "success" }));
       return { id: arg.id, newTitle: arg.newTitle };
     } else {
       handlerAppServerError(dispatch, res.data);

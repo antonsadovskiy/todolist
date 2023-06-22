@@ -1,0 +1,6 @@
+.tasksContainer {
+  padding-left: 20px;
+  padding-right: 50px;
+  display: flex;
+  flex-direction: column;
+}

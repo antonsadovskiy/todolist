@@ -1,12 +1,3 @@
-import {
-  ResultCode,
-  TaskDomainType,
-  TaskPriority,
-  tasksAPI,
-  TaskStatus,
-  TaskType,
-  UpdateTaskModelType,
-} from "../../../../api/todolistAPI";
 import { appActions, RequestType } from "../../../../app/app-slice";
 import { AxiosError } from "axios";
 import {
@@ -14,9 +5,21 @@ import {
   handlerAppServerError,
 } from "../../../../utils/error-utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { todolistsThunks } from "../todolist-reducer/todolists-slice";
+import {
+  todolistsActions,
+  todolistsThunks,
+} from "../todolist-reducer/todolists-slice";
 import { ClearTasksAndTodolists } from "../../../../common/actions/common-actions";
-import { createAppAsyncThunk } from "../../../../common/utils/createAppAsyncThunk";
+import { createAppAsyncThunk } from "../../../../common/utils";
+import {
+  TaskDomainType,
+  TaskPriority,
+  tasksAPI,
+  TaskStatus,
+  TaskType,
+  UpdateTaskModelType,
+} from "../../../../api/tasksAPI";
+import { ResultCode } from "../../../../api/todolistsAPI";
 
 export type TasksType = {
   [key: string]: Array<TaskDomainType>;
@@ -90,15 +93,32 @@ const getTasks = createAppAsyncThunk<
   {
     todolistId: string;
     tasks: Array<TaskType>;
+    totalCount: number;
   },
-  { todolistId: string }
+  { todolistId: string; count: number; page: number }
 >("tasks/get", async (arg, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   dispatch(appActions.setAppStatus({ status: "loading" }));
+  dispatch(
+    todolistsActions.setTodolistStatus({
+      todolistId: arg.todolistId,
+      status: "loading",
+    })
+  );
   try {
-    const res = await tasksAPI.getTasks(arg.todolistId);
+    const res = await tasksAPI.getTasks(arg.todolistId, arg.page, arg.count);
     dispatch(appActions.setAppStatus({ status: "success" }));
-    return { todolistId: arg.todolistId, tasks: res.data.items };
+    dispatch(
+      todolistsActions.setTodolistStatus({
+        todolistId: arg.todolistId,
+        status: "success",
+      })
+    );
+    return {
+      todolistId: arg.todolistId,
+      tasks: res.data.items,
+      totalCount: res.data.totalCount,
+    };
   } catch (e) {
     handlerAppNetworkError(dispatch, e as AxiosError);
     return rejectWithValue(null);

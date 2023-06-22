@@ -8,14 +8,3 @@
     border: 2px solid gray;
     outline: 0;
 }
-.titleContainer {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.tasksContainer {
-    padding-left: 20px;
-    padding-right: 50px;
-    display: flex;
-    flex-direction: column;
-}

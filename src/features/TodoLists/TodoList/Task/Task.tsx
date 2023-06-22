@@ -2,46 +2,44 @@ import React, { FC, memo } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { EditableSpan } from "../../../../components/EditableSpan/EditableSpan";
 import DeleteItem from "../../../../components/DeleteItem/DeleteItem";
-import { TaskDomainType, TaskStatus } from "../../../../api/todolistAPI";
 import { useTask } from "./hooks/useTask";
+import { TaskDomainType, TaskStatus } from "../../../../api/tasksAPI";
 
 type TaskPropsType = {
-  task: TaskDomainType
-  removeTask: (taskId: string) => void
-  changeTaskStatus: (taskId: string, newStatus: TaskStatus) => void
-  changeTaskTitle: (taskId: string, newTitle: string) => void
-}
+  task: TaskDomainType;
+};
 
-const Task: FC<TaskPropsType> = memo((props) => {
-
-  const { id, title, status, entityStatus } = props.task;
-
-  const {
-    removeTaskHandler,
-    onChangeTitleHandler,
-    onChangeStatusHandler
-  } = useTask(id, props.removeTask, props.changeTaskTitle, props.changeTaskStatus);
+const Task: FC<TaskPropsType> = memo(({ task }) => {
+  const { removeTaskHandler, changeTaskStatusHandler, changeTaskTitleHandler } =
+    useTask(task.todoListId, task.id);
 
   const taskStyle = {
     listStyle: "none",
-    opacity: status === TaskStatus.Completed ? "0.6" : "1",
-    textDecorationLine: status === TaskStatus.Completed ? "line-through" : "none",
+    textDecorationLine:
+      task.status === TaskStatus.Completed ? "line-through" : "none",
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   };
 
   return (
     <li style={taskStyle}>
       <div>
-        <Checkbox checked={status === TaskStatus.Completed}
-                  onChange={onChangeStatusHandler}
-                  disabled={entityStatus === "loading"} />
-        <EditableSpan title={title}
-                      onChangeTitle={onChangeTitleHandler}
-                      disabled={entityStatus === "loading"} />
+        <Checkbox
+          checked={task.status === TaskStatus.Completed}
+          onChange={changeTaskStatusHandler}
+          disabled={task.entityStatus === "loading"}
+        />
+        <EditableSpan
+          taskStatus={task.status === TaskStatus.Completed ? "0.6" : "1"}
+          title={task.title}
+          onChangeTitle={changeTaskTitleHandler}
+          disabled={task.entityStatus === "loading"}
+        />
       </div>
-      <DeleteItem deleteItem={removeTaskHandler}
-                  disabled={entityStatus === "loading"} />
+      <DeleteItem
+        deleteItem={removeTaskHandler}
+        disabled={task.entityStatus === "loading"}
+      />
     </li>
   );
 });

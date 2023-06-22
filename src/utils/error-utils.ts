@@ -1,9 +1,12 @@
 import { Dispatch } from "redux";
-import { ResponseType } from "../api/todolistAPI";
+import { ResponseType } from "../api/todolistsAPI";
 import { AxiosError } from "axios";
 import { appActions } from "../app/app-slice";
 
-export const handlerAppServerError = <T>(dispatch: Dispatch, data: ResponseType<T>) => {
+export const handlerAppServerError = <T>(
+  dispatch: Dispatch,
+  data: ResponseType<T>
+) => {
   dispatch(appActions.setAppStatus({ status: "error" }));
   dispatch(appActions.setAppError({ error: data.messages[0] }));
 };

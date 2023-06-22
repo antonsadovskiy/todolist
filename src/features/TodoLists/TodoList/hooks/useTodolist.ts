@@ -1,6 +1,5 @@
 import { AppStateType, useAppDispatch } from "../../../../app/store/store";
 import { useSelector } from "react-redux";
-import { TaskDomainType, TaskStatus } from "../../../../api/todolistAPI";
 import { useCallback, useEffect } from "react";
 import {
   FilterType,
@@ -8,8 +7,15 @@ import {
   todolistsThunks,
 } from "../../reducers/todolist-reducer/todolists-slice";
 import { tasksThunks } from "../../reducers/tasks-reducer/tasks-slice";
+import { TaskDomainType, TaskStatus } from "../../../../api/tasksAPI";
 
-export const useTodolist = (demo: boolean, id: string, filter: FilterType) => {
+export const useTodolist = (
+  demo: boolean,
+  id: string,
+  filter: FilterType,
+  pageCount: number,
+  page: number
+) => {
   const dispatch = useAppDispatch();
   const tasks = useSelector<AppStateType, Array<TaskDomainType>>(
     (state) => state.tasks[id]
@@ -17,8 +23,8 @@ export const useTodolist = (demo: boolean, id: string, filter: FilterType) => {
 
   useEffect(() => {
     if (demo) return;
-    dispatch(tasksThunks.getTasks({ todolistId: id }));
-  }, []);
+    dispatch(tasksThunks.getTasks({ todolistId: id, page, count: pageCount }));
+  }, [page, pageCount]);
 
   const removeTodolistHandler = useCallback(() => {
     dispatch(todolistsThunks.deleteTodolist({ id }));
@@ -45,54 +51,25 @@ export const useTodolist = (demo: boolean, id: string, filter: FilterType) => {
 
   const addTaskHandler = useCallback(
     (taskTitle: string) => {
-      dispatch(tasksThunks.addTask({ todolistId: id, taskTitle }));
-    },
-    [dispatch, id]
-  );
-
-  const removeTaskHandler = useCallback(
-    (taskId: string) => {
-      dispatch(tasksThunks.deleteTask({ todolistId: id, taskId }));
-    },
-    [dispatch, id]
-  );
-
-  const changeTaskTitleHandler = useCallback(
-    (taskId: string, newTaskTitle: string) => {
       dispatch(
-        tasksThunks.updateTask({
+        tasksThunks.addTask({
           todolistId: id,
-          taskId,
-          model: { title: newTaskTitle },
+          taskTitle,
         })
       );
     },
     [dispatch, id]
   );
 
-  const changeTaskStatusHandler = useCallback(
-    (taskId: string, newTaskStatus: TaskStatus) => {
-      dispatch(
-        tasksThunks.updateTask({
-          todolistId: id,
-          taskId,
-          model: { status: newTaskStatus },
-        })
-      );
-    },
-    [dispatch, id]
-  );
+  const changePageCountHandler = (pageCount: number) => {
+    dispatch(todolistsActions.changePageCount({ todolistId: id, pageCount }));
+  };
+  const changePageHandler = (page: number) => [
+    dispatch(todolistsActions.changePage({ todolistId: id, page })),
+  ];
 
-  const setAll = useCallback(
-    () => changeTodolistFilterHandler("all"),
-    [changeTodolistFilterHandler]
-  );
-  const setActive = useCallback(
-    () => changeTodolistFilterHandler("active"),
-    [changeTodolistFilterHandler]
-  );
-  const setCompleted = useCallback(
-    () => changeTodolistFilterHandler("completed"),
+  const setFilter = useCallback(
+    (filterValue: FilterType) => changeTodolistFilterHandler(filterValue),
     [changeTodolistFilterHandler]
   );
 
@@ -110,14 +87,11 @@ export const useTodolist = (demo: boolean, id: string, filter: FilterType) => {
 
   return {
     tasksForTodolist,
-    setAll,
-    setActive,
-    setCompleted,
+    changePageCountHandler,
+    changePageHandler,
+    setFilter,
     removeTodolistHandler,
     changeTodolistTitleHandler,
     addTaskHandler,
-    removeTaskHandler,
-    changeTaskTitleHandler,
-    changeTaskStatusHandler,
   };
 };

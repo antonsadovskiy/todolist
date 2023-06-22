@@ -16,6 +16,9 @@ test("ids should be equals", () => {
     addedDate: "",
     filter: "all",
     entityStatus: "idle",
+    pageCount: 4,
+    page: 1,
+    totalCount: 0,
   };
 
   const action = todolistsThunks.addTodolist.fulfilled(

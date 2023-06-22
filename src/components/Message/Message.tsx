@@ -3,6 +3,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { useAppDispatch, useAppSelector } from "../../app/store/store";
 import { appActions } from "../../app/app-slice";
+import { selectorError } from "../../app/selectors";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -13,7 +14,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 export const Message = () => {
   const dispatch = useAppDispatch();
-  const error = useAppSelector<string | null>((state) => state.app.error);
+  const error = useAppSelector(selectorError);
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,

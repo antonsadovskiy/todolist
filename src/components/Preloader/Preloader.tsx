@@ -1,11 +1,11 @@
 import React from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useAppSelector } from "../../app/store/store";
-import { RequestType } from "../../app/app-slice";
 import style from "./Preloader.module.css";
+import { selectorStatus } from "../../app/selectors";
 
 const Preloader = () => {
-  const status = useAppSelector<RequestType>((state) => state.app.status);
+  const status = useAppSelector(selectorStatus);
 
   return (
     <div className={style.progress}>

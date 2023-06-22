@@ -1,14 +1,12 @@
 import React, { FC, memo } from "react";
 import style from "./TodoList.module.css";
 import { Input } from "../../../components/Input/Input";
-import { EditableSpan } from "../../../components/EditableSpan/EditableSpan";
-import {
-  TodoListDomainType
-} from "../reducers/todolist-reducer/todolists-slice";
+import { TodoListDomainType } from "../reducers/todolist-reducer/todolists-slice";
 import Buttons from "./Buttons/Buttons";
-import DeleteItem from "../../../components/DeleteItem/DeleteItem";
-import Task from "./Task/Task";
 import { useTodolist } from "./hooks/useTodolist";
+import Title from "./Title/Title";
+import Tasks from "./Tasks/Tasks";
+import TasksPagination from "./MyPagination/TasksPagination";
 
 type TodoListPropType = {
   todolist: TodoListDomainType;
@@ -17,58 +15,39 @@ type TodoListPropType = {
 
 export const TodoList: FC<TodoListPropType> = memo(
   ({ todolist, demo = false }) => {
-
-    const { id, title, filter } = todolist;
+    const { id, title, filter, entityStatus, pageCount, page, totalCount } =
+      todolist;
     const {
       tasksForTodolist,
-      setAll,
-      setActive,
-      setCompleted,
+      setFilter,
+      changePageCountHandler,
+      changePageHandler,
       removeTodolistHandler,
       changeTodolistTitleHandler,
       addTaskHandler,
-      removeTaskHandler,
-      changeTaskTitleHandler,
-      changeTaskStatusHandler
-    } = useTodolist(demo, id, filter);
-
+    } = useTodolist(demo, id, filter, pageCount, page);
 
     return (
       <div className={style.listContainer}>
-        <div className={style.titleContainer}>
-          <h3>
-            <EditableSpan
-              title={title}
-              onChangeTitle={changeTodolistTitleHandler}
-              disabled={todolist.entityStatus === "loading"}
-            />
-          </h3>
-          <DeleteItem
-            deleteItem={removeTodolistHandler}
-            disabled={todolist.entityStatus === "loading"}
-          />
-        </div>
-        <Input
-          addItem={addTaskHandler}
-          disabled={todolist.entityStatus === "loading"}
+        <Title
+          title={title}
+          entityStatus={entityStatus}
+          removeTodolistHandler={removeTodolistHandler}
+          changeTodolistTitleHandler={changeTodolistTitleHandler}
         />
-        <ul className={style.tasksContainer}>
-          {tasksForTodolist.map((task) => (
-            <Task
-              key={task.id}
-              task={task}
-              removeTask={removeTaskHandler}
-              changeTaskStatus={changeTaskStatusHandler}
-              changeTaskTitle={changeTaskTitleHandler}
-            />
-          ))}
-        </ul>
-        <Buttons
-          filter={filter}
-          setAll={setAll}
-          setActive={setActive}
-          setCompleted={setCompleted}
+        <Input addItem={addTaskHandler} disabled={entityStatus === "loading"} />
+        <Tasks
+          tasks={tasksForTodolist}
+          isLoading={entityStatus === "loading"}
         />
+        <TasksPagination
+          page={page}
+          pageCount={pageCount}
+          tasksTotalCount={totalCount}
+          changePageHandler={changePageHandler}
+          changePageCountHandler={changePageCountHandler}
+        />
+        <Buttons filter={filter} setFilter={setFilter} />
       </div>
     );
   }

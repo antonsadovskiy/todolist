@@ -68,7 +68,7 @@ export const useTodolist = (
     dispatch(todolistsActions.changePage({ todolistId: id, page })),
   ];
 
-  const setFilter = useCallback(
+  const setFilterHandler = useCallback(
     (filterValue: FilterType) => changeTodolistFilterHandler(filterValue),
     [changeTodolistFilterHandler]
   );
@@ -83,13 +83,13 @@ export const useTodolist = (
         return tasks;
     }
   };
-  const tasksForTodolist = getTasksByFilter(filter);
+  const todolistTasks = getTasksByFilter(filter);
 
   return {
-    tasksForTodolist,
+    todolistTasks,
     changePageCountHandler,
     changePageHandler,
-    setFilter,
+    setFilterHandler,
     removeTodolistHandler,
     changeTodolistTitleHandler,
     addTaskHandler,

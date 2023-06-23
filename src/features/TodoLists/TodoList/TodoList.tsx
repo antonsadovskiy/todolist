@@ -8,23 +8,23 @@ import Tasks from "./Tasks/Tasks";
 import TasksPagination from "./MyPagination/TasksPagination";
 import { TodoListDomainType } from "../types";
 
-type TodoListPropType = {
+type TodoListPropsType = {
   todolist: TodoListDomainType;
   demo?: boolean;
 };
 
-export const TodoList: FC<TodoListPropType> = memo(
+export const TodoList: FC<TodoListPropsType> = memo(
   ({ todolist, demo = false }) => {
     const { id, title, filter, entityStatus, pageCount, page, totalCount } =
       todolist;
     const {
-      tasksForTodolist,
-      setFilter,
-      changePageCountHandler,
+      todolistTasks,
+      setFilterHandler,
       changePageHandler,
+      changePageCountHandler,
+      addTaskHandler,
       removeTodolistHandler,
       changeTodolistTitleHandler,
-      addTaskHandler,
     } = useTodolist(demo, id, filter, pageCount, page);
 
     return (
@@ -38,10 +38,7 @@ export const TodoList: FC<TodoListPropType> = memo(
           />
         </div>
         <Input addItem={addTaskHandler} disabled={entityStatus === "loading"} />
-        <Tasks
-          tasks={tasksForTodolist}
-          isLoading={entityStatus === "loading"}
-        />
+        <Tasks tasks={todolistTasks} isLoading={entityStatus === "loading"} />
         <TasksPagination
           page={page}
           pageCount={pageCount}
@@ -49,7 +46,7 @@ export const TodoList: FC<TodoListPropType> = memo(
           changePageHandler={changePageHandler}
           changePageCountHandler={changePageCountHandler}
         />
-        <Buttons filter={filter} setFilter={setFilter} />
+        <Buttons filter={filter} setFilter={setFilterHandler} />
       </div>
     );
   }

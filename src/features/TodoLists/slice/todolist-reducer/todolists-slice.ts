@@ -1,4 +1,4 @@
-import { appActions, RequestType } from "../../../../app/app-slice";
+import { appActions } from "../../../App/slice/app-slice";
 import { AxiosError } from "axios";
 import {
   handlerAppNetworkError,
@@ -8,20 +8,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ClearTasksAndTodolists } from "../../../../common/actions/common-actions";
 import { createAppAsyncThunk } from "../../../../common/utils";
 import { tasksThunks } from "../tasks-reducer/tasks-slice";
-import {
-  ResultCode,
-  todolistAPI,
-  TodoListType,
-} from "../../../../api/todolistsAPI";
-
-export type FilterType = "all" | "active" | "completed";
-export type TodoListDomainType = TodoListType & {
-  filter: FilterType;
-  entityStatus: RequestType;
-  totalCount: number;
-  pageCount: number;
-  page: number;
-};
+import { todolistAPI } from "../../../../api/todolistsAPI";
+import { FilterType, TodoListDomainType, TodoListType } from "../../types";
+import { RequestType } from "../../../App/types";
+import { ResultCode } from "../../../../api/types";
 
 const initialState: Array<TodoListDomainType> = [];
 

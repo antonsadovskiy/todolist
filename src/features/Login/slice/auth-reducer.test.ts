@@ -4,7 +4,7 @@ let startState: ReturnType<typeof authReducer>;
 
 beforeEach(() => {
   startState = {
-    isLoggedIn: false
+    isLoggedIn: false,
   };
 });
 

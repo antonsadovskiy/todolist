@@ -2,7 +2,7 @@ import React from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useAppSelector } from "../../app/store/store";
 import style from "./Preloader.module.css";
-import { selectorStatus } from "../../app/selectors";
+import { selectorStatus } from "../../features/App/selectors";
 
 const Preloader = () => {
   const status = useAppSelector(selectorStatus);

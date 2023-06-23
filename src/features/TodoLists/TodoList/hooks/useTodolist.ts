@@ -2,12 +2,12 @@ import { AppStateType, useAppDispatch } from "../../../../app/store/store";
 import { useSelector } from "react-redux";
 import { useCallback, useEffect } from "react";
 import {
-  FilterType,
   todolistsActions,
   todolistsThunks,
-} from "../../reducers/todolist-reducer/todolists-slice";
-import { tasksThunks } from "../../reducers/tasks-reducer/tasks-slice";
-import { TaskDomainType, TaskStatus } from "../../../../api/tasksAPI";
+} from "../../slice/todolist-reducer/todolists-slice";
+import { tasksThunks } from "../../slice/tasks-reducer/tasks-slice";
+import { FilterType, TaskDomainType } from "../../types";
+import { TaskStatus } from "../../../../api/types";
 
 export const useTodolist = (
   demo: boolean,

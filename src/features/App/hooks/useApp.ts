@@ -1,7 +1,7 @@
-import { useAppDispatch, useAppSelector } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../../../app/store/store";
 import { useEffect } from "react";
-import { authThunks } from "../../features/Login/reducers/auth-slice";
-import { selectorIsLoggedIn } from "../../features/Login/selectors";
+import { authThunks } from "../../Login/slice/auth-slice";
+import { selectorIsLoggedIn } from "../../Login/selectors";
 import { selectorIsInitialized } from "../selectors";
 
 export const useApp = (demo: boolean) => {

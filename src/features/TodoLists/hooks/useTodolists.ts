@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../../app/store/store";
 import { useSelector } from "react-redux";
-import { todolistsThunks } from "../reducers/todolist-reducer/todolists-slice";
+import { todolistsThunks } from "../slice/todolist-reducer/todolists-slice";
 import { useCallback, useEffect } from "react";
 import { selectorIsLoggedIn } from "../../Login/selectors";
 import { selectorTodolists } from "../selectors";

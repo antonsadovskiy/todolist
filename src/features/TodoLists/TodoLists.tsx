@@ -9,7 +9,6 @@ import { useTodolists } from "./hooks/useTodolists";
 type TodoListsPropsType = { demo?: boolean };
 
 const TodoLists: FC<TodoListsPropsType> = ({ demo = false }) => {
-
   const { todolists, isLoggedIn, addTodolistHandler } = useTodolists(demo);
 
   if (!isLoggedIn) return <Navigate to={"/login"} />;

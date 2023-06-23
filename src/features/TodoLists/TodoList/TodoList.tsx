@@ -1,12 +1,12 @@
 import React, { FC, memo } from "react";
 import style from "./TodoList.module.css";
 import { Input } from "../../../components/Input/Input";
-import { TodoListDomainType } from "../reducers/todolist-reducer/todolists-slice";
 import Buttons from "./Buttons/Buttons";
 import { useTodolist } from "./hooks/useTodolist";
 import Title from "./Title/Title";
 import Tasks from "./Tasks/Tasks";
 import TasksPagination from "./MyPagination/TasksPagination";
+import { TodoListDomainType } from "../types";
 
 type TodoListPropType = {
   todolist: TodoListDomainType;
@@ -29,12 +29,14 @@ export const TodoList: FC<TodoListPropType> = memo(
 
     return (
       <div className={style.listContainer}>
-        <Title
-          title={title}
-          entityStatus={entityStatus}
-          removeTodolistHandler={removeTodolistHandler}
-          changeTodolistTitleHandler={changeTodolistTitleHandler}
-        />
+        <div>
+          <Title
+            title={title}
+            entityStatus={entityStatus}
+            removeTodolistHandler={removeTodolistHandler}
+            changeTodolistTitleHandler={changeTodolistTitleHandler}
+          />
+        </div>
         <Input addItem={addTaskHandler} disabled={entityStatus === "loading"} />
         <Tasks
           tasks={tasksForTodolist}

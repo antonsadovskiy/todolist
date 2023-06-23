@@ -3,12 +3,12 @@ import {
   handlerAppNetworkError,
   handlerAppServerError,
 } from "../../../utils/error-utils";
-import { appActions } from "../../../app/app-slice";
+import { appActions } from "../../App/slice/app-slice";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ClearTasksAndTodolists } from "../../../common/actions/common-actions";
 import { createAppAsyncThunk } from "../../../common/utils";
-import { authAPI, FormDataType } from "../../../api/authAPI";
-import { ResultCode } from "../../../api/todolistsAPI";
+import { authAPI } from "../../../api/authAPI";
+import { ResultCode, FormDataType } from "../../../api/types";
 
 const slice = createSlice({
   name: "auth",

@@ -1,3 +1,8 @@
+.input {
+    display: flex;
+    gap: 5px;
+}
+
 .newTaskContainer input{
     outline: 0;
 }
@@ -9,4 +14,5 @@
 .addItem {
     position: relative;
     top: 7px;
+    left: 5px;
 }

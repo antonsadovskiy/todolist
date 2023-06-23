@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
-import { ResponseType } from "../api/todolistsAPI";
 import { AxiosError } from "axios";
-import { appActions } from "../app/app-slice";
+import { appActions } from "../features/App/slice/app-slice";
+import { ResponseType } from "../api/types";
 
 export const handlerAppServerError = <T>(
   dispatch: Dispatch,

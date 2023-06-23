@@ -1,15 +1,15 @@
 import React from "react";
 import { combineReducers } from "redux";
-import { todolistsReducer } from "../../features/TodoLists/reducers/todolist-reducer/todolists-slice";
-import { tasksReducer } from "../../features/TodoLists/reducers/tasks-reducer/tasks-slice";
+import { todolistsReducer } from "../../features/TodoLists/slice/todolist-reducer/todolists-slice";
+import { tasksReducer } from "../../features/TodoLists/slice/tasks-reducer/tasks-slice";
 import { AppStateType } from "./store";
 import { Provider } from "react-redux";
 import { v1 } from "uuid";
-import { TaskPriority, TaskStatus } from "../../api/tasksAPI";
-import { appReducer } from "../app-slice";
+import { appReducer } from "../../features/App/slice/app-slice";
 import thunk from "redux-thunk";
-import { authReducer } from "../../features/Login/reducers/auth-slice";
+import { authReducer } from "../../features/Login/slice/auth-slice";
 import { configureStore } from "@reduxjs/toolkit";
+import { TaskPriority, TaskStatus } from "../../api/types";
 
 const rootReducer = combineReducers({
   todolists: todolistsReducer,

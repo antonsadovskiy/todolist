@@ -1,13 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { authThunks } from "../features/Login/reducers/auth-slice";
-
-export type RequestType = "idle" | "loading" | "error" | "success";
-
-type AppInitialStateType = {
-  isInitialized: boolean;
-  status: RequestType;
-  error: null | string;
-};
+import { authThunks } from "../../Login/slice/auth-slice";
+import { AppInitialStateType, RequestType } from "../types";
 
 const initialState: AppInitialStateType = {
   isInitialized: false,

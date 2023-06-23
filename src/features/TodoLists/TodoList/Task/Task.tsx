@@ -3,7 +3,8 @@ import Checkbox from "@mui/material/Checkbox";
 import { EditableSpan } from "../../../../components/EditableSpan/EditableSpan";
 import DeleteItem from "../../../../components/DeleteItem/DeleteItem";
 import { useTask } from "./hooks/useTask";
-import { TaskDomainType, TaskStatus } from "../../../../api/tasksAPI";
+import { TaskDomainType } from "../../types";
+import { TaskStatus } from "../../../../api/types";
 
 type TaskPropsType = {
   task: TaskDomainType;

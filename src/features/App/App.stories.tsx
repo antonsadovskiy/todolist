@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import App from "./App";
-import { reduxStoreDecorator } from "./store/ReduxStoreDecorator";
+import { reduxStoreDecorator } from "../../app/store/ReduxStoreDecorator";
 import { withRouter } from "storybook-addon-react-router-v6";
 
 const meta: Meta<typeof App> = {

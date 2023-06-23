@@ -1,4 +1,4 @@
-import { FormData } from "../../features/Login/Login";
+import { FormData } from "../../features/Login/types";
 
 export const validate = (values: any) => {
   const errors: FormData = {};

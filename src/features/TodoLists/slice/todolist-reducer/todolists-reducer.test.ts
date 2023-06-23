@@ -1,13 +1,11 @@
 import { v1 } from "uuid";
-import { RequestType } from "../../../../app/app-slice";
-import { TodoListType } from "../../../../api/todolistsAPI";
 import {
-  FilterType,
-  TodoListDomainType,
   todolistsActions,
   todolistsReducer,
   todolistsThunks,
 } from "./todolists-slice";
+import { FilterType, TodoListDomainType, TodoListType } from "../../types";
+import { RequestType } from "../../../App/types";
 
 let startState: Array<TodoListDomainType>;
 let TodolistId1: string;

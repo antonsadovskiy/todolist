@@ -1,15 +1,13 @@
 import { v1 } from "uuid";
+import { todolistsThunks } from "../todolist-reducer/todolists-slice";
 import {
-  tasksReducer,
-  tasksThunks,
   TasksType,
-  UpdateDomainTaskModelType,
-} from "./tasks-slice";
-import {
+  TaskType,
   TodoListDomainType,
-  todolistsThunks,
-} from "../todolist-reducer/todolists-slice";
-import { TaskPriority, TaskStatus, TaskType } from "../../../../api/tasksAPI";
+  UpdateDomainTaskModelType,
+} from "../../types";
+import { tasksReducer, tasksThunks } from "./tasks-slice";
+import { TaskPriority, TaskStatus } from "../../../../api/types";
 
 let TodolistId1: string;
 let TodolistId2: string;

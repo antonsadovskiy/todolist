@@ -2,7 +2,7 @@ import React, { FC, memo } from "react";
 import style from "./Title.module.css";
 import { EditableSpan } from "../../../../components/EditableSpan/EditableSpan";
 import DeleteItem from "../../../../components/DeleteItem/DeleteItem";
-import { RequestType } from "../../../../app/app-slice";
+import { RequestType } from "../../../App/types";
 
 type TitlePropsType = {
   title: string;

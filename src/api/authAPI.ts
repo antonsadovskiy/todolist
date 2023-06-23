@@ -1,5 +1,5 @@
 import { instance } from "./instance";
-import { ResponseType } from "./todolistsAPI";
+import { FormDataType, ResponseType } from "./types";
 
 export const authAPI = {
   me() {
@@ -13,10 +13,4 @@ export const authAPI = {
   logout() {
     return instance.delete<ResponseType>("auth/login");
   },
-};
-
-export type FormDataType = {
-  email: string;
-  password: string;
-  rememberMe: boolean;
 };

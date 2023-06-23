@@ -1,5 +1,5 @@
-import { appActions, appReducer, RequestType } from "./app-slice";
-import { authActions, authThunks } from "../features/Login/reducers/auth-slice";
+import { appActions, appReducer } from "./app-slice";
+import { RequestType } from "../types";
 
 let startState: ReturnType<typeof appReducer>;
 

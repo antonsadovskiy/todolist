@@ -27,6 +27,9 @@ const TasksPagination: FC<TasksPaginationPropsType> = (props) => {
   return (
     <div className={style.pagination}>
       <Pagination
+        siblingCount={0}
+        variant={"text"}
+        shape={"rounded"}
         size={"small"}
         page={props.page}
         count={pages}

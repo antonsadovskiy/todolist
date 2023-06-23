@@ -1,4 +1,6 @@
 import { instance } from "./instance";
+import { TodoListType } from "../features/TodoLists/types";
+import { ResponseType } from "./types";
 
 export const todolistAPI = {
   getTodolists() {
@@ -15,23 +17,4 @@ export const todolistAPI = {
   updateTodolist(todolistId: string, title: string) {
     return instance.put<ResponseType>(`todo-lists/${todolistId}`, { title });
   },
-};
-
-export enum ResultCode {
-  OK = 0,
-  ERROR = 1,
-  CAPTCHA = 2,
-}
-
-export type TodoListType = {
-  id: string;
-  addedDate: string;
-  order: number;
-  title: string;
-};
-
-export type ResponseType<T = {}> = {
-  resultCode: number;
-  messages: string[];
-  data: T;
 };

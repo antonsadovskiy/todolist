@@ -1,4 +1,4 @@
-import { appActions, RequestType } from "../../../../app/app-slice";
+import { appActions } from "../../../App/slice/app-slice";
 import { AxiosError } from "axios";
 import {
   handlerAppNetworkError,
@@ -11,19 +11,10 @@ import {
 } from "../todolist-reducer/todolists-slice";
 import { ClearTasksAndTodolists } from "../../../../common/actions/common-actions";
 import { createAppAsyncThunk } from "../../../../common/utils";
-import {
-  TaskDomainType,
-  TaskPriority,
-  tasksAPI,
-  TaskStatus,
-  TaskType,
-  UpdateTaskModelType,
-} from "../../../../api/tasksAPI";
-import { ResultCode } from "../../../../api/todolistsAPI";
-
-export type TasksType = {
-  [key: string]: Array<TaskDomainType>;
-};
+import { tasksAPI } from "../../../../api/tasksAPI";
+import { TasksType, TaskType, UpdateDomainTaskModelType } from "../../types";
+import { RequestType } from "../../../App/types";
+import { ResultCode, UpdateTaskModelType } from "../../../../api/types";
 
 const initialState: TasksType = {};
 
@@ -176,15 +167,6 @@ const deleteTask = createAppAsyncThunk<
     return rejectWithValue(null);
   }
 });
-
-export type UpdateDomainTaskModelType = {
-  title?: string;
-  description?: string;
-  status?: TaskStatus;
-  priority?: TaskPriority;
-  startDate?: string;
-  deadline?: string;
-};
 
 const updateTask = createAppAsyncThunk<
   {

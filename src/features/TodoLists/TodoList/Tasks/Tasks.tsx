@@ -3,7 +3,7 @@ import style from "./Tasks.module.css";
 import Task from "../Task/Task";
 import TasksPreloader from "../../../../components/TasksPreloader/TasksPreloader";
 import EmptyTodolist from "../../../../components/EmptyTodolist/EmptyTodolist";
-import { TaskDomainType } from "../../../../api/tasksAPI";
+import { TaskDomainType } from "../../types";
 
 type TasksPropsType = {
   tasks: Array<TaskDomainType>;

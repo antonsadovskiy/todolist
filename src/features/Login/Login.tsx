@@ -9,16 +9,10 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import { useFormik } from "formik";
 import { useAppDispatch, useAppSelector } from "../../app/store/store";
-import { authThunks } from "./reducers/auth-slice";
+import { authThunks } from "./slice/auth-slice";
 import { Navigate } from "react-router-dom";
 import { selectorIsLoggedIn } from "./selectors";
 import { validate } from "../../common/utils";
-
-export type FormData = {
-  email?: string;
-  password?: string;
-  rememberMe?: boolean;
-};
 
 export const Login = () => {
   const dispatch = useAppDispatch();
@@ -50,7 +44,6 @@ export const Login = () => {
                   href={"https://social-network.samuraijs.com/"}
                   target={"_blank"}
                 >
-                  {" "}
                   here
                 </a>
               </p>

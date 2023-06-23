@@ -1,4 +1,4 @@
-import { AppStateType } from "./store/store";
+import { AppStateType } from "../../app/store/store";
 
 export const selectorIsInitialized = (state: AppStateType) =>
   state.app.isInitialized;

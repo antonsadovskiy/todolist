@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import "./App.css";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -7,13 +6,13 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import TodoLists from "../features/TodoLists/TodoLists";
-import { Message } from "../components/Message/Message";
-import Preloader from "../components/Preloader/Preloader";
+import TodoLists from "../TodoLists/TodoLists";
+import { Message } from "../../components/Message/Message";
+import Preloader from "../../components/Preloader/Preloader";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { Login } from "../features/Login/Login";
-import { Page404 } from "./page404/page404";
-import InitializedPreloader from "../components/InitializedPreloader/InitializedPreloader";
+import { Login } from "../Login/Login";
+import { Page404 } from "../../components/Page404/Page404";
+import InitializedPreloader from "../../components/InitializedPreloader/InitializedPreloader";
 import { useApp } from "./hooks/useApp";
 
 type AppPropsType = { demo?: boolean };
@@ -25,7 +24,7 @@ const App: FC<AppPropsType> = ({ demo = false }) => {
 
   return (
     <div>
-      <AppBar position="static">
+      <AppBar position={"static"}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu">
             <MenuIcon />
@@ -39,8 +38,8 @@ const App: FC<AppPropsType> = ({ demo = false }) => {
             </Button>
           )}
         </Toolbar>
-        <Preloader />
       </AppBar>
+      <Preloader />
       <Container fixed>
         <Routes>
           <Route path={"*"} element={<Navigate to={"/404_NOT_FOUND"} />} />

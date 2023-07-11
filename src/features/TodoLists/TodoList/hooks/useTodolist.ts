@@ -9,13 +9,7 @@ import { tasksThunks } from "../../slice/tasks-reducer/tasks-slice";
 import { FilterType, TaskDomainType } from "../../types";
 import { TaskStatus } from "../../../../api/types";
 
-export const useTodolist = (
-  demo: boolean,
-  id: string,
-  filter: FilterType,
-  pageCount: number,
-  page: number
-) => {
+export const useTodolist = (demo: boolean, id: string, filter: FilterType) => {
   const dispatch = useAppDispatch();
   const tasks = useSelector<AppStateType, Array<TaskDomainType>>(
     (state) => state.tasks[id]
@@ -23,8 +17,8 @@ export const useTodolist = (
 
   useEffect(() => {
     if (demo) return;
-    dispatch(tasksThunks.getTasks({ todolistId: id, page, count: pageCount }));
-  }, [page, pageCount]);
+    dispatch(tasksThunks.getTasks({ todolistId: id }));
+  }, []);
 
   const removeTodolistHandler = useCallback(() => {
     dispatch(todolistsThunks.deleteTodolist({ id }));

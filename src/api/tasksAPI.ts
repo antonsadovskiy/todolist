@@ -7,10 +7,8 @@ import {
 } from "./types";
 
 export const tasksAPI = {
-  getTasks(todolistId: string, page: number, count: number) {
-    return instance.get<GetTasksResponseType>(
-      `todo-lists/${todolistId}/tasks?page=${page}&count=${count}`
-    );
+  getTasks(todolistId: string) {
+    return instance.get<GetTasksResponseType>(`todo-lists/${todolistId}/tasks`);
   },
   addTask(todolistId: string, title: string) {
     return instance.post<ResponseType<{ item: TaskType }>>(

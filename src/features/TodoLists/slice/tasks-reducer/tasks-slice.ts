@@ -86,7 +86,7 @@ const getTasks = createAppAsyncThunk<
     tasks: Array<TaskType>;
     totalCount: number;
   },
-  { todolistId: string; count: number; page: number }
+  { todolistId: string }
 >("tasks/get", async (arg, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   dispatch(appActions.setAppStatus({ status: "loading" }));
@@ -97,7 +97,7 @@ const getTasks = createAppAsyncThunk<
     })
   );
   try {
-    const res = await tasksAPI.getTasks(arg.todolistId, arg.page, arg.count);
+    const res = await tasksAPI.getTasks(arg.todolistId);
     dispatch(appActions.setAppStatus({ status: "success" }));
     dispatch(
       todolistsActions.setTodolistStatus({

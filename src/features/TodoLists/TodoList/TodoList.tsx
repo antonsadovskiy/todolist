@@ -2,25 +2,21 @@ import React, { FC, useCallback, useEffect } from "react";
 import style from "./TodoList.module.css";
 import { Input } from "../../../components/Input/Input";
 import { EditableSpan } from "../../../components/EditableSpan/EditableSpan";
-import {
-  addTaskTC,
-  deleteTaskTC,
-  getTasksTC,
-  updateTaskTC,
-} from "../reducers/tasks-reducer/tasks-reducer";
+import { updateTaskTC } from "../reducers/tasks-reducer/tasks-reducer";
 import {
   changeTodolistFilterAC,
   changeTodolistTitleTC,
   deleteTodolistTC,
   FilterType,
   TodoListDomainType,
-} from "../reducers/todolist-reducer/todolists-reducer";
+} from "../reducers/todolist-reducer/todo-lists-reducer";
 import { useSelector } from "react-redux";
 import { AppStateType, useAppDispatch } from "../../../app/store/store";
 import Buttons from "./Buttons/Buttons";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
 import Task from "./Task/Task";
 import { TaskDomainType, TaskStatus } from "../../../api/todolistAPI";
+import { tasksSagasActions } from "../reducers/tasks-reducer/tasks-sagas";
 
 type TodoListPropType = {
   todolist: TodoListDomainType;
@@ -39,7 +35,7 @@ export const TodoList: FC<TodoListPropType> = React.memo(
       if (demo) {
         return;
       }
-      dispatch(getTasksTC(id));
+      dispatch(tasksSagasActions.getTasks(id));
     }, []);
 
     const removeTodolist = useCallback(() => {
@@ -62,14 +58,14 @@ export const TodoList: FC<TodoListPropType> = React.memo(
 
     const addTask = useCallback(
       (taskTitle: string) => {
-        dispatch(addTaskTC(id, taskTitle));
+        dispatch(tasksSagasActions.addTask(id, taskTitle));
       },
       [dispatch, id]
     );
 
     const removeTask = useCallback(
       (taskId: string) => {
-        dispatch(deleteTaskTC(id, taskId));
+        dispatch(tasksSagasActions.deleteTask(id, taskId));
       },
       [dispatch, id]
     );

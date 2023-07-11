@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { RequestType } from "../app/app-reducer";
 
 export type TodoListType = {
@@ -47,12 +47,12 @@ export type TaskDomainType = TaskType & {
   entityStatus: RequestType;
 };
 
-type ResponseType<T = {}> = {
+export type ResponseType<T = {}> = {
   resultCode: number;
   messages: string[];
   data: T;
 };
-type GetTasksResponseType = {
+export type GetTasksResponseType = {
   items: TaskType[];
   totalCount: number;
   error: string;
@@ -82,15 +82,14 @@ export const todolistAPI = {
   },
 };
 export const tasksAPI = {
-  getTasks(todolistId: string) {
+  getTasks(todolistId: string): Promise<AxiosResponse<GetTasksResponseType>> {
     return instance.get<GetTasksResponseType>(`todo-lists/${todolistId}/tasks`);
   },
   addTask(todolistId: string, title: string) {
-    return instance.post<
-      ResponseType<{
-        item: TaskType;
-      }>
-    >(`todo-lists/${todolistId}/tasks`, { title });
+    return instance.post<ResponseType<{ item: TaskType }>>(
+      `todo-lists/${todolistId}/tasks`,
+      { title }
+    );
   },
   deleteTask(todolistId: string, taskId: string) {
     return instance.delete<ResponseType>(

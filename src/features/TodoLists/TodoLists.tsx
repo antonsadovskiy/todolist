@@ -4,12 +4,12 @@ import Paper from "@mui/material/Paper";
 import { TodoList } from "./TodoList/TodoList";
 import {
   addTodolistTC,
-  getTodolistsTC,
   TodoListDomainType,
-} from "./reducers/todolist-reducer/todolists-reducer";
+} from "./reducers/todolist-reducer/todo-lists-reducer";
 import { Input } from "../../components/Input/Input";
 import { AppStateType, useAppDispatch } from "../../app/store/store";
 import { useSelector } from "react-redux";
+import { todoListsSagasActions } from "./reducers/todolist-reducer/todo-lists-sagas";
 
 type TodoListsPropsType = {
   demo?: boolean;
@@ -18,14 +18,14 @@ type TodoListsPropsType = {
 const TodoLists: FC<TodoListsPropsType> = ({ demo = false }) => {
   const dispatch = useAppDispatch();
   const todolists = useSelector<AppStateType, Array<TodoListDomainType>>(
-    (state) => state.todolists
+    (state) => state.todoLists
   );
 
   useEffect(() => {
     if (demo) {
       return;
     }
-    dispatch(getTodolistsTC());
+    dispatch(todoListsSagasActions.getTodoLists());
   }, [dispatch]);
 
   const addList = useCallback(

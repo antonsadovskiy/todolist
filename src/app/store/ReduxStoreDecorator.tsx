@@ -1,6 +1,6 @@
 import React from "react";
 import { applyMiddleware, combineReducers, legacy_createStore } from "redux";
-import { todolistsReducer } from "../../features/TodoLists/reducers/todolist-reducer/todolists-reducer";
+import { todoListsReducer } from "../../features/TodoLists/reducers/todolist-reducer/todo-lists-reducer";
 import { tasksReducer } from "../../features/TodoLists/reducers/tasks-reducer/tasks-reducer";
 import { AppStateType } from "./store";
 import { Provider } from "react-redux";
@@ -10,13 +10,13 @@ import { appReducer } from "../app-reducer";
 import thunk from "redux-thunk";
 
 const rootReducer = combineReducers({
-  todolists: todolistsReducer,
+  todoLists: todoListsReducer,
   tasks: tasksReducer,
   app: appReducer,
 });
 
 const initialState: AppStateType = {
-  todolists: [
+  todoLists: [
     {
       id: "todolistId1",
       title: "what to learn",

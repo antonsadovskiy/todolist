@@ -1,24 +1,24 @@
-import {Meta, StoryObj} from "@storybook/react";
-import {Input} from "./Input";
+import { Meta, StoryObj } from "@storybook/react";
+import { Input } from "./Input";
 
 const meta: Meta<typeof Input> = {
-    title: 'TodoList/Input',
-    component: Input,
-    tags: ['autodocs'],
-    argTypes: {
-        addItem: {
-            description: 'add item',
-            action: 'clicked'
-        }
+  title: "TodoList/Input",
+  component: Input,
+  tags: ["autodocs"],
+  argTypes: {
+    addItem: {
+      description: "add item",
+      action: "clicked",
     },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const InputExample: Story = {}
+export const InputExample: Story = {};
 export const DisabledInputExample: Story = {
-    args: {
-        disabled: true
-    }
-}
+  args: {
+    disabled: true,
+  },
+};

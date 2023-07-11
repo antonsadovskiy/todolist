@@ -1,29 +1,35 @@
-import {AppInitialStateType, appReducer, RequestType, setAppErrorAC, setAppStatusAC} from "./app-reducer";
+import {
+  AppInitialStateType,
+  appReducer,
+  RequestType,
+  setAppErrorAC,
+  setAppStatusAC,
+} from "./app-reducer";
 
-let startState: AppInitialStateType
+let startState: AppInitialStateType;
 
 beforeEach(() => {
-    startState = {
-        status: 'idle',
-        error: null
-    }
-})
+  startState = {
+    status: "idle",
+    error: null,
+  };
+});
 
-test('should change error value', () => {
-    const newError = 'something went wrong'
+test("should change error value", () => {
+  const newError = "something went wrong";
 
-    const action = setAppErrorAC(newError)
-    const endState = appReducer(startState, action)
+  const action = setAppErrorAC(newError);
+  const endState = appReducer(startState, action);
 
-    expect(endState.status).toBe('idle')
-    expect(endState.error).toBe(newError)
-})
-test('should change status value', () => {
-    const newStatus: RequestType = 'loading'
+  expect(endState.status).toBe("idle");
+  expect(endState.error).toBe(newError);
+});
+test("should change status value", () => {
+  const newStatus: RequestType = "loading";
 
-    const action = setAppStatusAC(newStatus)
-    const endState = appReducer(startState, action)
+  const action = setAppStatusAC(newStatus);
+  const endState = appReducer(startState, action);
 
-    expect(endState.status).toBe('loading')
-    expect(endState.error).toBe(null)
-})
+  expect(endState.status).toBe("loading");
+  expect(endState.error).toBe(null);
+});

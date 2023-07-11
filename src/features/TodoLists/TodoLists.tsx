@@ -2,14 +2,11 @@ import React, { FC, useCallback, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { TodoList } from "./TodoList/TodoList";
-import {
-  addTodolistTC,
-  TodoListDomainType,
-} from "./reducers/todolist-reducer/todo-lists-reducer";
+import { TodoListDomainType } from "./reducers/todolist-reducer/todo-lists-reducer";
 import { Input } from "../../components/Input/Input";
 import { AppStateType, useAppDispatch } from "../../app/store/store";
 import { useSelector } from "react-redux";
-import { todoListsSagasActions } from "./reducers/todolist-reducer/todo-lists-sagas";
+import { todoListsSagaActions } from "./reducers/todolist-reducer/todo-lists-sagas";
 
 type TodoListsPropsType = {
   demo?: boolean;
@@ -25,12 +22,12 @@ const TodoLists: FC<TodoListsPropsType> = ({ demo = false }) => {
     if (demo) {
       return;
     }
-    dispatch(todoListsSagasActions.getTodoLists());
+    dispatch(todoListsSagaActions.getTodoLists());
   }, [dispatch]);
 
   const addList = useCallback(
     (title: string) => {
-      dispatch(addTodolistTC(title));
+      dispatch(todoListsSagaActions.addTodoList(title));
     },
     [dispatch]
   );

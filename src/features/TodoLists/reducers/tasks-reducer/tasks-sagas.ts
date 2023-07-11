@@ -1,18 +1,23 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, select, takeEvery } from "redux-saga/effects";
 import { setAppErrorAC, setAppStatusAC } from "../../../../app/app-reducer";
 import { AxiosError, AxiosResponse } from "axios";
 import {
   GetTasksResponseType,
   ResponseType,
+  TaskPriority,
   tasksAPI,
+  TaskStatus,
   TaskType,
+  UpdateTaskModelType,
 } from "../../../../api/todolistAPI";
 import {
   addTaskAC,
   removeTaskAC,
   setTasksAC,
   setTaskStatusAC,
+  updateTaskAC,
 } from "./tasks-reducer";
+import { AppStateType } from "../../../../app/store/store";
 
 const getTasks = (id: string) => {
   return { type: "TASKS/GET-TASKS", id } as const;
@@ -58,7 +63,7 @@ export function* addTaskWorkerSaga(action: ReturnType<typeof addTask>) {
 }
 
 const deleteTask = (todolistId: string, taskId: string) => {
-  return { type: "TASKS/DELETE-TASKS", todolistId, taskId } as const;
+  return { type: "TASKS/DELETE-TASK", todolistId, taskId } as const;
 };
 
 export function* deleteTaskWorkerSaga(action: ReturnType<typeof deleteTask>) {
@@ -82,10 +87,67 @@ export function* deleteTaskWorkerSaga(action: ReturnType<typeof deleteTask>) {
   }
 }
 
-export const tasksSagasActions = { getTasks, addTask, deleteTask };
+export type UpdateDomainTaskModelType = {
+  title?: string;
+  description?: string;
+  status?: TaskStatus;
+  priority?: TaskPriority;
+  startDate?: string;
+  deadline?: string;
+};
+
+const updateTask = (
+  todolistId: string,
+  taskId: string,
+  model: UpdateDomainTaskModelType
+) => {
+  return { type: "TASKS/UPDATE-TASK", todolistId, taskId, model } as const;
+};
+
+const getTasksFromState = (state: AppStateType) => state.tasks;
+
+export function* updateTaskWorkerSaga(action: ReturnType<typeof updateTask>) {
+  yield put(setAppStatusAC("loading"));
+  const tasks: TaskType[] = yield select(
+    (state: AppStateType) => state.tasks[action.todolistId]
+  );
+  const task = tasks.find((task) => task.id === action.taskId);
+  if (task) {
+    const taskModel: UpdateTaskModelType = {
+      title: task.title,
+      status: task.status,
+      description: task.description,
+      priority: task.priority,
+      startDate: task.startDate,
+      deadline: task.deadline,
+      ...action.model,
+    };
+    try {
+      const res: AxiosResponse<
+        ResponseType<{
+          item: TaskType;
+        }>
+      > = yield call(
+        tasksAPI.updateTask,
+        action.todolistId,
+        action.taskId,
+        taskModel
+      );
+      if (res.data.resultCode === 0) {
+        yield put(setAppStatusAC("success"));
+        yield put(updateTaskAC(action.todolistId, action.taskId, taskModel));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
+
+export const tasksSagaActions = { getTasks, addTask, deleteTask, updateTask };
 
 export function* tasksWatcherSaga() {
   yield takeEvery("TASKS/GET-TASKS", getTasksWorkerSaga);
   yield takeEvery("TASKS/ADD-TASK", addTaskWorkerSaga);
-  yield takeEvery("TASKS/DELETE-TASKS", deleteTaskWorkerSaga);
+  yield takeEvery("TASKS/DELETE-TASK", deleteTaskWorkerSaga);
+  yield takeEvery("TASKS/UPDATE-TASK", updateTaskWorkerSaga);
 }

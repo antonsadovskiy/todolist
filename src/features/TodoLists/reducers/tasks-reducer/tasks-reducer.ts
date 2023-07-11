@@ -3,17 +3,9 @@ import {
   RemoveTodolistAT,
   SetTodoListsAT,
 } from "../todolist-reducer/todo-lists-reducer";
-import {
-  TaskDomainType,
-  TaskPriority,
-  tasksAPI,
-  TaskStatus,
-  TaskType,
-  UpdateTaskModelType,
-} from "../../../../api/todolistAPI";
-import { Dispatch } from "redux";
-import { AppStateType } from "../../../../app/store/store";
-import { RequestType, setAppStatusAC } from "../../../../app/app-reducer";
+import { TaskDomainType, TaskType } from "../../../../api/todolistAPI";
+import { RequestType } from "../../../../app/app-reducer";
+import { UpdateDomainTaskModelType } from "./tasks-sagas";
 
 export type TasksType = {
   [key: string]: Array<TaskDomainType>;
@@ -162,37 +154,3 @@ export const setTaskStatusAC = (
     },
   } as const;
 };
-
-export type UpdateDomainTaskModelType = {
-  title?: string;
-  description?: string;
-  status?: TaskStatus;
-  priority?: TaskPriority;
-  startDate?: string;
-  deadline?: string;
-};
-export const updateTaskTC =
-  (todolistId: string, taskId: string, model: UpdateDomainTaskModelType) =>
-  (dispatch: Dispatch, getState: () => AppStateType) => {
-    dispatch(setAppStatusAC("loading"));
-    const task = getState().tasks[todolistId].find(
-      (task) => task.id === taskId
-    );
-    if (task) {
-      const taskModel: UpdateTaskModelType = {
-        title: task.title,
-        status: task.status,
-        description: task.description,
-        priority: task.priority,
-        startDate: task.startDate,
-        deadline: task.deadline,
-        ...model,
-      };
-      tasksAPI.updateTask(todolistId, taskId, taskModel).then((res) => {
-        if (res.data.resultCode === 0) {
-          dispatch(setAppStatusAC("success"));
-          dispatch(updateTaskAC(todolistId, taskId, taskModel));
-        }
-      });
-    }
-  };

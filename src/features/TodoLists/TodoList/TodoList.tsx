@@ -2,11 +2,8 @@ import React, { FC, useCallback, useEffect } from "react";
 import style from "./TodoList.module.css";
 import { Input } from "../../../components/Input/Input";
 import { EditableSpan } from "../../../components/EditableSpan/EditableSpan";
-import { updateTaskTC } from "../reducers/tasks-reducer/tasks-reducer";
 import {
   changeTodolistFilterAC,
-  changeTodolistTitleTC,
-  deleteTodolistTC,
   FilterType,
   TodoListDomainType,
 } from "../reducers/todolist-reducer/todo-lists-reducer";
@@ -16,7 +13,8 @@ import Buttons from "./Buttons/Buttons";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
 import Task from "./Task/Task";
 import { TaskDomainType, TaskStatus } from "../../../api/todolistAPI";
-import { tasksSagasActions } from "../reducers/tasks-reducer/tasks-sagas";
+import { tasksSagaActions } from "../reducers/tasks-reducer/tasks-sagas";
+import { todoListsSagaActions } from "../reducers/todolist-reducer/todo-lists-sagas";
 
 type TodoListPropType = {
   todolist: TodoListDomainType;
@@ -32,19 +30,17 @@ export const TodoList: FC<TodoListPropType> = React.memo(
     );
 
     useEffect(() => {
-      if (demo) {
-        return;
-      }
-      dispatch(tasksSagasActions.getTasks(id));
+      if (demo) return;
+      dispatch(tasksSagaActions.getTasks(id));
     }, []);
 
     const removeTodolist = useCallback(() => {
-      dispatch(deleteTodolistTC(id));
+      dispatch(todoListsSagaActions.deleteTodoList(id));
     }, [dispatch, id]);
 
     const changeTodolistTitle = useCallback(
       (newTitle: string) => {
-        dispatch(changeTodolistTitleTC(id, newTitle));
+        dispatch(todoListsSagaActions.updateTodoList(id, newTitle));
       },
       [dispatch, id]
     );
@@ -58,28 +54,32 @@ export const TodoList: FC<TodoListPropType> = React.memo(
 
     const addTask = useCallback(
       (taskTitle: string) => {
-        dispatch(tasksSagasActions.addTask(id, taskTitle));
+        dispatch(tasksSagaActions.addTask(id, taskTitle));
       },
       [dispatch, id]
     );
 
     const removeTask = useCallback(
       (taskId: string) => {
-        dispatch(tasksSagasActions.deleteTask(id, taskId));
+        dispatch(tasksSagaActions.deleteTask(id, taskId));
       },
       [dispatch, id]
     );
 
     const changeTaskTitle = useCallback(
       (taskId: string, newTaskTitle: string) => {
-        dispatch(updateTaskTC(id, taskId, { title: newTaskTitle }));
+        dispatch(
+          tasksSagaActions.updateTask(id, taskId, { title: newTaskTitle })
+        );
       },
       [dispatch, id]
     );
 
     const changeTaskStatus = useCallback(
       (taskId: string, newTaskStatus: TaskStatus) => {
-        dispatch(updateTaskTC(id, taskId, { status: newTaskStatus }));
+        dispatch(
+          tasksSagaActions.updateTask(id, taskId, { status: newTaskStatus })
+        );
       },
       [dispatch, id]
     );

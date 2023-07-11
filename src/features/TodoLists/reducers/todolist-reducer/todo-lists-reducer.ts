@@ -1,11 +1,5 @@
-import { todolistAPI, TodoListType } from "../../../../api/todolistAPI";
-import { Dispatch } from "redux";
-import {
-  RequestType,
-  setAppErrorAC,
-  setAppStatusAC,
-} from "../../../../app/app-reducer";
-import { AxiosError } from "axios";
+import { TodoListType } from "../../../../api/todolistAPI";
+import { RequestType } from "../../../../app/app-reducer";
 
 export type FilterType = "all" | "active" | "completed";
 export type TodoListDomainType = TodoListType & {
@@ -140,45 +134,3 @@ export const setTodolistStatusAC = (
     },
   } as const;
 };
-
-export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
-  dispatch(setAppStatusAC("loading"));
-  todolistAPI.addTodolist(title).then((res) => {
-    if (res.data.resultCode === 0) {
-      dispatch(setAppStatusAC("success"));
-      dispatch(addTodolistAC(res.data.data.item));
-    } else {
-      dispatch(setAppStatusAC("error"));
-      dispatch(setAppErrorAC(res.data.messages[0]));
-    }
-  });
-};
-export const deleteTodolistTC =
-  (todolistId: string) => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC("loading"));
-    dispatch(setTodolistStatusAC(todolistId, "loading"));
-    todolistAPI
-      .deleteTodolist(todolistId)
-      .then((res) => {
-        if (res.data.resultCode === 0) {
-          dispatch(setAppStatusAC("success"));
-          dispatch(setTodolistStatusAC(todolistId, "success"));
-          dispatch(removeTodolistAC(todolistId));
-        }
-      })
-      .catch((e: AxiosError) => {
-        dispatch(setAppStatusAC("error"));
-        dispatch(setTodolistStatusAC(todolistId, "error"));
-        dispatch(setAppErrorAC(e.message));
-      });
-  };
-export const changeTodolistTitleTC =
-  (todolistId: string, newTitle: string) => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC("loading"));
-    todolistAPI.updateTodolist(todolistId, newTitle).then((res) => {
-      if (res.data.resultCode === 0) {
-        dispatch(setAppStatusAC("success"));
-        dispatch(changeTodolistTitleAC(todolistId, newTitle));
-      }
-    });
-  };

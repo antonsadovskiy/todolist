@@ -2,3 +2,9 @@
     pointer-events: none;
     color: grey;
 }
+.span {
+    margin-top: 8px;
+    inline-size: 150px;
+    overflow-wrap: break-word;
+    hyphens: manual;
+}

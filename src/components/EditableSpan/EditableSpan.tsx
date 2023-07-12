@@ -20,7 +20,7 @@ export const EditableSpan: FC<EditableSpanPropsType> = memo((props) => {
     onKeyDownHandler,
   } = useEditableSpan(props.title, props.onChangeTitle);
 
-  const titleStyle = props.disabled ? style.disabledSpan : "";
+  const titleStyle = props.disabled ? style.disabledSpan : style.span;
 
   return isEditModeOn ? (
     <TextField

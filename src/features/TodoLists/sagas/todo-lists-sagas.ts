@@ -1,29 +1,27 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { setAppErrorAC, setAppStatusAC } from "../../../../app/app-reducer";
-import { AxiosError, AxiosResponse } from "axios";
+import { setAppErrorAC, setAppStatusAC } from "../../../app/app-reducer";
+import { AxiosError } from "axios";
 import {
   ResponseType,
   todolistAPI,
   TodoListType,
-} from "../../../../api/todolistAPI";
+} from "../../../api/todolistAPI";
 import {
   addTodolistAC,
   changeTodolistTitleAC,
   removeTodolistAC,
   setTodolistsAC,
   setTodolistStatusAC,
-} from "./todo-lists-reducer";
+} from "../reducers/todolist-reducer/todo-lists-reducer";
 
 const getTodoLists = () => ({ type: "TODO-LISTS/GET-TODO-LISTS" });
 
 export function* getTodoListsWorkerSaga() {
   yield put(setAppStatusAC("loading"));
   try {
-    const res: AxiosResponse<TodoListType[]> = yield call(
-      todolistAPI.getTodolists
-    );
+    const data: TodoListType[] = yield call(todolistAPI.getTodolists);
     yield put(setAppStatusAC("success"));
-    yield put(setTodolistsAC(res.data));
+    yield put(setTodolistsAC(data));
   } catch (e) {
     console.log("something went wrong");
   }
@@ -36,17 +34,15 @@ const addTodoList = (title: string) => {
 export function* addTodoListWorkerSaga(action: ReturnType<typeof addTodoList>) {
   yield put(setAppStatusAC("loading"));
   try {
-    const res: AxiosResponse<
-      ResponseType<{
-        item: TodoListType;
-      }>
-    > = yield call(todolistAPI.addTodolist, action.title);
-    if (res.data.resultCode === 0) {
+    const data: ResponseType<{
+      item: TodoListType;
+    }> = yield call(todolistAPI.addTodolist, action.title);
+    if (data.resultCode === 0) {
       yield put(setAppStatusAC("success"));
-      yield put(addTodolistAC(res.data.data.item));
+      yield put(addTodolistAC(data.data.item));
     } else {
       yield put(setAppStatusAC("error"));
-      yield put(setAppErrorAC(res.data.messages[0]));
+      yield put(setAppErrorAC(data.messages[0]));
     }
   } catch (e) {
     console.log(e);
@@ -63,11 +59,11 @@ export function* deleteTodoListWorkerSaga(
   yield put(setAppStatusAC("loading"));
   yield put(setTodolistStatusAC(action.todoListId, "loading"));
   try {
-    const res: AxiosResponse<ResponseType> = yield call(
+    const data: ResponseType = yield call(
       todolistAPI.deleteTodolist,
       action.todoListId
     );
-    if (res.data.resultCode === 0) {
+    if (data.resultCode === 0) {
       yield put(setAppStatusAC("success"));
       yield put(setTodolistStatusAC(action.todoListId, "success"));
       yield put(removeTodolistAC(action.todoListId));
@@ -92,12 +88,12 @@ export function* updateTodoListWorkerSaga(
 ) {
   yield put(setAppStatusAC("loading"));
   try {
-    const res: AxiosResponse<ResponseType> = yield call(
+    const data: ResponseType = yield call(
       todolistAPI.updateTodolist,
       action.todoListId,
       action.newTitle
     );
-    if (res.data.resultCode === 0) {
+    if (data.resultCode === 0) {
       yield put(setAppStatusAC("success"));
       yield put(changeTodolistTitleAC(action.todoListId, action.newTitle));
     }

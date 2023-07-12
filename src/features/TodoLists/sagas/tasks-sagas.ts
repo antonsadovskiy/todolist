@@ -1,6 +1,6 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
-import { setAppErrorAC, setAppStatusAC } from "../../../../app/app-reducer";
-import { AxiosError, AxiosResponse } from "axios";
+import { setAppErrorAC, setAppStatusAC } from "../../../app/app-reducer";
+import { AxiosError } from "axios";
 import {
   GetTasksResponseType,
   ResponseType,
@@ -9,60 +9,55 @@ import {
   TaskStatus,
   TaskType,
   UpdateTaskModelType,
-} from "../../../../api/todolistAPI";
+} from "../../../api/todolistAPI";
 import {
   addTaskAC,
   removeTaskAC,
   setTasksAC,
   setTaskStatusAC,
   updateTaskAC,
-} from "./tasks-reducer";
-import { AppStateType } from "../../../../app/store/store";
+} from "../reducers/tasks-reducer/tasks-reducer";
+import { AppStateType } from "../../../app/store/store";
 
-const getTasks = (id: string) => {
+export const getTasks = (id: string) => {
   return { type: "TASKS/GET-TASKS", id } as const;
 };
 
 export function* getTasksWorkerSaga(action: ReturnType<typeof getTasks>) {
   yield put(setAppStatusAC("loading"));
   try {
-    const res: AxiosResponse<GetTasksResponseType> = yield call(
-      tasksAPI.getTasks,
-      action.id
-    );
+    const data: GetTasksResponseType = yield call(tasksAPI.getTasks, action.id);
     yield put(setAppStatusAC("success"));
-    yield put(setTasksAC(action.id, res.data.items));
+    yield put(setTasksAC(action.id, data.items));
   } catch (e) {
     console.log(e);
   }
 }
 
-const addTask = (id: string, taskTitle: string) => {
+export const addTask = (id: string, taskTitle: string) => {
   return { type: "TASKS/ADD-TASK", id, taskTitle } as const;
 };
 
 export function* addTaskWorkerSaga(action: ReturnType<typeof addTask>) {
   yield put(setAppStatusAC("loading"));
   try {
-    const res: AxiosResponse<
-      ResponseType<{
-        item: TaskType;
-      }>
-    > = yield call(tasksAPI.addTask, action.id, action.taskTitle);
+    const data: ResponseType<{
+      item: TaskType;
+    }> = yield call(tasksAPI.addTask, action.id, action.taskTitle);
 
-    if (res.data.resultCode === 0) {
+    if (data.resultCode === 0) {
       yield put(setAppStatusAC("success"));
-      yield put(addTaskAC(action.id, res.data.data.item));
+      yield put(addTaskAC(action.id, data.data.item));
     } else {
       yield put(setAppStatusAC("error"));
-      yield put(setAppErrorAC(res.data.messages[0]));
+      yield put(setAppErrorAC(data.messages[0]));
     }
   } catch (e) {
     console.log(e);
   }
 }
 
-const deleteTask = (todolistId: string, taskId: string) => {
+export const deleteTask = (todolistId: string, taskId: string) => {
   return { type: "TASKS/DELETE-TASK", todolistId, taskId } as const;
 };
 
@@ -70,12 +65,12 @@ export function* deleteTaskWorkerSaga(action: ReturnType<typeof deleteTask>) {
   yield put(setAppStatusAC("loading"));
   yield put(setTaskStatusAC(action.todolistId, action.taskId, "loading"));
   try {
-    const res: AxiosResponse<ResponseType> = yield call(
+    const data: ResponseType = yield call(
       tasksAPI.deleteTask,
       action.todolistId,
       action.taskId
     );
-    if (res.data.resultCode === 0) {
+    if (data.resultCode === 0) {
       yield put(setAppStatusAC("success"));
       yield put(setTaskStatusAC(action.todolistId, action.taskId, "success"));
       yield put(removeTaskAC(action.todolistId, action.taskId));
@@ -96,15 +91,13 @@ export type UpdateDomainTaskModelType = {
   deadline?: string;
 };
 
-const updateTask = (
+export const updateTask = (
   todolistId: string,
   taskId: string,
   model: UpdateDomainTaskModelType
 ) => {
   return { type: "TASKS/UPDATE-TASK", todolistId, taskId, model } as const;
 };
-
-const getTasksFromState = (state: AppStateType) => state.tasks;
 
 export function* updateTaskWorkerSaga(action: ReturnType<typeof updateTask>) {
   yield put(setAppStatusAC("loading"));
@@ -123,17 +116,15 @@ export function* updateTaskWorkerSaga(action: ReturnType<typeof updateTask>) {
       ...action.model,
     };
     try {
-      const res: AxiosResponse<
-        ResponseType<{
-          item: TaskType;
-        }>
-      > = yield call(
+      const data: ResponseType<{
+        item: TaskType;
+      }> = yield call(
         tasksAPI.updateTask,
         action.todolistId,
         action.taskId,
         taskModel
       );
-      if (res.data.resultCode === 0) {
+      if (data.resultCode === 0) {
         yield put(setAppStatusAC("success"));
         yield put(updateTaskAC(action.todolistId, action.taskId, taskModel));
       }

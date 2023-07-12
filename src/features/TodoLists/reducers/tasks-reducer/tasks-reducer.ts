@@ -5,7 +5,7 @@ import {
 } from "../todolist-reducer/todo-lists-reducer";
 import { TaskDomainType, TaskType } from "../../../../api/todolistAPI";
 import { RequestType } from "../../../../app/app-reducer";
-import { UpdateDomainTaskModelType } from "./tasks-sagas";
+import { UpdateDomainTaskModelType } from "../../sagas/tasks-sagas";
 
 export type TasksType = {
   [key: string]: Array<TaskDomainType>;

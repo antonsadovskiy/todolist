@@ -1,5 +1,63 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { RequestType } from "../app/app-reducer";
+
+const instance = axios.create({
+  baseURL: "https://social-network.samuraijs.com/api/1.1/",
+  withCredentials: true,
+});
+
+export const todolistAPI = {
+  getTodolists() {
+    return instance.get<TodoListType[]>(`todo-lists`).then((res) => res.data);
+  },
+  addTodolist(title: string) {
+    return instance
+      .post<
+        ResponseType<{
+          item: TodoListType;
+        }>
+      >(`todo-lists`, { title })
+      .then((res) => res.data);
+  },
+  deleteTodolist(todolistId: string) {
+    return instance
+      .delete<ResponseType>(`todo-lists/${todolistId}`)
+      .then((res) => res.data);
+  },
+  updateTodolist(todolistId: string, title: string) {
+    return instance
+      .put<ResponseType>(`todo-lists/${todolistId}`, { title })
+      .then((res) => res.data);
+  },
+};
+export const tasksAPI = {
+  getTasks(todolistId: string) {
+    return instance
+      .get<GetTasksResponseType>(`todo-lists/${todolistId}/tasks`)
+      .then((res) => res.data);
+  },
+  addTask(todolistId: string, title: string) {
+    return instance
+      .post<ResponseType<{ item: TaskType }>>(
+        `todo-lists/${todolistId}/tasks`,
+        { title }
+      )
+      .then((res) => res.data);
+  },
+  deleteTask(todolistId: string, taskId: string) {
+    return instance
+      .delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
+      .then((res) => res.data);
+  },
+  updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+    return instance
+      .put<ResponseType<{ item: TaskType }>>(
+        `todo-lists/${todolistId}/tasks/${taskId}`,
+        model
+      )
+      .then((res) => res.data);
+  },
+};
 
 export type TodoListType = {
   id: string;
@@ -56,50 +114,4 @@ export type GetTasksResponseType = {
   items: TaskType[];
   totalCount: number;
   error: string;
-};
-
-const instance = axios.create({
-  baseURL: "https://social-network.samuraijs.com/api/1.1/",
-  withCredentials: true,
-});
-
-export const todolistAPI = {
-  getTodolists() {
-    return instance.get<TodoListType[]>(`todo-lists`);
-  },
-  addTodolist(title: string) {
-    return instance.post<
-      ResponseType<{
-        item: TodoListType;
-      }>
-    >(`todo-lists`, { title });
-  },
-  deleteTodolist(todolistId: string) {
-    return instance.delete<ResponseType>(`todo-lists/${todolistId}`);
-  },
-  updateTodolist(todolistId: string, title: string) {
-    return instance.put<ResponseType>(`todo-lists/${todolistId}`, { title });
-  },
-};
-export const tasksAPI = {
-  getTasks(todolistId: string): Promise<AxiosResponse<GetTasksResponseType>> {
-    return instance.get<GetTasksResponseType>(`todo-lists/${todolistId}/tasks`);
-  },
-  addTask(todolistId: string, title: string) {
-    return instance.post<ResponseType<{ item: TaskType }>>(
-      `todo-lists/${todolistId}/tasks`,
-      { title }
-    );
-  },
-  deleteTask(todolistId: string, taskId: string) {
-    return instance.delete<ResponseType>(
-      `todo-lists/${todolistId}/tasks/${taskId}`
-    );
-  },
-  updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-    return instance.put<ResponseType<{ item: TaskType }>>(
-      `todo-lists/${todolistId}/tasks/${taskId}`,
-      model
-    );
-  },
 };

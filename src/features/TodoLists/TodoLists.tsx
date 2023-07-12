@@ -6,7 +6,7 @@ import { TodoListDomainType } from "./reducers/todolist-reducer/todo-lists-reduc
 import { Input } from "../../components/Input/Input";
 import { AppStateType, useAppDispatch } from "../../app/store/store";
 import { useSelector } from "react-redux";
-import { todoListsSagaActions } from "./reducers/todolist-reducer/todo-lists-sagas";
+import { todoListsSagaActions } from "./sagas/todo-lists-sagas";
 
 type TodoListsPropsType = {
   demo?: boolean;

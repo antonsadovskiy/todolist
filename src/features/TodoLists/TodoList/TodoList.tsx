@@ -13,8 +13,8 @@ import Buttons from "./Buttons/Buttons";
 import DeleteItem from "../../../components/DeleteItem/DeleteItem";
 import Task from "./Task/Task";
 import { TaskDomainType, TaskStatus } from "../../../api/todolistAPI";
-import { tasksSagaActions } from "../reducers/tasks-reducer/tasks-sagas";
-import { todoListsSagaActions } from "../reducers/todolist-reducer/todo-lists-sagas";
+import { tasksSagaActions } from "../sagas/tasks-sagas";
+import { todoListsSagaActions } from "../sagas/todo-lists-sagas";
 
 type TodoListPropType = {
   todolist: TodoListDomainType;

@@ -11,8 +11,8 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { appReducer } from "../app-reducer";
 import createSagaMiddleware from "redux-saga";
 import { all } from "redux-saga/effects";
-import { todoListsWatcherSaga } from "../../features/TodoLists/reducers/todolist-reducer/todo-lists-sagas";
-import { tasksWatcherSaga } from "../../features/TodoLists/reducers/tasks-reducer/tasks-sagas";
+import { todoListsWatcherSaga } from "../../features/TodoLists/sagas/todo-lists-sagas";
+import { tasksWatcherSaga } from "../../features/TodoLists/sagas/tasks-sagas";
 
 const rootReducer = combineReducers({
   todoLists: todoListsReducer,

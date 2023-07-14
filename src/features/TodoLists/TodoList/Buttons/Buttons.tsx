@@ -1,7 +1,6 @@
 import React, { FC, memo } from "react";
-import style from "./Buttons.module.css";
-import Button from "@mui/material/Button";
 import { FilterType } from "../../types";
+import { TabSwitcher } from "../../../../components/ui/tab-switcher";
 
 type ButtonsPropsType = {
   filter: FilterType;
@@ -9,26 +8,19 @@ type ButtonsPropsType = {
 };
 
 const Buttons: FC<ButtonsPropsType> = memo((props) => {
-  const setFilter = (filterValue: FilterType) => props.setFilter(filterValue);
+  const setFilter = (value: string) => props.setFilter(value as FilterType);
 
-  const renderButton = (filterValue: FilterType) => {
-    return (
-      <Button
-        variant={props.filter === filterValue ? "contained" : "outlined"}
-        onClick={() => setFilter(filterValue)}
-        size={"small"}
-      >
-        {filterValue}
-      </Button>
-    );
-  };
+  const options = [
+    { value: "all", label: "All" },
+    {
+      value: "active",
+      label: "Active",
+    },
+    { value: "completed", label: "Completed" },
+  ];
 
   return (
-    <div className={style.buttonsContainer}>
-      {renderButton("all")}
-      {renderButton("active")}
-      {renderButton("completed")}
-    </div>
+    <TabSwitcher options={options} value={props.filter} onChange={setFilter} />
   );
 });
 

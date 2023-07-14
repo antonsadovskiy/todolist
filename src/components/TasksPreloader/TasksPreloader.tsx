@@ -1,6 +1,6 @@
 import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import style from "./TasksPreloader.module.css";
+import style from "./TasksPreloader.module.scss";
 
 const TasksPreloader = () => {
   return (

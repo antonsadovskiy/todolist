@@ -1,11 +1,11 @@
 import React, { FC, memo } from "react";
-import Checkbox from "@mui/material/Checkbox";
 import { EditableSpan } from "../../../../components/EditableSpan/EditableSpan";
 import DeleteItem from "../../../../components/DeleteItem/DeleteItem";
 import { useTask } from "./hooks/useTask";
 import { TaskDomainType } from "../../types";
 import { TaskStatus } from "../../../../api/types";
-import s from "./Task.module.css";
+import s from "./Task.module.scss";
+import { Checkbox } from "../../../../components/ui/checkbox";
 
 type TaskPropsType = {
   task: TaskDomainType;
@@ -32,10 +32,14 @@ const Task: FC<TaskPropsType> = memo(({ task }) => {
         title={task.title}
         onChangeTitle={changeTaskTitleHandler}
         disabled={task.entityStatus === "loading"}
+        editInputWidth={110}
+        variant={"body1"}
+        className={s.taskTitle}
       />
       <DeleteItem
         deleteItem={removeTaskHandler}
         disabled={task.entityStatus === "loading"}
+        className={s.deleteItem}
       />
     </li>
   );

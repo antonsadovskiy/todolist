@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback } from "react";
+import { useCallback } from "react";
 import { useAppDispatch } from "../../../../../app/store/store";
 import { tasksThunks } from "../../../slice/tasks-reducer/tasks-slice";
 import { TaskStatus } from "../../../../../api/types";
@@ -23,15 +23,13 @@ export const useTask = (todoListId: string, id: string) => {
     [dispatch, id]
   );
   const changeTaskStatusHandler = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
+    (checked: boolean) => {
       dispatch(
         tasksThunks.updateTask({
           todolistId: todoListId,
           taskId: id,
           model: {
-            status: e.currentTarget.checked
-              ? TaskStatus.Completed
-              : TaskStatus.New,
+            status: checked ? TaskStatus.Completed : TaskStatus.New,
           },
         })
       );

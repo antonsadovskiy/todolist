@@ -4,7 +4,7 @@ import { reduxStoreDecorator } from "../../../../app/store/ReduxStoreDecorator";
 import { TaskPriority, TaskStatus } from "../../../../api/types";
 
 const meta: Meta<typeof Task> = {
-  title: "TodoList/Task",
+  title: "TodoList/TaskDrawer.tsx",
   component: Task,
   tags: ["autodocs"],
   decorators: [reduxStoreDecorator],

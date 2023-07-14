@@ -5,9 +5,9 @@ import { useCallback, useEffect } from "react";
 import { selectorIsLoggedIn } from "../../Login/selectors";
 import { selectorTodolists } from "../selectors";
 
-export const useTodolists = (demo: boolean) => {
+export const useTodoLists = (demo: boolean) => {
   const dispatch = useAppDispatch();
-  const todolists = useSelector(selectorTodolists);
+  const todoLists = useSelector(selectorTodolists);
   const isLoggedIn = useAppSelector(selectorIsLoggedIn);
 
   useEffect(() => {
@@ -22,5 +22,5 @@ export const useTodolists = (demo: boolean) => {
     [dispatch]
   );
 
-  return { todolists, isLoggedIn, addTodolistHandler };
+  return { todoLists, isLoggedIn, addTodolistHandler };
 };

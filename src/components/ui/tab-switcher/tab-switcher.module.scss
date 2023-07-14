@@ -1,0 +1,24 @@
+/* reset */
+button,
+fieldset,
+input {
+  all: unset;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+}
+
+.TabsRoot {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+
+  .TabsList {
+    display: flex;
+    flex-shrink: 0;
+  }
+}

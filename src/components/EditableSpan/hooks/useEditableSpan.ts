@@ -1,7 +1,9 @@
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 
-export const useEditableSpan = (mainTitle: string, onChangeTitle: (newTitle: string) => void) => {
-
+export const useEditableSpan = (
+  mainTitle: string,
+  onChangeTitle: (newTitle: string) => void
+) => {
   const [title, setTitle] = useState<string>("");
   const [isEditModeOn, setIsEditModeOn] = useState<boolean>(false);
 
@@ -32,6 +34,6 @@ export const useEditableSpan = (mainTitle: string, onChangeTitle: (newTitle: str
     onChangeHandler,
     onDoubleClickHandler,
     onBlurHandler,
-    onKeyDownHandler
+    onKeyDownHandler,
   };
 };

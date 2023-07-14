@@ -1,7 +1,7 @@
 import React from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useAppSelector } from "../../app/store/store";
-import style from "./Preloader.module.css";
+import style from "./Preloader.module.scss";
 import { selectorStatus } from "../../features/App/selectors";
 
 const Preloader = () => {

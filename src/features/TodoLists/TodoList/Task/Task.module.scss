@@ -1,0 +1,23 @@
+.task {
+  border-bottom: 1px solid var(--color-dark-500);;
+  list-style: none;
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
+  padding: 5px 0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .taskTitle {
+    inline-size: 150px;
+    overflow-wrap: break-word;
+    hyphens: manual;
+    margin-top: 6px;
+  }
+
+  .deleteItem {
+    margin-top: 2px;
+  }
+}

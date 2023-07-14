@@ -1,14 +1,18 @@
 import React, { FC, memo } from "react";
-import TextField from "@mui/material/TextField";
-import style from "./EditableSpan.module.css";
+import style from "./EditableSpan.module.scss";
 import { useEditableSpan } from "./hooks/useEditableSpan";
+import { Typography, TypographyProps } from "../ui/typography";
+import { TextField } from "../ui/text-field";
+import clsx from "clsx";
 
 export type EditableSpanPropsType = {
   title: string;
   taskStatus?: string;
   onChangeTitle: (newTitle: string) => void;
   disabled: boolean;
-};
+  className?: string;
+  editInputWidth?: number;
+} & Pick<TypographyProps, "variant">;
 
 export const EditableSpan: FC<EditableSpanPropsType> = memo((props) => {
   const {
@@ -20,25 +24,30 @@ export const EditableSpan: FC<EditableSpanPropsType> = memo((props) => {
     onKeyDownHandler,
   } = useEditableSpan(props.title, props.onChangeTitle);
 
-  const titleStyle = props.disabled ? style.disabledSpan : style.span;
+  const classNames = {
+    spanStyle: clsx(
+      props.disabled ? style.disabledSpan : style.span,
+      props.className
+    ),
+  };
 
   return isEditModeOn ? (
     <TextField
-      variant={"standard"}
-      type="text"
       value={title}
       onChange={onChangeHandler}
       onBlur={onBlurHandler}
       onKeyDown={onKeyDownHandler}
       autoFocus
+      style={{ width: props.editInputWidth }}
     />
   ) : (
-    <span
-      className={titleStyle}
-      style={{ opacity: props.taskStatus }}
+    <Typography
+      className={classNames.spanStyle}
       onDoubleClick={onDoubleClickHandler}
+      style={{ opacity: props.taskStatus }}
+      variant={props.variant}
     >
       {props.title}
-    </span>
+    </Typography>
   );
 });

@@ -1,9 +1,8 @@
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 
 export const useInput = (addItemHandler: (title: string) => void) => {
-
   const [title, setTitle] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
   const isButtonDisabled = title.length === 0;
 
   const addItem = () => {
@@ -21,7 +20,7 @@ export const useInput = (addItemHandler: (title: string) => void) => {
     setTitle(e.currentTarget.value);
   };
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    setError(null);
+    setError("");
     if (e.key === "Enter") {
       addItem();
     }
@@ -33,6 +32,6 @@ export const useInput = (addItemHandler: (title: string) => void) => {
     isButtonDisabled,
     onChangeHandler,
     onClickHandler,
-    onKeyPressHandler
+    onKeyPressHandler,
   };
 };
